@@ -6,27 +6,73 @@ let circuitState = {
     resistance: 100,
     current: 0,
     isClosed: false,
-    animationId: null
+    switchClosed: true,
+    animationId: null,
+    geminiModel: null,
+    apiKey: null
 };
 
 // Component positions and types
 let draggedComponent = null;
 let selectedComponent = null;
 let componentCounter = 0;
+let animationIntervals = [];
 
 // Initialize the experiment
 document.addEventListener('DOMContentLoaded', () => {
     initializeExperiment();
     setupEventListeners();
     setupPresetCircuits();
+    loadApiKey();
 });
 
 function initializeExperiment() {
     updateMeasurements();
     updateCircuitStatus();
+    checkApiKeyStatus();
+}
+
+function loadApiKey() {
+    const savedKey = localStorage.getItem('gemini_api_key');
+    if (savedKey) {
+        circuitState.apiKey = savedKey;
+        initializeGemini(savedKey);
+        document.getElementById('apiKeyInput').value = '••••••••••••';
+        document.getElementById('apiConfigPanel').style.display = 'none';
+    }
+}
+
+function checkApiKeyStatus() {
+    if (circuitState.apiKey && circuitState.geminiModel) {
+        document.getElementById('analyzeCircuitBtn').disabled = false;
+        document.getElementById('aiStatus').textContent = 'Ready';
+        document.getElementById('aiStatus').style.color = '#00ff88';
+    } else {
+        document.getElementById('analyzeCircuitBtn').disabled = true;
+        document.getElementById('aiStatus').textContent = 'API key required';
+        document.getElementById('aiStatus').style.color = '#ff4444';
+    }
+}
+
+function initializeGemini(apiKey) {
+    try {
+        if (typeof google !== 'undefined' && google.generativeai) {
+            const genAI = new google.generativeai.GenerativeAI(apiKey);
+            circuitState.geminiModel = genAI.getGenerativeModel({ model: 'gemini-pro' });
+            circuitState.apiKey = apiKey;
+            checkApiKeyStatus();
+        }
+    } catch (error) {
+        console.error('Error initializing Gemini:', error);
+        document.getElementById('aiStatus').textContent = 'API initialization failed';
+        document.getElementById('aiStatus').style.color = '#ff4444';
+    }
 }
 
 function setupEventListeners() {
+    // API Key configuration
+    document.getElementById('saveApiKeyBtn').addEventListener('click', saveApiKey);
+    
     // Component palette drag
     const componentItems = document.querySelectorAll('.component-item');
     componentItems.forEach(item => {
@@ -47,20 +93,44 @@ function setupEventListeners() {
     voltageSlider.addEventListener('input', (e) => {
         circuitState.voltage = parseFloat(e.target.value);
         document.getElementById('voltageValue').textContent = circuitState.voltage;
-        calculateCircuit();
+        analyzeCircuitWithGemini();
         updateMeasurements();
     });
 
     resistanceSlider.addEventListener('input', (e) => {
         circuitState.resistance = parseFloat(e.target.value);
         document.getElementById('resistanceValue').textContent = circuitState.resistance;
-        calculateCircuit();
+        analyzeCircuitWithGemini();
         updateMeasurements();
     });
+
+    // Switch state toggle
+    const switchToggle = document.getElementById('switchState');
+    switchToggle.addEventListener('change', (e) => {
+        circuitState.switchClosed = e.target.checked;
+        document.getElementById('switchLabel').textContent = e.target.checked ? 'Closed' : 'Open';
+        checkCircuitClosure();
+        analyzeCircuitWithGemini();
+        updateMeasurements();
+    });
+
+    // AI Analysis button
+    document.getElementById('analyzeCircuitBtn').addEventListener('click', analyzeCircuitWithGemini);
 
     // Data logging
     document.getElementById('logDataBtn').addEventListener('click', logDataPoint);
     document.getElementById('clearLogBtn').addEventListener('click', clearLog);
+}
+
+function saveApiKey() {
+    const apiKey = document.getElementById('apiKeyInput').value.trim();
+    if (apiKey && apiKey.length > 0) {
+        localStorage.setItem('gemini_api_key', apiKey);
+        initializeGemini(apiKey);
+        document.getElementById('apiConfigPanel').style.display = 'none';
+    } else {
+        alert('Please enter a valid API key');
+    }
 }
 
 function handleDragStart(e) {
@@ -87,7 +157,8 @@ function handleDrop(e) {
     const y = e.clientY - rect.top;
 
     addComponent(draggedComponent, x, y);
-    calculateCircuit();
+    checkCircuitClosure();
+    analyzeCircuitWithGemini();
     updateMeasurements();
 }
 
@@ -137,7 +208,7 @@ function renderComponent(component) {
             symbol.innerHTML = '💡';
             break;
         case 'switch':
-            symbol.innerHTML = '🔘';
+            symbol.innerHTML = circuitState.switchClosed ? '🔘' : '⚪';
             break;
         case 'ammeter':
             symbol.innerHTML = 'A';
@@ -179,6 +250,8 @@ function makeDraggable(element, component) {
             element.style.left = (component.x - 40) + 'px';
             element.style.top = (component.y - 40) + 'px';
             updateConnections();
+            checkCircuitClosure();
+            analyzeCircuitWithGemini();
             calculateCircuit();
         }
     });
@@ -192,55 +265,153 @@ function makeDraggable(element, component) {
 }
 
 function updateConnections() {
-    // Simple connection logic: components are connected if they're close enough
     const svg = document.getElementById('circuitSvg');
     svg.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#ff4444" /></marker><marker id="electron" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><circle cx="4" cy="4" r="3" fill="#00aaff" /></marker></defs>';
 
-    const hasBattery = circuitState.components.some(c => c.type === 'battery');
-    const hasResistor = circuitState.components.some(c => c.type === 'resistor');
-    const hasSwitch = circuitState.components.some(c => c.type === 'switch');
-    
-    // Check if switch is closed (simplified: assume closed if switch exists)
-    circuitState.isClosed = hasBattery && (hasResistor || hasSwitch);
+    if (circuitState.components.length < 2) return;
 
-    if (circuitState.isClosed && circuitState.components.length >= 2) {
-        // Draw connections between components
-        for (let i = 0; i < circuitState.components.length - 1; i++) {
+    // Draw connections between nearby components
+    for (let i = 0; i < circuitState.components.length; i++) {
+        for (let j = i + 1; j < circuitState.components.length; j++) {
             const comp1 = circuitState.components[i];
-            const comp2 = circuitState.components[i + 1];
+            const comp2 = circuitState.components[j];
             const distance = Math.sqrt(
                 Math.pow(comp2.x - comp1.x, 2) + Math.pow(comp2.y - comp1.y, 2)
             );
 
-            if (distance < 200) {
+            if (distance < 150) {
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 line.setAttribute('x1', comp1.x);
                 line.setAttribute('y1', comp1.y);
                 line.setAttribute('x2', comp2.x);
                 line.setAttribute('y2', comp2.y);
-                line.setAttribute('stroke', '#333');
+                line.setAttribute('stroke', circuitState.isClosed ? '#00ff88' : '#666');
                 line.setAttribute('stroke-width', '3');
-                svg.appendChild(line);
-            }
-        }
-
-        // Draw complete circuit path
-        if (hasBattery && hasResistor) {
-            const battery = circuitState.components.find(c => c.type === 'battery');
-            const resistor = circuitState.components.find(c => c.type === 'resistor');
-            
-            if (battery && resistor) {
-                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', battery.x);
-                line.setAttribute('y1', battery.y);
-                line.setAttribute('x2', resistor.x);
-                line.setAttribute('y2', resistor.y);
-                line.setAttribute('stroke', '#333');
-                line.setAttribute('stroke-width', '3');
+                line.setAttribute('stroke-dasharray', circuitState.isClosed ? '0' : '5,5');
                 svg.appendChild(line);
             }
         }
     }
+}
+
+function checkCircuitClosure() {
+    const hasBattery = circuitState.components.some(c => c.type === 'battery');
+    const hasResistor = circuitState.components.some(c => c.type === 'resistor' || c.type === 'led');
+    const hasSwitch = circuitState.components.some(c => c.type === 'switch');
+    
+    // Circuit is closed only if:
+    // 1. Has a battery (power source)
+    // 2. Has a load (resistor or LED)
+    // 3. Switch is closed (if switch exists)
+    // 4. Components are connected (close enough)
+    const componentsConnected = areComponentsConnected();
+    
+    circuitState.isClosed = hasBattery && 
+                            hasResistor && 
+                            (!hasSwitch || circuitState.switchClosed) && 
+                            componentsConnected;
+
+    // Show/hide warning
+    const warning = document.getElementById('circuitWarning');
+    if (!circuitState.isClosed && circuitState.components.length > 0) {
+        warning.style.display = 'block';
+    } else {
+        warning.style.display = 'none';
+    }
+
+    updateConnections();
+    updateCircuitStatus();
+}
+
+function areComponentsConnected() {
+    if (circuitState.components.length < 2) return false;
+    
+    const battery = circuitState.components.find(c => c.type === 'battery');
+    const load = circuitState.components.find(c => c.type === 'resistor' || c.type === 'led');
+    
+    if (!battery || !load) return false;
+    
+    // Check if battery and load are close enough (connected)
+    const distance = Math.sqrt(
+        Math.pow(load.x - battery.x, 2) + Math.pow(load.y - battery.y, 2)
+    );
+    
+    return distance < 300; // Components within 300px are considered connected
+}
+
+async function analyzeCircuitWithGemini() {
+    if (!circuitState.geminiModel || !circuitState.isClosed) {
+        document.getElementById('aiAnalysisResult').style.display = 'none';
+        return;
+    }
+
+    const analyzeBtn = document.getElementById('analyzeCircuitBtn');
+    const aiStatus = document.getElementById('aiStatus');
+    const resultDiv = document.getElementById('aiAnalysisResult');
+    const resultContent = document.getElementById('aiResultContent');
+
+    analyzeBtn.disabled = true;
+    aiStatus.textContent = 'Analyzing...';
+    aiStatus.style.color = '#ffaa00';
+
+    try {
+        // Build circuit description for Gemini
+        const circuitDescription = buildCircuitDescription();
+        
+        const prompt = `You are an expert electrical engineer. Analyze this electric circuit and provide calculations using Ohm's Law.
+
+Circuit Configuration:
+${circuitDescription}
+
+Voltage (V): ${circuitState.voltage}V
+Resistance (R): ${circuitState.resistance}Ω
+
+Please calculate and explain:
+1. Current (I) using Ohm's Law: I = V / R
+2. Power (P) using: P = V × I
+3. Whether this is a valid closed circuit
+4. Any safety considerations or recommendations
+
+Format your response in clear, educational language suitable for students learning about circuits.`;
+
+        const result = await circuitState.geminiModel.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+
+        resultContent.innerHTML = `<div class="ai-response">${formatGeminiResponse(text)}</div>`;
+        resultDiv.style.display = 'block';
+        aiStatus.textContent = 'Analysis complete';
+        aiStatus.style.color = '#00ff88';
+
+    } catch (error) {
+        console.error('Gemini API error:', error);
+        aiStatus.textContent = 'Analysis failed';
+        aiStatus.style.color = '#ff4444';
+        resultContent.innerHTML = `<div class="ai-error">Error: ${error.message}</div>`;
+        resultDiv.style.display = 'block';
+    } finally {
+        analyzeBtn.disabled = false;
+    }
+}
+
+function buildCircuitDescription() {
+    const components = circuitState.components.map(c => {
+        return `- ${c.type} at position (${Math.round(c.x)}, ${Math.round(c.y)})`;
+    }).join('\n');
+
+    return `Components:
+${components}
+
+Switch State: ${circuitState.switchClosed ? 'Closed' : 'Open'}
+Circuit Status: ${circuitState.isClosed ? 'Closed Circuit' : 'Open Circuit'}`;
+}
+
+function formatGeminiResponse(text) {
+    // Format the response with proper line breaks and styling
+    return text
+        .replace(/\n/g, '<br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
 }
 
 function calculateCircuit() {
@@ -271,108 +442,132 @@ function startAnimations() {
 
     // Find battery and resistor for flow path
     const battery = circuitState.components.find(c => c.type === 'battery');
-    const resistor = circuitState.components.find(c => c.type === 'resistor');
+    const load = circuitState.components.find(c => c.type === 'resistor' || c.type === 'led');
 
-    if (!battery || !resistor) return;
+    if (!battery || !load) return;
 
     // Create current flow animation (conventional current: + to -)
-    const currentSpeed = Math.max(100, 1000 - (circuitState.current * 50));
+    const currentSpeed = Math.max(200, 1500 - (circuitState.current * 30));
     
-    function animateCurrent() {
-        const arrow = document.createElement('div');
-        arrow.className = 'current-arrow';
-        arrow.style.left = battery.x + 'px';
-        arrow.style.top = battery.y + 'px';
-        arrow.style.width = '20px';
-        arrow.style.height = '20px';
-        arrow.style.background = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'%3E%3Cpolygon points=\'0,0 20,10 0,20\' fill=\'%23ff4444\'/%3E%3C/svg%3E")';
-        arrow.style.backgroundSize = 'contain';
-        arrow.style.backgroundRepeat = 'no-repeat';
-        
-        currentFlow.appendChild(arrow);
-
-        const startX = battery.x;
-        const startY = battery.y;
-        const endX = resistor.x;
-        const endY = resistor.y;
-        const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-
-        arrow.style.transform = `rotate(${angle}deg)`;
-        
-        let progress = 0;
-        const animate = () => {
-            progress += 2;
-            if (progress > distance) {
-                arrow.remove();
-                return;
-            }
-            
-            const currentX = startX + (endX - startX) * (progress / distance);
-            const currentY = startY + (endY - startY) * (progress / distance);
-            arrow.style.left = (currentX - 10) + 'px';
-            arrow.style.top = (currentY - 10) + 'px';
-            
-            requestAnimationFrame(animate);
-        };
-        animate();
-    }
+    const currentInterval = setInterval(() => {
+        if (!circuitState.isClosed) {
+            clearInterval(currentInterval);
+            return;
+        }
+        animateCurrent(battery, load);
+    }, currentSpeed);
+    animationIntervals.push(currentInterval);
 
     // Create electron flow animation (electrons: - to +)
-    function animateElectrons() {
-        const electron = document.createElement('div');
-        electron.className = 'electron-dot';
-        electron.style.left = resistor.x + 'px';
-        electron.style.top = resistor.y + 'px';
-        electron.style.width = '8px';
-        electron.style.height = '8px';
-        electron.style.borderRadius = '50%';
-        electron.style.background = '#00aaff';
-        electron.style.boxShadow = '0 0 8px #00aaff';
+    const electronInterval = setInterval(() => {
+        if (!circuitState.isClosed) {
+            clearInterval(electronInterval);
+            return;
+        }
+        animateElectrons(battery, load);
+    }, currentSpeed * 1.2);
+    animationIntervals.push(electronInterval);
+}
+
+function animateCurrent(battery, load) {
+    const currentFlow = document.getElementById('currentFlow');
+    const arrow = document.createElement('div');
+    arrow.className = 'current-arrow';
+    arrow.style.position = 'absolute';
+    arrow.style.left = battery.x + 'px';
+    arrow.style.top = battery.y + 'px';
+    arrow.style.width = '20px';
+    arrow.style.height = '20px';
+    arrow.style.background = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'%3E%3Cpolygon points=\'0,0 20,10 0,20\' fill=\'%23ff4444\'/%3E%3C/svg%3E")';
+    arrow.style.backgroundSize = 'contain';
+    arrow.style.backgroundRepeat = 'no-repeat';
+    arrow.style.pointerEvents = 'none';
+    arrow.style.zIndex = '5';
+    
+    currentFlow.appendChild(arrow);
+
+    const startX = battery.x;
+    const startY = battery.y;
+    const endX = load.x;
+    const endY = load.y;
+    const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+    const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+
+    arrow.style.transform = `rotate(${angle}deg)`;
+    
+    let progress = 0;
+    const animate = () => {
+        if (!circuitState.isClosed || progress > distance) {
+            arrow.remove();
+            return;
+        }
         
-        electronFlow.appendChild(electron);
-
-        const startX = resistor.x;
-        const startY = resistor.y;
-        const endX = battery.x;
-        const endY = battery.y;
-        const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-        const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
-
-        electron.style.transform = `rotate(${angle}deg)`;
+        progress += 3;
+        const currentX = startX + (endX - startX) * (progress / distance);
+        const currentY = startY + (endY - startY) * (progress / distance);
+        arrow.style.left = (currentX - 10) + 'px';
+        arrow.style.top = (currentY - 10) + 'px';
         
-        let progress = 0;
-        const animate = () => {
-            progress += 2;
-            if (progress > distance) {
-                electron.remove();
-                return;
-            }
-            
-            const currentX = startX + (endX - startX) * (progress / distance);
-            const currentY = startY + (endY - startY) * (progress / distance);
-            electron.style.left = (currentX - 4) + 'px';
-            electron.style.top = (currentY - 4) + 'px';
-            
-            requestAnimationFrame(animate);
-        };
-        animate();
-    }
+        requestAnimationFrame(animate);
+    };
+    animate();
+}
 
-    // Start animations
-    setInterval(animateCurrent, currentSpeed);
-    setInterval(animateElectrons, currentSpeed * 1.2);
+function animateElectrons(battery, load) {
+    const electronFlow = document.getElementById('electronFlow');
+    const electron = document.createElement('div');
+    electron.className = 'electron-dot';
+    electron.style.position = 'absolute';
+    electron.style.left = load.x + 'px';
+    electron.style.top = load.y + 'px';
+    electron.style.width = '8px';
+    electron.style.height = '8px';
+    electron.style.borderRadius = '50%';
+    electron.style.background = '#00aaff';
+    electron.style.boxShadow = '0 0 8px #00aaff';
+    electron.style.pointerEvents = 'none';
+    electron.style.zIndex = '5';
+    
+    electronFlow.appendChild(electron);
+
+    const startX = load.x;
+    const startY = load.y;
+    const endX = battery.x;
+    const endY = battery.y;
+    const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+    const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+
+    electron.style.transform = `rotate(${angle}deg)`;
+    
+    let progress = 0;
+    const animate = () => {
+        if (!circuitState.isClosed || progress > distance) {
+            electron.remove();
+            return;
+        }
+        
+        progress += 3;
+        const currentX = startX + (endX - startX) * (progress / distance);
+        const currentY = startY + (endY - startY) * (progress / distance);
+        electron.style.left = (currentX - 4) + 'px';
+        electron.style.top = (currentY - 4) + 'px';
+        
+        requestAnimationFrame(animate);
+    };
+    animate();
 }
 
 function stopAnimations() {
+    animationIntervals.forEach(interval => clearInterval(interval));
+    animationIntervals = [];
     document.getElementById('currentFlow').innerHTML = '';
     document.getElementById('electronFlow').innerHTML = '';
 }
 
 function updateMeasurements() {
-    // Update current display
+    // Update current display - only show if circuit is closed
     const currentDisplay = document.getElementById('currentValue');
-    currentDisplay.textContent = circuitState.current.toFixed(2);
+    currentDisplay.textContent = circuitState.isClosed ? circuitState.current.toFixed(2) : '0.00';
 
     // Update voltage display
     const voltageDisplay = document.getElementById('voltageDisplay');
@@ -383,12 +578,15 @@ function updateMeasurements() {
     resistanceDisplay.textContent = circuitState.isClosed ? circuitState.resistance : '0';
 
     // Calculate and update power: P = V × I
-    const power = circuitState.voltage * circuitState.current;
+    const power = circuitState.isClosed ? circuitState.voltage * circuitState.current : 0;
     const powerDisplay = document.getElementById('powerValue');
     powerDisplay.textContent = power.toFixed(2);
 
     // Update ammeter and voltmeter readings if they exist
     updateMeterReadings();
+
+    // Enable/disable log button based on circuit state
+    document.getElementById('logDataBtn').disabled = !circuitState.isClosed;
 }
 
 function updateMeterReadings() {
@@ -418,13 +616,25 @@ function updateMeterReadings() {
 function updateCircuitStatus() {
     const statusDot = document.querySelector('.status-dot');
     const statusText = document.getElementById('statusText');
+    const pathInfo = document.getElementById('circuitPathInfo');
     
     if (circuitState.isClosed) {
         statusDot.classList.add('active');
-        statusText.textContent = 'Circuit Closed';
+        statusText.textContent = 'Circuit Closed ✓';
+        pathInfo.innerHTML = '<p style="color: #00ff88; margin-top: 10px;">Complete circuit path detected. Current can flow.</p>';
     } else {
         statusDot.classList.remove('active');
-        statusText.textContent = 'Circuit Open';
+        statusText.textContent = 'Circuit Open ✗';
+        const reasons = [];
+        if (!circuitState.components.some(c => c.type === 'battery')) reasons.push('Missing battery');
+        if (!circuitState.components.some(c => c.type === 'resistor' || c.type === 'led')) reasons.push('Missing load');
+        const switchComp = circuitState.components.find(c => c.type === 'switch');
+        if (switchComp && !circuitState.switchClosed) reasons.push('Switch is open');
+        if (circuitState.components.length >= 2 && !areComponentsConnected()) reasons.push('Components not connected');
+        
+        pathInfo.innerHTML = reasons.length > 0 
+            ? `<p style="color: #ff4444; margin-top: 10px;">Issues: ${reasons.join(', ')}</p>`
+            : '<p style="color: #ffaa00; margin-top: 10px;">Build a complete circuit to enable current flow.</p>';
     }
 }
 
@@ -457,6 +667,9 @@ function applyPreset(preset) {
     document.getElementById('circuitComponents').innerHTML = '';
     document.getElementById('circuitSvg').innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#ff4444" /></marker><marker id="electron" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><circle cx="4" cy="4" r="3" fill="#00aaff" /></marker></defs>';
     stopAnimations();
+    circuitState.switchClosed = true;
+    document.getElementById('switchState').checked = true;
+    document.getElementById('switchLabel').textContent = 'Closed';
 
     const canvas = document.getElementById('circuitCanvas');
     const centerX = canvas.offsetWidth / 2;
@@ -464,35 +677,36 @@ function applyPreset(preset) {
 
     switch(preset) {
         case 'simple':
-            addComponent('battery', centerX - 100, centerY);
-            addComponent('resistor', centerX + 100, centerY);
-            addComponent('switch', centerX, centerY - 50);
+            addComponent('battery', centerX - 120, centerY);
+            addComponent('resistor', centerX + 120, centerY);
+            addComponent('switch', centerX, centerY - 60);
             break;
         case 'series':
-            addComponent('battery', centerX - 150, centerY);
+            addComponent('battery', centerX - 180, centerY);
             addComponent('resistor', centerX, centerY);
-            addComponent('led', centerX + 150, centerY);
-            addComponent('ammeter', centerX - 75, centerY - 50);
+            addComponent('led', centerX + 180, centerY);
+            addComponent('ammeter', centerX - 90, centerY - 60);
             break;
         case 'parallel':
-            addComponent('battery', centerX - 150, centerY);
-            addComponent('resistor', centerX, centerY - 80);
-            addComponent('led', centerX, centerY + 80);
-            addComponent('voltmeter', centerX + 150, centerY);
+            addComponent('battery', centerX - 180, centerY);
+            addComponent('resistor', centerX, centerY - 100);
+            addComponent('led', centerX, centerY + 100);
+            addComponent('voltmeter', centerX + 180, centerY);
             break;
         case 'clear':
             // Already cleared above
             break;
     }
 
+    checkCircuitClosure();
+    analyzeCircuitWithGemini();
     calculateCircuit();
     updateMeasurements();
-    updateCircuitStatus();
 }
 
 function logDataPoint() {
     if (!circuitState.isClosed) {
-        alert('Please close the circuit first to take measurements.');
+        alert('Circuit must be closed to record measurements!');
         return;
     }
 
@@ -514,10 +728,8 @@ function clearLog() {
 // Recalculate circuit when components are moved
 setInterval(() => {
     if (circuitState.components.length > 0) {
-        updateConnections();
+        checkCircuitClosure();
         calculateCircuit();
         updateMeasurements();
-        updateCircuitStatus();
     }
 }, 500);
-
