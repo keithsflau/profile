@@ -157,7 +157,7 @@ body {
 .alveoli-container {
     position: relative;
     width: 100%;
-    min-height: 500px;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -167,16 +167,18 @@ body {
     padding: 40px;
 }
 
+/* Airway */
 .airway {
     position: relative;
     width: 80px;
-    height: 120px;
-    margin-bottom: 30px;
+    height: 100px;
+    margin-bottom: 20px;
+    z-index: 10;
 }
 
 .airway-tube {
     width: 80px;
-    height: 120px;
+    height: 100px;
     background: linear-gradient(to bottom, #eceff1 0%, #cfd8dc 100%);
     border-radius: 40px;
     position: relative;
@@ -190,9 +192,20 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 60px;
-    height: 120px;
+    height: 100px;
     background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
     border-radius: 30px;
+}
+
+.airway-label {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1565c0;
+    white-space: nowrap;
 }
 
 .molecules-in, .molecules-out {
@@ -202,137 +215,52 @@ body {
     pointer-events: none;
 }
 
-.molecules-out {
-    top: 0;
-    left: 0;
+.air-arrow-in, .air-arrow-out {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    font-weight: bold;
+    animation: pulse 2s ease-in-out infinite;
 }
 
-.alveoli-group {
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+.air-arrow-in {
+    top: 10px;
+    color: #2196f3;
 }
 
+.air-arrow-out {
+    bottom: 10px;
+    color: #ff9800;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+/* Alveolus Wrapper */
 .alveolus-wrapper {
     position: relative;
-    width: 220px;
-    height: 220px;
+    width: 500px;
+    height: 450px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.capillary-network {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    z-index: 1;
-}
-
-.capillary-segment {
-    position: absolute;
-    background: linear-gradient(to bottom, #d32f2f 0%, #f44336 50%, #d32f2f 100%);
-    border: 2px solid #c62828;
-    border-radius: 15px;
-    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.5);
-}
-
-.capillary-segment.top {
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%) rotate(0deg);
-    width: 180px;
-    height: 25px;
-    border-radius: 15px 15px 0 0;
-}
-
-.capillary-segment.right {
-    top: 50%;
-    right: -15px;
-    transform: translateY(-50%) rotate(90deg);
-    width: 180px;
-    height: 25px;
-    border-radius: 0 15px 15px 0;
-}
-
-.capillary-segment.bottom {
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%) rotate(180deg);
-    width: 180px;
-    height: 25px;
-    border-radius: 0 0 15px 15px;
-}
-
-.capillary-segment.left {
-    top: 50%;
-    left: -15px;
-    transform: translateY(-50%) rotate(270deg);
-    width: 180px;
-    height: 25px;
-    border-radius: 15px 0 0 15px;
-}
-
-.blood-cells {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.blood-cell {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background: radial-gradient(circle at 30% 30%, #f44336 0%, #d32f2f 50%, #b71c1c 100%);
-    border-radius: 50%;
-    border: 1px solid #c62828;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    animation: blood-flow-around 8s linear infinite;
-}
-
-@keyframes blood-flow-around {
-    0% {
-        top: 0%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    25% {
-        top: 50%;
-        right: 0%;
-        transform: translate(50%, -50%);
-    }
-    50% {
-        bottom: 0%;
-        left: 50%;
-        transform: translate(-50%, 50%);
-    }
-    75% {
-        top: 50%;
-        left: 0%;
-        transform: translate(-50%, -50%);
-    }
-    100% {
-        top: 0%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
+/* Alveolus (Air Sac) */
 .alveolus {
     position: relative;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(233, 245, 255, 0.85) 50%, rgba(187, 222, 251, 0.75) 100%);
+    width: 280px;
+    height: 320px;
+    border-radius: 50% 40% 50% 45%;
+    background: radial-gradient(ellipse at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(233, 245, 255, 0.9) 50%, rgba(187, 222, 251, 0.8) 100%);
     border: 3px solid #90caf9;
-    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3), inset 0 0 30px rgba(33, 150, 243, 0.1);
+    box-shadow: 0 4px 20px rgba(33, 150, 243, 0.3), inset 0 0 40px rgba(144, 202, 249, 0.2);
     animation: breathing 4s ease-in-out infinite;
     overflow: visible;
-    z-index: 2;
+    z-index: 5;
 }
 
 @keyframes breathing {
@@ -340,17 +268,47 @@ body {
         transform: scale(1);
     }
     50% {
-        transform: scale(1.15);
+        transform: scale(1.05);
     }
 }
 
 .alveolus-wall {
     position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1565c0;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 6;
+}
+
+.gas-labels {
+    position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    border: 2px dashed rgba(33, 150, 243, 0.5);
     pointer-events: none;
+}
+
+.gas-label {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: 700;
+    z-index: 6;
+}
+
+.o2-label {
+    right: 30%;
+    top: 30%;
+    color: #2196f3;
+}
+
+.co2-label {
+    left: 25%;
+    bottom: 35%;
+    color: #ff9800;
 }
 
 .o2-molecules, .co2-molecules {
@@ -362,11 +320,11 @@ body {
 
 .o2-molecule {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #2196f3 0%, #1976d2 100%);
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, #64b5f6 0%, #2196f3 100%);
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.8);
     animation: float-o2 3s ease-in-out infinite;
 }
 
@@ -376,18 +334,18 @@ body {
         opacity: 0.8;
     }
     50% {
-        transform: translate(10px, -10px) scale(1.1);
+        transform: translate(8px, -8px) scale(1.1);
         opacity: 1;
     }
 }
 
 .co2-molecule {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #ff9800 0%, #f57c00 100%);
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, #ffb74d 0%, #ff9800 100%);
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+    box-shadow: 0 0 8px rgba(255, 152, 0, 0.8);
     animation: float-co2 3s ease-in-out infinite;
 }
 
@@ -397,185 +355,228 @@ body {
         opacity: 0.8;
     }
     50% {
-        transform: translate(-10px, 10px) scale(1.1);
+        transform: translate(-8px, 8px) scale(1.1);
         opacity: 1;
     }
 }
 
+/* Capillary Wrapper - wraps around alveolus */
+.capillary-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
 
-.exchange-indicators {
+.capillary {
+    position: absolute;
+    width: 420px;
+    height: 380px;
+    border-radius: 60% 50% 70% 55%;
+    background: transparent;
+    border: 4px solid #d32f2f;
+    border-top: none;
+    border-right: none;
+    box-shadow: 
+        -8px 8px 15px rgba(211, 47, 47, 0.3),
+        inset 8px -8px 20px rgba(211, 47, 47, 0.2);
+    clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 40%);
+    overflow: visible;
+}
+
+.capillary::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(211, 47, 47, 0.2) 100%);
+    border-radius: inherit;
+    z-index: -1;
+}
+
+.capillary-label {
+    position: absolute;
+    bottom: -25px;
+    left: 150px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #c62828;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 7;
+}
+
+.deoxygenated-blood-label {
+    position: absolute;
+    top: 20px;
+    left: -80px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #c62828;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 7;
+}
+
+.oxygenated-blood-label {
+    position: absolute;
+    top: 50%;
+    right: -100px;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1976d2;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 7;
+}
+
+.blood-flow-container {
     position: absolute;
     width: 100%;
     height: 100%;
     pointer-events: none;
+    overflow: visible;
+}
+
+.blood-cell {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at 30% 30%, #f44336 0%, #d32f2f 50%, #b71c1c 100%);
+    border-radius: 50%;
+    border: 2px solid #c62828;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    animation: blood-flow 6s linear infinite;
     z-index: 4;
 }
 
-.o2-to-blood, .co2-from-blood {
+.blood-cell::after {
+    content: 'RBC';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes blood-flow {
+    0% {
+        top: 15%;
+        left: 10%;
+        transform: translate(0, 0);
+    }
+    30% {
+        top: 45%;
+        left: 5%;
+    }
+    60% {
+        top: 85%;
+        left: 30%;
+    }
+    100% {
+        top: 85%;
+        left: 80%;
+        transform: translate(0, 0);
+    }
+}
+
+/* Exchange Arrows */
+.exchange-arrows {
     position: absolute;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 3;
+    z-index: 8;
 }
 
-.o2-particle {
+.o2-arrow-container, .co2-arrow-container {
     position: absolute;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, #64b5f6 0%, #42a5f5 50%, #2196f3 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(33, 150, 243, 1), 0 0 12px rgba(33, 150, 243, 0.6);
-    animation: o2-into-capillary 2s ease-in forwards;
-    z-index: 5;
 }
 
-@keyframes o2-into-capillary {
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.9;
-        transform: translate(0, 0) scale(1.3);
-    }
-    100% {
-        transform: translate(0, 90px) scale(0.9);
-        opacity: 0.8;
-    }
+.o2-arrow-container {
+    top: 40%;
+    right: 20%;
 }
 
-.co2-particle {
+.co2-arrow-container {
+    bottom: 35%;
+    left: 15%;
+}
+
+.exchange-arrow {
+    position: relative;
+    width: 80px;
+    height: 8px;
+    background: transparent;
+}
+
+.o2-arrow {
+    background: linear-gradient(to right, #f44336 0%, #e53935 100%);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.6);
+}
+
+.o2-arrow::after {
+    content: '';
     position: absolute;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, #ffb74d 0%, #ffa726 50%, #ff9800 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(255, 152, 0, 1), 0 0 12px rgba(255, 152, 0, 0.6);
-    animation: co2-out-of-capillary 2s ease-out forwards;
-    z-index: 5;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 12px solid #f44336;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
 }
 
-@keyframes co2-out-of-capillary {
-    0% {
-        transform: translate(0, 90px) scale(0.9);
-        opacity: 0.8;
-    }
-    50% {
-        opacity: 0.9;
-        transform: translate(0, 0) scale(1.3);
-    }
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
+.co2-arrow {
+    background: linear-gradient(to left, #2196f3 0%, #1976d2 100%);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.6);
 }
 
-/* Multiple O₂ particles flowing from different directions */
-.o2-particle.top {
-    animation: o2-from-top 2s ease-in forwards;
+.co2-arrow::after {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-right: 12px solid #2196f3;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
 }
 
-.o2-particle.right {
-    animation: o2-from-right 2s ease-in forwards;
+.arrow-label {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
-.o2-particle.bottom {
-    animation: o2-from-bottom 2s ease-in forwards;
+.o2-arrow .arrow-label {
+    color: #f44336;
+    background: rgba(255, 255, 255, 0.9);
 }
 
-.o2-particle.left {
-    animation: o2-from-left 2s ease-in forwards;
+.co2-arrow .arrow-label {
+    color: #2196f3;
+    background: rgba(255, 255, 255, 0.9);
 }
-
-@keyframes o2-from-top {
-    0% { transform: translate(-50%, -90px) scale(1); opacity: 1; }
-    100% { transform: translate(-50%, 0) scale(1.2); opacity: 0.9; }
-}
-
-@keyframes o2-from-right {
-    0% { transform: translate(90px, -50%) scale(1); opacity: 1; }
-    100% { transform: translate(0, -50%) scale(1.2); opacity: 0.9; }
-}
-
-@keyframes o2-from-bottom {
-    0% { transform: translate(-50%, 90px) scale(1); opacity: 1; }
-    100% { transform: translate(-50%, 0) scale(1.2); opacity: 0.9; }
-}
-
-@keyframes o2-from-left {
-    0% { transform: translate(-90px, -50%) scale(1); opacity: 1; }
-    100% { transform: translate(0, -50%) scale(1.2); opacity: 0.9; }
-}
-
-/* Multiple CO₂ particles flowing to different directions */
-.co2-particle.top {
-    animation: co2-to-top 2s ease-out forwards;
-}
-
-.co2-particle.right {
-    animation: co2-to-right 2s ease-out forwards;
-}
-
-.co2-particle.bottom {
-    animation: co2-to-bottom 2s ease-out forwards;
-}
-
-.co2-particle.left {
-    animation: co2-to-left 2s ease-out forwards;
-}
-
-@keyframes co2-to-top {
-    0% { transform: translate(-50%, 0) scale(0.9); opacity: 0.8; }
-    100% { transform: translate(-50%, -90px) scale(1); opacity: 1; }
-}
-
-@keyframes co2-to-right {
-    0% { transform: translate(0, -50%) scale(0.9); opacity: 0.8; }
-    100% { transform: translate(90px, -50%) scale(1); opacity: 1; }
-}
-
-@keyframes co2-to-bottom {
-    0% { transform: translate(-50%, 0) scale(0.9); opacity: 0.8; }
-    100% { transform: translate(-50%, 90px) scale(1); opacity: 1; }
-}
-
-@keyframes co2-to-left {
-    0% { transform: translate(0, -50%) scale(0.9); opacity: 0.8; }
-    100% { transform: translate(-90px, -50%) scale(1); opacity: 1; }
-}
-
-/* Additional animations for complex gas exchange */
-@keyframes o2-into-capillary {
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.9;
-        transform: translate(0, 0) scale(1.3);
-    }
-    100% {
-        transform: translate(0, 90px) scale(0.9);
-        opacity: 0.8;
-    }
-}
-
-@keyframes co2-out-of-capillary {
-    0% {
-        transform: translate(0, 90px) scale(0.9);
-        opacity: 0.8;
-    }
-    50% {
-        opacity: 0.9;
-        transform: translate(0, 0) scale(1.3);
-    }
-    100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-}
-
 
 .gas-exchange-display {
     text-align: center;
@@ -768,7 +769,18 @@ body {
         order: 1;
     }
     
-    .alveoli-group {
-        flex-direction: column;
+    .alveolus-wrapper {
+        width: 400px;
+        height: 360px;
+    }
+    
+    .alveolus {
+        width: 240px;
+        height: 280px;
+    }
+    
+    .capillary {
+        width: 360px;
+        height: 320px;
     }
 }

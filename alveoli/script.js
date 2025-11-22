@@ -29,6 +29,7 @@ function initializeExperiment() {
     createO2Molecules();
     createCO2Molecules();
     createBloodFlow();
+    createExchangeArrows();
 }
 
 // Setup control panel
@@ -143,39 +144,39 @@ function stopAnimation() {
 
 // Perform inhale animation
 function performInhale() {
-    // Create oxygen molecules entering from airway into alveoli
+    // Create oxygen molecules entering from airway into alveolus
     createInhaleO2Molecules();
     
-    // Expand alveoli (inhale expands)
-    expandAlveoli();
-    
-    // Show oxygen entering blood (O₂ flows into capillary)
-    animateO2ToBlood();
+    // Expand alveolus (inhale expands)
+    expandAlveolus();
     
     // Update status display
-    document.getElementById('o2Count').textContent = 'Inhaling...';
-    document.getElementById('co2Count').textContent = 'Waiting to exhale';
+    const o2Count = document.getElementById('o2Count');
+    const co2Count = document.getElementById('co2Count');
+    if (o2Count) o2Count.textContent = 'Inhaling...';
+    if (co2Count) co2Count.textContent = 'Waiting to exhale';
 }
 
 // Perform exhale animation
 function performExhale() {
-    // Create carbon dioxide molecules exiting from alveoli
+    // Create carbon dioxide molecules exiting from alveolus
     createExhaleCO2Molecules();
     
-    // Contract alveoli (exhale contracts)
-    contractAlveoli();
-    
-    // Show carbon dioxide from blood entering alveoli (CO₂ flows out of capillary)
-    animateCO2FromBlood();
+    // Contract alveolus (exhale contracts)
+    contractAlveolus();
     
     // Update status display
-    document.getElementById('o2Count').textContent = 'Exchange complete';
-    document.getElementById('co2Count').textContent = 'Exhaling...';
+    const o2Count = document.getElementById('o2Count');
+    const co2Count = document.getElementById('co2Count');
+    if (o2Count) o2Count.textContent = 'Exchange complete';
+    if (co2Count) co2Count.textContent = 'Exhaling...';
 }
 
 // Create inhaled oxygen molecules
 function createInhaleO2Molecules() {
     const moleculesIn = document.getElementById('moleculesIn');
+    if (!moleculesIn) return;
+    
     const count = Math.floor(experimentState.o2Concentration / 5);
     
     for (let i = 0; i < count; i++) {
@@ -184,25 +185,27 @@ function createInhaleO2Molecules() {
             molecule.className = 'o2-molecule-in';
             molecule.style.cssText = `
                 position: absolute;
-                width: 15px;
-                height: 15px;
-                background: radial-gradient(circle, #2196f3 0%, #1976d2 100%);
+                width: 12px;
+                height: 12px;
+                background: radial-gradient(circle, #64b5f6 0%, #2196f3 100%);
                 border-radius: 50%;
-                box-shadow: 0 0 6px rgba(33, 150, 243, 0.6);
+                box-shadow: 0 0 6px rgba(33, 150, 243, 0.8);
                 left: 50%;
-                bottom: 100%;
+                bottom: 90%;
                 animation: inhale-o2 ${breathCycleDuration / 4}ms ease-out forwards;
             `;
             moleculesIn.appendChild(molecule);
             
             setTimeout(() => molecule.remove(), breathCycleDuration / 4);
-        }, i * 50);
+        }, i * 80);
     }
 }
 
 // Create exhaled carbon dioxide molecules
 function createExhaleCO2Molecules() {
     const moleculesOut = document.getElementById('moleculesOut');
+    if (!moleculesOut) return;
+    
     const count = Math.floor(experimentState.co2Concentration * 2);
     
     for (let i = 0; i < count; i++) {
@@ -211,170 +214,114 @@ function createExhaleCO2Molecules() {
             molecule.className = 'co2-molecule-out';
             molecule.style.cssText = `
                 position: absolute;
-                width: 15px;
-                height: 15px;
-                background: radial-gradient(circle, #ff9800 0%, #f57c00 100%);
+                width: 12px;
+                height: 12px;
+                background: radial-gradient(circle, #ffb74d 0%, #ff9800 100%);
                 border-radius: 50%;
-                box-shadow: 0 0 6px rgba(255, 152, 0, 0.6);
+                box-shadow: 0 0 6px rgba(255, 152, 0, 0.8);
                 left: 50%;
-                top: 100%;
+                top: 90%;
                 animation: exhale-co2 ${breathCycleDuration / 4}ms ease-out forwards;
             `;
             moleculesOut.appendChild(molecule);
             
             setTimeout(() => molecule.remove(), breathCycleDuration / 4);
-        }, i * 50);
+        }, i * 80);
     }
 }
 
-// Expand alveoli
-function expandAlveoli() {
-    const alveoli = document.querySelectorAll('.alveolus');
-    alveoli.forEach(alveolus => {
+// Expand alveolus
+function expandAlveolus() {
+    const alveolus = document.getElementById('alveolus');
+    if (alveolus) {
         alveolus.style.animation = `breathing ${breathCycleDuration}ms ease-in-out infinite`;
-    });
+    }
 }
 
-// Contract alveoli
-function contractAlveoli() {
+// Contract alveolus
+function contractAlveolus() {
     // Handled by CSS animation
 }
 
-// Animate O₂ entering blood (flowing into capillary network)
-function animateO2ToBlood() {
-    for (let i = 1; i <= 3; i++) {
-        const o2ToBlood = document.getElementById(`o2ToBlood${i}`);
-        if (!o2ToBlood) continue;
-        
-        // Create O₂ molecules flowing from center of alveolus to surrounding capillaries
-        const directions = ['top', 'right', 'bottom', 'left'];
-        const positions = [
-            { x: '50%', y: '50%', offsetX: '0', offsetY: '-90px' }, // top
-            { x: '50%', y: '50%', offsetX: '90px', offsetY: '0' },  // right
-            { x: '50%', y: '50%', offsetX: '0', offsetY: '90px' },  // bottom
-            { x: '50%', y: '50%', offsetX: '-90px', offsetY: '0' }  // left
-        ];
-        
-        directions.forEach((direction, idx) => {
-            for (let j = 0; j < 2; j++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = `o2-particle ${direction}`;
-                    particle.style.cssText = `
-                        position: absolute;
-                        left: ${positions[idx].x};
-                        top: ${positions[idx].y};
-                        transform: translate(-50%, -50%);
-                        animation: o2-${direction} ${breathCycleDuration / 4}ms ease-in forwards;
-                    `;
-                    
-                    o2ToBlood.appendChild(particle);
-                    setTimeout(() => particle.remove(), breathCycleDuration / 4);
-                }, (idx * 150) + (j * 50));
-            }
-        });
-    }
-}
-
-// Animate CO₂ from blood entering alveoli (flowing out of capillary network)
-function animateCO2FromBlood() {
-    for (let i = 1; i <= 3; i++) {
-        const co2FromBlood = document.getElementById(`co2FromBlood${i}`);
-        if (!co2FromBlood) continue;
-        
-        // Create CO₂ molecules flowing from surrounding capillaries to center of alveolus
-        const directions = ['top', 'right', 'bottom', 'left'];
-        const positions = [
-            { x: '50%', y: '0%', offsetX: '0', offsetY: '-90px' },     // from top
-            { x: '100%', y: '50%', offsetX: '90px', offsetY: '0' },    // from right
-            { x: '50%', y: '100%', offsetX: '0', offsetY: '90px' },    // from bottom
-            { x: '0%', y: '50%', offsetX: '-90px', offsetY: '0' }      // from left
-        ];
-        
-        directions.forEach((direction, idx) => {
-            for (let j = 0; j < 2; j++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = `co2-particle ${direction}`;
-                    particle.style.cssText = `
-                        position: absolute;
-                        left: ${positions[idx].x};
-                        top: ${positions[idx].y};
-                        transform: translate(-50%, -50%);
-                        animation: co2-to-${direction} ${breathCycleDuration / 4}ms ease-out forwards;
-                    `;
-                    
-                    co2FromBlood.appendChild(particle);
-                    setTimeout(() => particle.remove(), breathCycleDuration / 4);
-                }, (idx * 150) + (j * 50));
-            }
-        });
-    }
-}
-
-// Create blood flow animation in capillary network
+// Create blood flow animation in capillary
 function createBloodFlow() {
-    for (let i = 1; i <= 3; i++) {
-        const bloodCellsContainer = document.getElementById(`bloodCells${i}`);
-        if (!bloodCellsContainer) continue;
-        
-        // Create multiple blood cells flowing around the alveolus
-        const cellCount = 6;
-        for (let j = 0; j < cellCount; j++) {
-            const bloodCell = document.createElement('div');
-            bloodCell.className = 'blood-cell';
-            bloodCell.style.cssText = `
-                animation: blood-flow-around ${8 + j}s linear infinite;
-                animation-delay: ${j * 1.3}s;
-            `;
-            bloodCellsContainer.appendChild(bloodCell);
-        }
+    const bloodFlowContainer = document.getElementById('bloodFlowContainer');
+    if (!bloodFlowContainer) return;
+    
+    // Create multiple blood cells flowing through the capillary
+    const cellCount = 4;
+    for (let i = 0; i < cellCount; i++) {
+        const bloodCell = document.createElement('div');
+        bloodCell.className = 'blood-cell';
+        bloodCell.style.cssText = `
+            animation: blood-flow ${6 + i * 0.5}s linear infinite;
+            animation-delay: ${i * 1.5}s;
+        `;
+        bloodFlowContainer.appendChild(bloodCell);
     }
 }
 
-// Create O₂ molecules inside alveoli
+// Create exchange arrows
+function createExchangeArrows() {
+    // O₂ arrow (red arrow from alveolus to capillary)
+    const o2ArrowContainer = document.getElementById('o2ArrowContainer');
+    if (o2ArrowContainer) {
+        // Arrow is created in HTML, we just animate it
+        o2ArrowContainer.style.animation = `pulse-arrow 3s ease-in-out infinite`;
+    }
+    
+    // CO₂ arrow (blue arrow from capillary to alveolus)
+    const co2ArrowContainer = document.getElementById('co2ArrowContainer');
+    if (co2ArrowContainer) {
+        co2ArrowContainer.style.animation = `pulse-arrow 3s ease-in-out infinite 1.5s`;
+    }
+}
+
+// Create O₂ molecules inside alveolus
 function createO2Molecules() {
-    for (let i = 1; i <= 3; i++) {
-        const container = document.getElementById(`o2Molecules${i}`);
-        if (!container) continue;
-        
-        const count = 8;
-        
-        for (let j = 0; j < count; j++) {
-            const molecule = document.createElement('div');
-            molecule.className = 'o2-molecule';
-            const angle = (360 / count) * j;
-            const radius = 60;
-            const x = 90 + Math.cos(angle * Math.PI / 180) * radius;
-            const y = 90 + Math.sin(angle * Math.PI / 180) * radius;
-            molecule.style.left = x + 'px';
-            molecule.style.top = y + 'px';
-            molecule.style.animationDelay = (j * 0.2) + 's';
-            container.appendChild(molecule);
-        }
+    const container = document.getElementById('o2Molecules');
+    if (!container) return;
+    
+    const count = 10;
+    
+    for (let j = 0; j < count; j++) {
+        const molecule = document.createElement('div');
+        molecule.className = 'o2-molecule';
+        const angle = (360 / count) * j;
+        const radiusX = 100;
+        const radiusY = 120;
+        const centerX = 140;
+        const centerY = 160;
+        const x = centerX + Math.cos(angle * Math.PI / 180) * radiusX;
+        const y = centerY + Math.sin(angle * Math.PI / 180) * radiusY;
+        molecule.style.left = x + 'px';
+        molecule.style.top = y + 'px';
+        molecule.style.animationDelay = (j * 0.2) + 's';
+        container.appendChild(molecule);
     }
 }
 
-// Create CO₂ molecules inside alveoli
+// Create CO₂ molecules inside alveolus
 function createCO2Molecules() {
-    for (let i = 1; i <= 3; i++) {
-        const container = document.getElementById(`co2Molecules${i}`);
-        if (!container) continue;
-        
-        const count = 6;
-        
-        for (let j = 0; j < count; j++) {
-            const molecule = document.createElement('div');
-            molecule.className = 'co2-molecule';
-            const angle = (360 / count) * j + 30;
-            const radius = 50;
-            const x = 90 + Math.cos(angle * Math.PI / 180) * radius;
-            const y = 90 + Math.sin(angle * Math.PI / 180) * radius;
-            molecule.style.left = x + 'px';
-            molecule.style.top = y + 'px';
-            molecule.style.animationDelay = (j * 0.25) + 's';
-            container.appendChild(molecule);
-        }
+    const container = document.getElementById('co2Molecules');
+    if (!container) return;
+    
+    const count = 8;
+    
+    for (let j = 0; j < count; j++) {
+        const molecule = document.createElement('div');
+        molecule.className = 'co2-molecule';
+        const angle = (360 / count) * j + 22.5;
+        const radiusX = 90;
+        const radiusY = 110;
+        const centerX = 140;
+        const centerY = 160;
+        const x = centerX + Math.cos(angle * Math.PI / 180) * radiusX;
+        const y = centerY + Math.sin(angle * Math.PI / 180) * radiusY;
+        molecule.style.left = x + 'px';
+        molecule.style.top = y + 'px';
+        molecule.style.animationDelay = (j * 0.25) + 's';
+        container.appendChild(molecule);
     }
 }
 
@@ -408,57 +355,46 @@ const style = document.createElement('style');
 style.textContent = `
     @keyframes inhale-o2 {
         0% {
-            bottom: 100%;
+            bottom: 90%;
             opacity: 1;
             transform: translateX(-50%) scale(1);
         }
         50% {
-            opacity: 0.8;
+            opacity: 0.9;
             transform: translateX(-50%) scale(1.2);
         }
         100% {
-            bottom: -20px;
+            bottom: -10px;
             opacity: 0;
-            transform: translateX(-50%) scale(0.8);
+            transform: translateX(-50%) scale(0.9);
         }
     }
     
     @keyframes exhale-co2 {
         0% {
-            top: 100%;
+            top: 90%;
             opacity: 1;
             transform: translateX(-50%) scale(1);
         }
         50% {
-            opacity: 0.8;
+            opacity: 0.9;
             transform: translateX(-50%) scale(1.2);
         }
         100% {
-            top: -20px;
+            top: -10px;
             opacity: 0;
-            transform: translateX(-50%) scale(0.8);
+            transform: translateX(-50%) scale(0.9);
         }
     }
     
-    @keyframes o2-into-capillary {
-        0% {
-            transform: translate(0, 0) scale(1);
+    @keyframes pulse-arrow {
+        0%, 100% {
+            opacity: 0.7;
+            transform: scale(1);
+        }
+        50% {
             opacity: 1;
-        }
-        100% {
-            transform: translate(0, 70px) scale(0.7);
-            opacity: 0.8;
-        }
-    }
-    
-    @keyframes co2-out-of-capillary {
-        0% {
-            transform: translate(0, 0) scale(0.7);
-            opacity: 0.8;
-        }
-        100% {
-            transform: translate(0, -70px) scale(1);
-            opacity: 1;
+            transform: scale(1.1);
         }
     }
 `;
