@@ -18,6 +18,15 @@ const repositories = [
         tags: ["biology", "respiration", "gas exchange", "lungs", "interactive", "education"],
         status: "active"
     },
+    {
+        name: "Electric Circuit Experiment",
+        description: "Interactive virtual laboratory for learning about electric circuits, circuit symbols, current flow, and voltage measurements. Build circuits by dragging components, observe current and electron flow, and measure voltage and current with ammeters and voltmeters.",
+        icon: "⚡",
+        url: "electric_circuit/",
+        branch: "SecSci",
+        tags: ["physics", "electricity", "circuits", "ohm's law", "interactive", "education"],
+        status: "active"
+    },
     // Add more experiments here as they are created
     // Example structure:
     // {
