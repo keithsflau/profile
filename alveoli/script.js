@@ -240,88 +240,94 @@ function contractAlveoli() {
     // Handled by CSS animation
 }
 
-// Animate O₂ entering blood (flowing into capillary)
+// Animate O₂ entering blood (flowing into capillary network)
 function animateO2ToBlood() {
     for (let i = 1; i <= 3; i++) {
         const o2ToBlood = document.getElementById(`o2ToBlood${i}`);
-        const alveolus = document.getElementById(`alveolus${i}`);
-        const capillary = alveolus.querySelector('.capillary');
+        if (!o2ToBlood) continue;
         
-        // Create O₂ molecules flowing from alveolus into capillary
-        for (let j = 0; j < 3; j++) {
-            setTimeout(() => {
-                const particle = document.createElement('div');
-                particle.className = 'o2-particle';
-                const startX = 90; // Center of alveolus
-                const startY = 90;
-                const endX = 90; // Center of capillary (aligned with alveolus)
-                const endY = 160; // Bottom of alveolus where capillary is
-                
-                particle.style.cssText = `
-                    position: absolute;
-                    left: ${startX}px;
-                    top: ${startY}px;
-                    width: 8px;
-                    height: 8px;
-                    background: #2196f3;
-                    border-radius: 50%;
-                    box-shadow: 0 0 4px rgba(33, 150, 243, 0.8);
-                    z-index: 10;
-                    animation: o2-into-capillary ${breathCycleDuration / 4}ms ease-in forwards;
-                `;
-                
-                o2ToBlood.appendChild(particle);
-                setTimeout(() => particle.remove(), breathCycleDuration / 4);
-            }, j * 100);
-        }
+        // Create O₂ molecules flowing from center of alveolus to surrounding capillaries
+        const directions = ['top', 'right', 'bottom', 'left'];
+        const positions = [
+            { x: '50%', y: '50%', offsetX: '0', offsetY: '-90px' }, // top
+            { x: '50%', y: '50%', offsetX: '90px', offsetY: '0' },  // right
+            { x: '50%', y: '50%', offsetX: '0', offsetY: '90px' },  // bottom
+            { x: '50%', y: '50%', offsetX: '-90px', offsetY: '0' }  // left
+        ];
+        
+        directions.forEach((direction, idx) => {
+            for (let j = 0; j < 2; j++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = `o2-particle ${direction}`;
+                    particle.style.cssText = `
+                        position: absolute;
+                        left: ${positions[idx].x};
+                        top: ${positions[idx].y};
+                        transform: translate(-50%, -50%);
+                        animation: o2-${direction} ${breathCycleDuration / 4}ms ease-in forwards;
+                    `;
+                    
+                    o2ToBlood.appendChild(particle);
+                    setTimeout(() => particle.remove(), breathCycleDuration / 4);
+                }, (idx * 150) + (j * 50));
+            }
+        });
     }
 }
 
-// Animate CO₂ from blood entering alveoli (flowing out of capillary)
+// Animate CO₂ from blood entering alveoli (flowing out of capillary network)
 function animateCO2FromBlood() {
     for (let i = 1; i <= 3; i++) {
         const co2FromBlood = document.getElementById(`co2FromBlood${i}`);
-        const alveolus = document.getElementById(`alveolus${i}`);
-        const capillary = alveolus.querySelector('.capillary');
+        if (!co2FromBlood) continue;
         
-        // Create CO₂ molecules flowing from capillary into alveolus
-        for (let j = 0; j < 3; j++) {
-            setTimeout(() => {
-                const particle = document.createElement('div');
-                particle.className = 'co2-particle';
-                const startX = 90; // Center of capillary
-                const startY = 160; // Position in capillary
-                const endX = 90; // Center of alveolus
-                const endY = 90; // Center of alveolus
-                
-                particle.style.cssText = `
-                    position: absolute;
-                    left: ${startX}px;
-                    top: ${startY}px;
-                    width: 8px;
-                    height: 8px;
-                    background: #ff9800;
-                    border-radius: 50%;
-                    box-shadow: 0 0 4px rgba(255, 152, 0, 0.8);
-                    z-index: 10;
-                    animation: co2-out-of-capillary ${breathCycleDuration / 4}ms ease-out forwards;
-                `;
-                
-                co2FromBlood.appendChild(particle);
-                setTimeout(() => particle.remove(), breathCycleDuration / 4);
-            }, j * 100);
-        }
+        // Create CO₂ molecules flowing from surrounding capillaries to center of alveolus
+        const directions = ['top', 'right', 'bottom', 'left'];
+        const positions = [
+            { x: '50%', y: '0%', offsetX: '0', offsetY: '-90px' },     // from top
+            { x: '100%', y: '50%', offsetX: '90px', offsetY: '0' },    // from right
+            { x: '50%', y: '100%', offsetX: '0', offsetY: '90px' },    // from bottom
+            { x: '0%', y: '50%', offsetX: '-90px', offsetY: '0' }      // from left
+        ];
+        
+        directions.forEach((direction, idx) => {
+            for (let j = 0; j < 2; j++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = `co2-particle ${direction}`;
+                    particle.style.cssText = `
+                        position: absolute;
+                        left: ${positions[idx].x};
+                        top: ${positions[idx].y};
+                        transform: translate(-50%, -50%);
+                        animation: co2-to-${direction} ${breathCycleDuration / 4}ms ease-out forwards;
+                    `;
+                    
+                    co2FromBlood.appendChild(particle);
+                    setTimeout(() => particle.remove(), breathCycleDuration / 4);
+                }, (idx * 150) + (j * 50));
+            }
+        });
     }
 }
 
-// Create blood flow animation in capillaries
+// Create blood flow animation in capillary network
 function createBloodFlow() {
     for (let i = 1; i <= 3; i++) {
-        const capillary = document.querySelector(`#alveolus${i} .capillary`);
-        const bloodCell = document.getElementById(`bloodCell${i}`);
+        const bloodCellsContainer = document.getElementById(`bloodCells${i}`);
+        if (!bloodCellsContainer) continue;
         
-        if (bloodCell) {
-            bloodCell.style.animation = `blood-flow ${breathCycleDuration * 2}ms linear infinite`;
+        // Create multiple blood cells flowing around the alveolus
+        const cellCount = 6;
+        for (let j = 0; j < cellCount; j++) {
+            const bloodCell = document.createElement('div');
+            bloodCell.className = 'blood-cell';
+            bloodCell.style.cssText = `
+                animation: blood-flow-around ${8 + j}s linear infinite;
+                animation-delay: ${j * 1.3}s;
+            `;
+            bloodCellsContainer.appendChild(bloodCell);
         }
     }
 }
