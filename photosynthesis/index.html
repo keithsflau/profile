@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photosynthesis Experiment - SecSci</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="experiment-container">
+        <header class="experiment-header">
+            <h1>🌱 Photosynthesis Experiment</h1>
+            <p>Interactive Virtual Laboratory</p>
+            <a href="../" class="back-link">← Back to Portal</a>
+        </header>
+
+        <div class="experiment-layout">
+            <!-- Left Panel: Controls -->
+            <div class="controls-panel">
+                <h2>Experiment Controls</h2>
+                
+                <div class="control-group">
+                    <label for="lightIntensity">
+                        <span class="control-icon">💡</span>
+                        Light Intensity: <span id="lightValue">50</span>%
+                    </label>
+                    <input type="range" id="lightIntensity" min="0" max="100" value="50" class="slider">
+                </div>
+
+                <div class="control-group">
+                    <label for="co2Concentration">
+                        <span class="control-icon">💨</span>
+                        CO₂ Concentration: <span id="co2Value">500</span> ppm
+                    </label>
+                    <input type="range" id="co2Concentration" min="0" max="1000" value="500" class="slider">
+                </div>
+
+                <div class="control-group">
+                    <label for="temperature">
+                        <span class="control-icon">🌡️</span>
+                        Temperature: <span id="tempValue">25</span>°C
+                    </label>
+                    <input type="range" id="temperature" min="10" max="40" value="25" class="slider">
+                </div>
+
+                <div class="control-group">
+                    <label for="waterAvailability">
+                        <span class="control-icon">💧</span>
+                        Water Availability: <span id="waterValue">50</span>%
+                    </label>
+                    <input type="range" id="waterAvailability" min="0" max="100" value="50" class="slider">
+                </div>
+
+                <div class="preset-buttons">
+                    <h3>Preset Scenarios</h3>
+                    <button class="preset-btn" data-preset="optimal">Optimal Conditions</button>
+                    <button class="preset-btn" data-preset="lowlight">Low Light</button>
+                    <button class="preset-btn" data-preset="hightemp">High Temperature</button>
+                    <button class="preset-btn" data-preset="reset">Reset</button>
+                </div>
+            </div>
+
+            <!-- Center Panel: Visualization -->
+            <div class="visualization-panel">
+                <div class="plant-container">
+                    <div class="plant" id="plant">
+                        <div class="leaf leaf1"></div>
+                        <div class="leaf leaf2"></div>
+                        <div class="leaf leaf3"></div>
+                        <div class="stem"></div>
+                    </div>
+                    <div class="bubbles-container" id="bubblesContainer"></div>
+                </div>
+
+                <div class="equation-display">
+                    <h3>Photosynthesis Equation</h3>
+                    <div class="equation">
+                        <span class="reactant">6CO₂</span> + 
+                        <span class="reactant">6H₂O</span> + 
+                        <span class="energy">light energy</span> → 
+                        <span class="product">C₆H₁₂O₆</span> + 
+                        <span class="product">6O₂</span>
+                    </div>
+                </div>
+
+                <div class="molecules-display">
+                    <div class="molecule co2">
+                        <div class="molecule-icon">CO₂</div>
+                        <div class="molecule-count" id="co2Count">500 ppm</div>
+                    </div>
+                    <div class="molecule o2">
+                        <div class="molecule-icon">O₂</div>
+                        <div class="molecule-count" id="o2Count">0</div>
+                    </div>
+                    <div class="molecule glucose">
+                        <div class="molecule-icon">C₆H₁₂O₆</div>
+                        <div class="molecule-count" id="glucoseCount">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Data & Graph -->
+            <div class="data-panel">
+                <h2>Data & Analysis</h2>
+                
+                <div class="rate-display">
+                    <h3>Photosynthesis Rate</h3>
+                    <div class="rate-value" id="rateValue">0</div>
+                    <div class="rate-unit">molecules/min</div>
+                </div>
+
+                <div class="graph-container">
+                    <canvas id="rateGraph" width="300" height="200"></canvas>
+                </div>
+
+                <div class="data-log">
+                    <h3>Data Log</h3>
+                    <div class="log-entries" id="logEntries"></div>
+                    <button class="log-btn" id="logDataBtn">Record Data Point</button>
+                    <button class="log-btn" id="clearLogBtn">Clear Log</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Panel -->
+        <div class="instructions-panel">
+            <h2>📚 Instructions</h2>
+            <div class="instructions-content">
+                <p><strong>Objective:</strong> Observe how different factors affect the rate of photosynthesis.</p>
+                <ol>
+                    <li>Adjust the controls to change environmental conditions</li>
+                    <li>Observe the real-time effects on the plant and oxygen production</li>
+                    <li>Record data points to analyze the relationship between variables</li>
+                    <li>Try different preset scenarios to see optimal and limiting conditions</li>
+                </ol>
+                <div class="info-box">
+                    <strong>Key Concepts:</strong>
+                    <ul>
+                        <li>Light intensity directly affects the rate of photosynthesis</li>
+                        <li>CO₂ is a limiting factor at low concentrations</li>
+                        <li>Temperature affects enzyme activity (optimal around 25-30°C)</li>
+                        <li>Water is essential for photosynthesis to occur</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
