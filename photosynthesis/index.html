@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecSci Portal - Science Experiments Repository</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="portal-container">
+        <header class="header">
+            <h1>🔬 SecSci Portal</h1>
+            <p>Interactive Virtual Science Experiments</p>
+            <p class="subtitle">Explore all repositories in the SecSci branch</p>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search experiments..." />
+            <button id="searchBtn">🔍</button>
+        </div>
+
+        <div class="repos-grid" id="reposGrid">
+            <!-- Repositories will be dynamically loaded here -->
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading repositories...</p>
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <p>No repositories found matching your search.</p>
+        </div>
+
+        <footer class="footer">
+            <p>SecSci Portal © 2025</p>
+            <p>Science Education Platform | keithsflau/SecSci</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
