@@ -175,37 +175,72 @@ function updatePlantVisualization() {
     const leaves = plant.querySelectorAll('.leaf');
     
     // Plant health based on photosynthesis rate
-    const health = experimentState.photosynthesisRate / 100;
+    const health = Math.min(1, experimentState.photosynthesisRate / 100);
     
     // Color intensity (green)
     const greenIntensity = Math.min(255, 100 + (health * 155));
     const color = `rgb(34, ${Math.round(greenIntensity)}, 34)`;
     
-    leaves.forEach(leaf => {
+    leaves.forEach((leaf) => {
+        // Only update color and opacity, don't touch transform to preserve animations
         leaf.style.backgroundColor = color;
         leaf.style.opacity = Math.max(0.5, health);
     });
     
-    // Plant size based on glucose production
+    // Plant size based on glucose production - use CSS variable
     const scale = 0.8 + (health * 0.4);
+    plant.style.setProperty('--plant-scale', scale);
+    // Use transform on plant container, not individual leaves
     plant.style.transform = `scale(${scale})`;
 }
 
 // Update oxygen bubbles
+let bubbleUpdateInterval = null;
+
 function updateBubbles() {
     const container = document.getElementById('bubblesContainer');
-    container.innerHTML = '';
     
     // Number of bubbles based on O2 production
-    const numBubbles = Math.min(20, Math.floor(experimentState.o2Production / 10));
+    const numBubbles = Math.min(20, Math.max(0, Math.floor(experimentState.o2Production / 10)));
     
-    for (let i = 0; i < numBubbles; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
-        bubble.style.left = `${Math.random() * 100}%`;
-        bubble.style.animationDelay = `${Math.random() * 2}s`;
-        bubble.style.animationDuration = `${2 + Math.random() * 2}s`;
-        container.appendChild(bubble);
+    // Only update if number changed significantly or container is empty
+    const currentBubbles = container.children.length;
+    if (Math.abs(currentBubbles - numBubbles) > 2 || currentBubbles === 0) {
+        // Clear and recreate bubbles
+        container.innerHTML = '';
+        
+        for (let i = 0; i < numBubbles; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.left = `${20 + Math.random() * 60}%`;
+            bubble.style.animationDelay = `${Math.random() * 2}s`;
+            bubble.style.animationDuration = `${2 + Math.random() * 2}s`;
+            container.appendChild(bubble);
+        }
+    }
+    
+    // Continuously add new bubbles if photosynthesis is active
+    if (experimentState.photosynthesisRate > 0 && !bubbleUpdateInterval) {
+        bubbleUpdateInterval = setInterval(() => {
+            if (experimentState.photosynthesisRate > 0 && container.children.length < numBubbles) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.style.left = `${20 + Math.random() * 60}%`;
+                bubble.style.animationDelay = '0s';
+                bubble.style.animationDuration = `${2 + Math.random() * 2}s`;
+                container.appendChild(bubble);
+                
+                // Remove bubble after animation completes
+                setTimeout(() => {
+                    if (bubble.parentNode) {
+                        bubble.remove();
+                    }
+                }, parseFloat(bubble.style.animationDuration) * 1000);
+            }
+        }, 1000);
+    } else if (experimentState.photosynthesisRate === 0 && bubbleUpdateInterval) {
+        clearInterval(bubbleUpdateInterval);
+        bubbleUpdateInterval = null;
     }
 }
 

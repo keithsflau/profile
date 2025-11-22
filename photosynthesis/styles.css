@@ -184,30 +184,53 @@ body {
     background: #66bb6a;
     border-radius: 0 100% 0 100%;
     position: absolute;
-    animation: grow 2s ease-in-out infinite;
+    animation: grow 2s ease-in-out infinite, sway 3s ease-in-out infinite;
+    transform-origin: center bottom;
+}
+
+@keyframes grow {
+    0%, 100% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.05);
+    }
+}
+
+@keyframes sway {
+    0%, 100% { 
+        transform: rotate(0deg);
+    }
+    25% { 
+        transform: rotate(-2deg);
+    }
+    75% { 
+        transform: rotate(2deg);
+    }
 }
 
 .leaf1 {
     top: -80px;
     left: -30px;
     transform: rotate(-30deg);
+    animation: grow 2s ease-in-out infinite, sway 3s ease-in-out infinite;
+    animation-delay: 0s, 0s;
 }
 
 .leaf2 {
     top: -100px;
     left: 20px;
     transform: rotate(20deg);
+    animation: grow 2.2s ease-in-out infinite, sway 3.2s ease-in-out infinite;
+    animation-delay: 0.3s, 0.5s;
 }
 
 .leaf3 {
     top: -70px;
     right: -20px;
     transform: rotate(30deg);
-}
-
-@keyframes grow {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    animation: grow 2.1s ease-in-out infinite, sway 3.1s ease-in-out infinite;
+    animation-delay: 0.6s, 1s;
 }
 
 .bubbles-container {
@@ -223,21 +246,35 @@ body {
     position: absolute;
     width: 20px;
     height: 20px;
-    background: rgba(33, 150, 243, 0.6);
+    background: radial-gradient(circle, rgba(33, 150, 243, 0.8) 0%, rgba(33, 150, 243, 0.4) 100%);
     border-radius: 50%;
-    animation: float 3s ease-in infinite;
+    border: 2px solid rgba(33, 150, 243, 0.3);
+    animation: float 3s ease-in infinite, pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
 }
 
 @keyframes float {
     0% {
         bottom: 0;
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0) scale(0.8);
+    }
+    50% {
+        transform: translateX(10px) scale(1);
     }
     100% {
         bottom: 100%;
         opacity: 0;
-        transform: translateX(20px);
+        transform: translateX(20px) scale(0.8);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
     }
 }
 
