@@ -29,7 +29,6 @@ function initializeExperiment() {
     createO2Molecules();
     createCO2Molecules();
     createBloodFlow();
-    createExchangeArrows();
 }
 
 // Setup control panel
@@ -144,11 +143,14 @@ function stopAnimation() {
 
 // Perform inhale animation
 function performInhale() {
-    // Create oxygen molecules entering from airway into alveolus
+    // Create oxygen molecules entering from airway into alveoli
     createInhaleO2Molecules();
     
-    // Expand alveolus (inhale expands)
-    expandAlveolus();
+    // Expand alveoli (inhale expands)
+    expandAlveoli();
+    
+    // Show oxygen entering blood
+    animateO2ToBlood();
     
     // Update status display
     const o2Count = document.getElementById('o2Count');
@@ -159,11 +161,14 @@ function performInhale() {
 
 // Perform exhale animation
 function performExhale() {
-    // Create carbon dioxide molecules exiting from alveolus
+    // Create carbon dioxide molecules exiting from alveoli
     createExhaleCO2Molecules();
     
-    // Contract alveolus (exhale contracts)
-    contractAlveolus();
+    // Contract alveoli (exhale contracts)
+    contractAlveoli();
+    
+    // Show carbon dioxide from blood entering alveoli
+    animateCO2FromBlood();
     
     // Update status display
     const o2Count = document.getElementById('o2Count');
@@ -230,98 +235,94 @@ function createExhaleCO2Molecules() {
     }
 }
 
-// Expand alveolus
+// Expand alveoli
+function expandAlveoli() {
+    for (let i = 1; i <= 3; i++) {
+        const alveolus = document.getElementById(`alveolus${i}`);
+        if (alveolus) {
+            alveolus.style.animation = `breathing ${breathCycleDuration}ms ease-in-out infinite`;
+        }
+    }
+}
+
+// Expand alveolus (alias for consistency)
 function expandAlveolus() {
-    const alveolus = document.getElementById('alveolus');
-    if (alveolus) {
-        alveolus.style.animation = `breathing ${breathCycleDuration}ms ease-in-out infinite`;
-    }
+    expandAlveoli();
 }
 
-// Contract alveolus
+// Contract alveoli
+function contractAlveoli() {
+    // Handled by CSS animation - alveoli contract during exhale
+}
+
+// Contract alveolus (alias for consistency)
 function contractAlveolus() {
-    // Handled by CSS animation
+    contractAlveoli();
 }
 
-// Create blood flow animation in capillary
+// Create blood flow animation in capillary network
 function createBloodFlow() {
-    const bloodFlowContainer = document.getElementById('bloodFlowContainer');
-    if (!bloodFlowContainer) return;
-    
-    // Create multiple blood cells flowing through the capillary
-    const cellCount = 4;
-    for (let i = 0; i < cellCount; i++) {
-        const bloodCell = document.createElement('div');
-        bloodCell.className = 'blood-cell';
-        bloodCell.style.cssText = `
-            animation: blood-flow ${6 + i * 0.5}s linear infinite;
-            animation-delay: ${i * 1.5}s;
-        `;
-        bloodFlowContainer.appendChild(bloodCell);
+    for (let i = 1; i <= 3; i++) {
+        const bloodCellsContainer = document.getElementById(`bloodCells${i}`);
+        if (!bloodCellsContainer) continue;
+        
+        // Create multiple blood cells flowing around the alveolus
+        const cellCount = 6;
+        for (let j = 0; j < cellCount; j++) {
+            const bloodCell = document.createElement('div');
+            bloodCell.className = 'blood-cell';
+            bloodCell.style.cssText = `
+                animation: blood-flow-around ${8 + j * 0.5}s linear infinite;
+                animation-delay: ${j * 1.3}s;
+            `;
+            bloodCellsContainer.appendChild(bloodCell);
+        }
     }
 }
 
-// Create exchange arrows
-function createExchangeArrows() {
-    // O₂ arrow (red arrow from alveolus to capillary)
-    const o2ArrowContainer = document.getElementById('o2ArrowContainer');
-    if (o2ArrowContainer) {
-        // Arrow is created in HTML, we just animate it
-        o2ArrowContainer.style.animation = `pulse-arrow 3s ease-in-out infinite`;
-    }
-    
-    // CO₂ arrow (blue arrow from capillary to alveolus)
-    const co2ArrowContainer = document.getElementById('co2ArrowContainer');
-    if (co2ArrowContainer) {
-        co2ArrowContainer.style.animation = `pulse-arrow 3s ease-in-out infinite 1.5s`;
-    }
-}
-
-// Create O₂ molecules inside alveolus
+// Create O₂ molecules inside alveoli
 function createO2Molecules() {
-    const container = document.getElementById('o2Molecules');
-    if (!container) return;
-    
-    const count = 10;
-    
-    for (let j = 0; j < count; j++) {
-        const molecule = document.createElement('div');
-        molecule.className = 'o2-molecule';
-        const angle = (360 / count) * j;
-        const radiusX = 100;
-        const radiusY = 120;
-        const centerX = 140;
-        const centerY = 160;
-        const x = centerX + Math.cos(angle * Math.PI / 180) * radiusX;
-        const y = centerY + Math.sin(angle * Math.PI / 180) * radiusY;
-        molecule.style.left = x + 'px';
-        molecule.style.top = y + 'px';
-        molecule.style.animationDelay = (j * 0.2) + 's';
-        container.appendChild(molecule);
+    for (let i = 1; i <= 3; i++) {
+        const container = document.getElementById(`o2Molecules${i}`);
+        if (!container) continue;
+        
+        const count = 8;
+        
+        for (let j = 0; j < count; j++) {
+            const molecule = document.createElement('div');
+            molecule.className = 'o2-molecule';
+            const angle = (360 / count) * j;
+            const radius = 60;
+            const x = 90 + Math.cos(angle * Math.PI / 180) * radius;
+            const y = 90 + Math.sin(angle * Math.PI / 180) * radius;
+            molecule.style.left = x + 'px';
+            molecule.style.top = y + 'px';
+            molecule.style.animationDelay = (j * 0.2) + 's';
+            container.appendChild(molecule);
+        }
     }
 }
 
-// Create CO₂ molecules inside alveolus
+// Create CO₂ molecules inside alveoli
 function createCO2Molecules() {
-    const container = document.getElementById('co2Molecules');
-    if (!container) return;
-    
-    const count = 8;
-    
-    for (let j = 0; j < count; j++) {
-        const molecule = document.createElement('div');
-        molecule.className = 'co2-molecule';
-        const angle = (360 / count) * j + 22.5;
-        const radiusX = 90;
-        const radiusY = 110;
-        const centerX = 140;
-        const centerY = 160;
-        const x = centerX + Math.cos(angle * Math.PI / 180) * radiusX;
-        const y = centerY + Math.sin(angle * Math.PI / 180) * radiusY;
-        molecule.style.left = x + 'px';
-        molecule.style.top = y + 'px';
-        molecule.style.animationDelay = (j * 0.25) + 's';
-        container.appendChild(molecule);
+    for (let i = 1; i <= 3; i++) {
+        const container = document.getElementById(`co2Molecules${i}`);
+        if (!container) continue;
+        
+        const count = 6;
+        
+        for (let j = 0; j < count; j++) {
+            const molecule = document.createElement('div');
+            molecule.className = 'co2-molecule';
+            const angle = (360 / count) * j + 30;
+            const radius = 50;
+            const x = 90 + Math.cos(angle * Math.PI / 180) * radius;
+            const y = 90 + Math.sin(angle * Math.PI / 180) * radius;
+            molecule.style.left = x + 'px';
+            molecule.style.top = y + 'px';
+            molecule.style.animationDelay = (j * 0.25) + 's';
+            container.appendChild(molecule);
+        }
     }
 }
 
@@ -387,15 +388,44 @@ style.textContent = `
         }
     }
     
-    @keyframes pulse-arrow {
-        0%, 100% {
-            opacity: 0.7;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 1;
-            transform: scale(1.1);
-        }
+    @keyframes o2-top {
+        0% { transform: translate(-50%, -50%) translateY(-90px) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) translateY(0) scale(1.2); opacity: 0.9; }
+    }
+    
+    @keyframes o2-right {
+        0% { transform: translate(-50%, -50%) translateX(90px) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) translateX(0) scale(1.2); opacity: 0.9; }
+    }
+    
+    @keyframes o2-bottom {
+        0% { transform: translate(-50%, -50%) translateY(90px) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) translateY(0) scale(1.2); opacity: 0.9; }
+    }
+    
+    @keyframes o2-left {
+        0% { transform: translate(-50%, -50%) translateX(-90px) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) translateX(0) scale(1.2); opacity: 0.9; }
+    }
+    
+    @keyframes co2-top {
+        0% { transform: translate(-50%, -50%) translateY(0) scale(0.9); opacity: 0.8; }
+        100% { transform: translate(-50%, -50%) translateY(-90px) scale(1); opacity: 1; }
+    }
+    
+    @keyframes co2-right {
+        0% { transform: translate(-50%, -50%) translateX(0) scale(0.9); opacity: 0.8; }
+        100% { transform: translate(-50%, -50%) translateX(90px) scale(1); opacity: 1; }
+    }
+    
+    @keyframes co2-bottom {
+        0% { transform: translate(-50%, -50%) translateY(0) scale(0.9); opacity: 0.8; }
+        100% { transform: translate(-50%, -50%) translateY(90px) scale(1); opacity: 1; }
+    }
+    
+    @keyframes co2-left {
+        0% { transform: translate(-50%, -50%) translateX(0) scale(0.9); opacity: 0.8; }
+        100% { transform: translate(-50%, -50%) translateX(-90px) scale(1); opacity: 1; }
     }
 `;
 document.head.appendChild(style);
