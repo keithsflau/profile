@@ -1,0 +1,780 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    min-height: 100vh;
+    color: #1565c0;
+    padding: 20px;
+}
+
+.experiment-container {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.experiment-header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.experiment-header h1 {
+    font-size: 2.5rem;
+    color: #1565c0;
+    margin-bottom: 10px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #1976d2;
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 2px solid #1976d2;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.back-link:hover {
+    background: #1976d2;
+    color: white;
+}
+
+.experiment-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 350px;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.controls-panel, .data-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.controls-panel h2, .data-panel h2 {
+    color: #1565c0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.control-group {
+    margin-bottom: 25px;
+}
+
+.control-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #1565c0;
+}
+
+.control-icon {
+    font-size: 1.2rem;
+}
+
+.gas-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #90caf9;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    color: #1565c0;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gas-select:hover {
+    border-color: #42a5f5;
+}
+
+.gas-select:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.test-selection {
+    margin-top: 20px;
+}
+
+.test-selection h3 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #1565c0;
+}
+
+.test-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.test-btn {
+    width: 100%;
+    padding: 12px;
+    background: #42a5f5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.test-btn:hover {
+    background: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.test-btn:active {
+    transform: translateY(0);
+}
+
+.reset-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e3f2fd;
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ef5350;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.reset-btn:hover {
+    background: #e53935;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.visualization-panel {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 600px;
+}
+
+.test-setup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.gas-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.gas-jar {
+    width: 200px;
+    height: 300px;
+    border: 4px solid #1976d2;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(to top, rgba(25, 118, 210, 0.1) 0%, transparent 100%);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.gas-label {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 600;
+    color: #1565c0;
+    z-index: 10;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.gas-molecules {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.molecule {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    animation: float-molecule 3s ease-in-out infinite;
+    opacity: 0.7;
+}
+
+@keyframes float-molecule {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+    }
+    25% {
+        transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+        transform: translateY(-10px) translateX(-10px);
+    }
+    75% {
+        transform: translateY(-30px) translateX(5px);
+    }
+}
+
+.apparatus-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.apparatus-placeholder {
+    text-align: center;
+    color: #90caf9;
+    font-size: 1.1rem;
+}
+
+.apparatus {
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+}
+
+.apparatus.inserted {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.test-label {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #1565c0;
+}
+
+/* Splint Apparatus */
+.splint-apparatus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.splint {
+    position: relative;
+    width: 10px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.splint-wood {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to right, #8d6e63, #5d4037);
+    border-radius: 5px 5px 0 0;
+}
+
+.splint-tip {
+    width: 15px;
+    height: 30px;
+    border-radius: 50% 50% 0 0;
+    position: relative;
+    transition: all 0.5s;
+}
+
+.splint-tip.glowing {
+    background: radial-gradient(circle, #ff9800 0%, #f57c00 100%);
+    box-shadow: 0 0 10px #ff9800, 0 0 20px #ff9800;
+    animation: glow 1.5s ease-in-out infinite;
+}
+
+.splint-tip.burning {
+    background: radial-gradient(circle, #ff5722 0%, #e64a19 100%);
+    box-shadow: 0 0 15px #ff5722, 0 0 30px #ff5722;
+    animation: flicker 0.3s ease-in-out infinite;
+}
+
+.splint-tip.relit {
+    background: radial-gradient(circle, #ff5722 0%, #e64a19 100%);
+    box-shadow: 0 0 20px #ff5722, 0 0 40px #ff5722, 0 0 60px #ff5722;
+    animation: relight 0.5s ease-out, flicker 0.3s ease-in-out infinite 0.5s;
+}
+
+.splint-tip.brighter {
+    box-shadow: 0 0 25px #ff5722, 0 0 50px #ff5722, 0 0 75px #ff5722;
+    animation: brighter-flame 0.2s ease-in-out infinite;
+}
+
+.splint-tip.extinguished {
+    background: #757575;
+    box-shadow: none;
+    animation: extinguish 1s ease-out;
+}
+
+@keyframes glow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+@keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); }
+    25% { transform: scale(1.1) rotate(2deg); }
+    50% { transform: scale(0.9) rotate(-1deg); }
+    75% { transform: scale(1.05) rotate(1deg); }
+}
+
+@keyframes relight {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes brighter-flame {
+    0%, 100% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        transform: scale(1.15);
+        filter: brightness(1.3);
+    }
+}
+
+@keyframes extinguish {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0.3;
+        transform: scale(0.5);
+    }
+}
+
+/* Lime Water Apparatus */
+.lime-water-apparatus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.test-tube {
+    width: 80px;
+    height: 200px;
+    border: 3px solid #90caf9;
+    border-radius: 0 0 40px 40px;
+    position: relative;
+    overflow: hidden;
+    background: white;
+}
+
+.lime-water {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60%;
+    transition: all 1s ease;
+}
+
+.lime-water.clear {
+    background: transparent;
+}
+
+.lime-water.milky {
+    background: rgba(255, 255, 255, 0.9);
+    animation: cloud-form 2s ease-out;
+}
+
+@keyframes cloud-form {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hydrogencarbonate Indicator */
+.indicator-apparatus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.indicator-container {
+    width: 150px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.indicator {
+    width: 100px;
+    height: 150px;
+    border-radius: 10px;
+    border: 3px solid #90caf9;
+    transition: all 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.indicator.red {
+    background: #e53935;
+}
+
+.indicator.yellow {
+    background: #fdd835;
+    animation: color-change 1s ease-out;
+}
+
+.indicator-label {
+    position: absolute;
+    bottom: -30px;
+    font-size: 0.8rem;
+    color: #1565c0;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+@keyframes color-change {
+    0% {
+        background: #e53935;
+    }
+    100% {
+        background: #fdd835;
+    }
+}
+
+/* Cobalt Chloride Paper */
+.paper-apparatus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cobalt-paper {
+    width: 120px;
+    height: 80px;
+    border-radius: 8px;
+    border: 2px solid #90caf9;
+    transition: all 1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cobalt-paper.blue {
+    background: #1976d2;
+}
+
+.cobalt-paper.pink {
+    background: #e91e63;
+    animation: paper-color-change 1.5s ease-out;
+}
+
+.paper-label {
+    position: absolute;
+    bottom: -30px;
+    font-size: 0.9rem;
+    color: #1565c0;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+@keyframes paper-color-change {
+    0% {
+        background: #1976d2;
+    }
+    50% {
+        background: #9c27b0;
+    }
+    100% {
+        background: #e91e63;
+    }
+}
+
+/* Result Display */
+.result-display {
+    width: 100%;
+    padding: 20px;
+    background: #e3f2fd;
+    border-radius: 10px;
+    border-left: 5px solid #1976d2;
+}
+
+.result-display h3 {
+    color: #1565c0;
+    margin-bottom: 15px;
+}
+
+.result-type {
+    padding: 15px;
+    border-radius: 8px;
+    background: white;
+}
+
+.result-type.positive {
+    border-left: 4px solid #4caf50;
+}
+
+.result-type.negative {
+    border-left: 4px solid #f44336;
+}
+
+.result-type.partial {
+    border-left: 4px solid #ff9800;
+}
+
+.result-type.variable {
+    border-left: 4px solid #9c27b0;
+}
+
+.result-type h4 {
+    margin-bottom: 10px;
+    color: #1565c0;
+}
+
+.result-type .observation {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.result-type .explanation {
+    color: #666;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* Data Panel Styles */
+.info-section, .observations-section, .explanation-section {
+    margin-bottom: 25px;
+}
+
+.info-section h3, .observations-section h3, .explanation-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #1565c0;
+}
+
+.expected-results {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 100px;
+}
+
+.expected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.expected-item {
+    padding: 10px;
+    border-radius: 5px;
+    background: white;
+    border-left: 4px solid #90caf9;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.expected-item.positive {
+    border-left-color: #4caf50;
+}
+
+.expected-item.negative {
+    border-left-color: #f44336;
+}
+
+.expected-item.partial {
+    border-left-color: #ff9800;
+}
+
+.observations-log {
+    max-height: 200px;
+    overflow-y: auto;
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    min-height: 100px;
+}
+
+.empty-log {
+    color: #90caf9;
+    text-align: center;
+    font-style: italic;
+}
+
+.observation-entry {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 5px;
+    border-left: 4px solid #42a5f5;
+}
+
+.observation-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #1565c0;
+}
+
+.observation-time {
+    color: #90caf9;
+    font-size: 0.85rem;
+}
+
+.observation-details p {
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+.log-btn {
+    width: 100%;
+    padding: 10px;
+    background: #42a5f5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.log-btn:hover {
+    background: #1976d2;
+}
+
+.explanation-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.explanation-card {
+    padding: 15px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    border-left: 4px solid #42a5f5;
+}
+
+.explanation-card h4 {
+    color: #1565c0;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.explanation-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #424242;
+}
+
+/* Instructions Panel */
+.instructions-panel {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.instructions-panel h2 {
+    color: #1565c0;
+    margin-bottom: 20px;
+}
+
+.instructions-content ol {
+    margin-left: 20px;
+    margin-top: 15px;
+}
+
+.instructions-content li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    border-left: 4px solid #42a5f5;
+}
+
+.info-box ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.info-box li {
+    margin-bottom: 8px;
+}
+
+@media (max-width: 1200px) {
+    .experiment-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .controls-panel, .data-panel {
+        order: 2;
+    }
+    
+    .visualization-panel {
+        order: 1;
+    }
+}
+

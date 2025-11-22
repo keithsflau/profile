@@ -1,0 +1,73 @@
+# Alveolar Gas Exchange Experiment
+
+## Introduction
+
+This is an interactive virtual experiment that demonstrates the gas exchange process between air and blood in the alveoli (air sacs). The experiment uses animations to show the flow of oxygen and carbon dioxide during respiration.
+
+## Features
+
+- 🫁 **Real-time Animation Display**: Shows the expansion and contraction of alveoli (air sacs), and the flow of gas molecules
+- 🎛️ **Adjustable Parameters**:
+  - Breathing rate (6-30 breaths per minute)
+  - Inhaled oxygen concentration (10-30%)
+  - Blood carbon dioxide concentration (2-10%)
+  - Animation playback speed (0.5x-3.0x)
+- 📊 **Real-time Data Display**:
+  - Oxygen exchange rate
+  - Carbon dioxide clearance rate
+  - Breathing rate statistics
+- 📚 **Educational Information**: Includes key concepts and experiment instructions
+
+## Experiment Content
+
+### Gas Exchange Process
+
+1. **Inhalation (Inhale)**:
+   - Oxygen (O₂) enters from the air through the airway
+   - O₂ diffuses through the alveolar wall into the air sac (alveolus)
+   - O₂ further diffuses from the alveolus into the blood in the capillary (flows into blood vessel)
+
+2. **Exhalation (Exhale)**:
+   - Carbon dioxide (CO₂) diffuses from the blood in the capillary into the alveolus (flows out of blood vessel)
+   - CO₂ is expelled through the airway
+
+### Key Concepts
+
+- Gas exchange follows diffusion laws (driven by concentration gradient)
+- Alveolar walls are extremely thin (one cell layer), facilitating rapid gas diffusion
+- Hemoglobin transports oxygen in the blood
+- Normal breathing rate is approximately 12-20 breaths per minute
+
+## Visual Components
+
+- **Air Sacs (Alveoli)**: Large, light blue structures representing the air sacs where gas exchange occurs
+- **Capillaries**: Red blood vessels surrounding the alveoli
+- **Gas Flow**: 
+  - Blue molecules (O₂) flowing from alveoli into capillaries (into blood vessel)
+  - Orange molecules (CO₂) flowing from capillaries into alveoli (out of blood vessel)
+- **Blood Flow**: Red blood cells moving through capillaries
+
+## Usage
+
+1. Open the `index.html` file
+2. Use the left control panel to adjust parameters
+3. Observe the gas exchange process in the central animation area
+4. View real-time statistics in the right data panel
+
+## Technical Implementation
+
+- Pure HTML/CSS/JavaScript implementation
+- Uses CSS animations and JavaScript dynamic element creation
+- Responsive design supporting different screen sizes
+
+## Educational Use
+
+Suitable for:
+- Biology education
+- Respiratory system learning
+- Understanding gas exchange mechanisms
+- Interactive science education
+
+---
+
+© 2025 SecSci Portal

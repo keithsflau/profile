@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electric Circuit Experiment - SecSci</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.21.0/dist/index.js"></script>
+</head>
+<body>
+    <div class="experiment-container">
+        <header class="experiment-header">
+            <h1>⚡ Electric Circuit Experiment</h1>
+            <p>Interactive Circuit Symbol Laboratory with Gemini Pro AI</p>
+            <a href="../" class="back-link">← Back to Portal</a>
+        </header>
+
+        <!-- API Key Configuration -->
+        <div class="api-config-panel" id="apiConfigPanel">
+            <div class="api-config-box">
+                <h3>🔑 Gemini API Configuration</h3>
+                <p>Enter your Google Gemini API key to enable AI-powered circuit analysis</p>
+                <input type="password" id="apiKeyInput" placeholder="Enter Gemini API Key" class="api-input">
+                <button id="saveApiKeyBtn" class="api-btn">Save API Key</button>
+                <p class="api-note">Your API key is stored locally and never shared. Get your key from <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+            </div>
+        </div>
+
+        <div class="experiment-layout">
+            <!-- Left Panel: Components & Controls -->
+            <div class="controls-panel">
+                <h2>Circuit Components</h2>
+                
+                <div class="component-palette">
+                    <div class="component-item" data-component="battery" draggable="true">
+                        <div class="component-icon">🔋</div>
+                        <div class="component-label">Battery</div>
+                    </div>
+                    <div class="component-item" data-component="resistor" draggable="true">
+                        <div class="component-icon">⬛</div>
+                        <div class="component-label">Resistor</div>
+                    </div>
+                    <div class="component-item" data-component="led" draggable="true">
+                        <div class="component-icon">💡</div>
+                        <div class="component-label">LED</div>
+                    </div>
+                    <div class="component-item" data-component="switch" draggable="true">
+                        <div class="component-icon">🔘</div>
+                        <div class="component-label">Switch</div>
+                    </div>
+                    <div class="component-item" data-component="ammeter" draggable="true">
+                        <div class="component-icon">A</div>
+                        <div class="component-label">Ammeter</div>
+                    </div>
+                    <div class="component-item" data-component="voltmeter" draggable="true">
+                        <div class="component-icon">V</div>
+                        <div class="component-label">Voltmeter</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>Battery Voltage</h3>
+                    <label for="voltage">
+                        <span class="control-icon">⚡</span>
+                        Voltage: <span id="voltageValue">9</span> V
+                    </label>
+                    <input type="range" id="voltage" min="1.5" max="12" step="1.5" value="9" class="slider">
+                </div>
+
+                <div class="control-group">
+                    <h3>Resistance</h3>
+                    <label for="resistance">
+                        <span class="control-icon">⬛</span>
+                        Resistance: <span id="resistanceValue">100</span> Ω
+                    </label>
+                    <input type="range" id="resistance" min="10" max="1000" step="10" value="100" class="slider">
+                </div>
+
+                <div class="control-group">
+                    <h3>Switch State</h3>
+                    <label class="switch-toggle">
+                        <input type="checkbox" id="switchState" checked>
+                        <span class="switch-slider"></span>
+                        <span id="switchLabel">Closed</span>
+                    </label>
+                </div>
+
+                <div class="preset-buttons">
+                    <h3>Preset Circuits</h3>
+                    <button class="preset-btn" data-preset="simple">Simple Circuit</button>
+                    <button class="preset-btn" data-preset="series">Series Circuit</button>
+                    <button class="preset-btn" data-preset="parallel">Parallel Circuit</button>
+                    <button class="preset-btn" data-preset="clear">Clear Circuit</button>
+                </div>
+
+                <div class="ai-analysis-section">
+                    <h3>🤖 AI Circuit Analysis</h3>
+                    <button class="ai-btn" id="analyzeCircuitBtn" disabled>Analyze Circuit with Gemini</button>
+                    <div class="ai-status" id="aiStatus">API key required</div>
+                </div>
+            </div>
+
+            <!-- Center Panel: Circuit Canvas -->
+            <div class="visualization-panel">
+                <div class="circuit-canvas" id="circuitCanvas">
+                    <svg id="circuitSvg" width="100%" height="100%">
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#ff4444" />
+                            </marker>
+                            <marker id="electron" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                                <circle cx="4" cy="4" r="3" fill="#00aaff" />
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="circuit-components" id="circuitComponents"></div>
+                    <div class="current-flow" id="currentFlow"></div>
+                    <div class="electron-flow" id="electronFlow"></div>
+                    <div class="circuit-warning" id="circuitWarning" style="display: none;">
+                        <div class="warning-box">
+                            <span class="warning-icon">⚠️</span>
+                            <span class="warning-text">Circuit must be closed to work!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="circuit-info">
+                    <div class="info-box">
+                        <h3>Circuit Status</h3>
+                        <div class="status-indicator" id="circuitStatus">
+                            <span class="status-dot"></span>
+                            <span id="statusText">Circuit Open</span>
+                        </div>
+                        <div class="circuit-path-info" id="circuitPathInfo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Measurements & Data -->
+            <div class="data-panel">
+                <h2>Measurements</h2>
+                
+                <div class="measurement-display">
+                    <div class="measurement-item">
+                        <div class="measurement-icon">A</div>
+                        <div class="measurement-label">Current (I)</div>
+                        <div class="measurement-value" id="currentValue">0.00</div>
+                        <div class="measurement-unit">A</div>
+                    </div>
+
+                    <div class="measurement-item">
+                        <div class="measurement-icon">V</div>
+                        <div class="measurement-label">Voltage (V)</div>
+                        <div class="measurement-value" id="voltageDisplay">0.00</div>
+                        <div class="measurement-unit">V</div>
+                    </div>
+
+                    <div class="measurement-item">
+                        <div class="measurement-icon">R</div>
+                        <div class="measurement-label">Resistance (R)</div>
+                        <div class="measurement-value" id="resistanceDisplay">0</div>
+                        <div class="measurement-unit">Ω</div>
+                    </div>
+
+                    <div class="measurement-item">
+                        <div class="measurement-icon">P</div>
+                        <div class="measurement-label">Power (P)</div>
+                        <div class="measurement-value" id="powerValue">0.00</div>
+                        <div class="measurement-unit">W</div>
+                    </div>
+                </div>
+
+                <div class="ohm-law-display">
+                    <h3>Ohm's Law</h3>
+                    <div class="equation">
+                        <div class="formula">V = I × R</div>
+                        <div class="formula">P = V × I</div>
+                    </div>
+                </div>
+
+                <div class="ai-analysis-result" id="aiAnalysisResult" style="display: none;">
+                    <h3>🤖 AI Analysis Result</h3>
+                    <div class="ai-result-content" id="aiResultContent"></div>
+                </div>
+
+                <div class="data-log">
+                    <h3>Data Log</h3>
+                    <div class="log-entries" id="logEntries"></div>
+                    <button class="log-btn" id="logDataBtn" disabled>Record Data Point</button>
+                    <button class="log-btn" id="clearLogBtn">Clear Log</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Panel -->
+        <div class="instructions-panel">
+            <h2>📚 Instructions</h2>
+            <div class="instructions-content">
+                <p><strong>Objective:</strong> Learn about circuit symbols, current flow, and voltage measurements in electric circuits using AI-powered analysis.</p>
+                <ol>
+                    <li><strong>Configure API Key:</strong> Enter your Google Gemini API key to enable AI analysis</li>
+                    <li><strong>Build Circuit:</strong> Drag components from the palette to build your circuit</li>
+                    <li><strong>Close Circuit:</strong> Ensure the circuit forms a complete closed loop with switch closed</li>
+                    <li><strong>Measure:</strong> Only closed circuits will show current and voltage measurements</li>
+                    <li><strong>Observe Flow:</strong> Watch current flow (red arrows) and electron flow (blue dots) animations</li>
+                    <li><strong>AI Analysis:</strong> Use Gemini AI to analyze your circuit configuration</li>
+                    <li><strong>Record Data:</strong> Log measurements for analysis (only works when circuit is closed)</li>
+                </ol>
+                <div class="info-box">
+                    <strong>Key Concepts:</strong>
+                    <ul>
+                        <li><strong>Closed Circuit:</strong> A complete path for current flow - required for circuit to work</li>
+                        <li><strong>Current (I):</strong> Flow of electric charge, measured in Amperes (A)</li>
+                        <li><strong>Voltage (V):</strong> Electrical potential difference, measured in Volts (V)</li>
+                        <li><strong>Resistance (R):</strong> Opposition to current flow, measured in Ohms (Ω)</li>
+                        <li><strong>Ohm's Law:</strong> V = I × R (Voltage equals Current times Resistance)</li>
+                        <li><strong>Conventional Current:</strong> Flows from positive to negative (red arrows)</li>
+                        <li><strong>Electron Flow:</strong> Flows from negative to positive (blue dots)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
