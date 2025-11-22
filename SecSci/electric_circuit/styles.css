@@ -542,3 +542,268 @@ body {
     100% { transform: translateX(100px); opacity: 0; }
 }
 
+/* API Configuration Panel */
+.api-config-panel {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.api-config-box {
+    text-align: center;
+}
+
+.api-config-box h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.api-config-box p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.api-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+.api-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.api-btn {
+    padding: 12px 30px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.api-btn:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.api-note {
+    font-size: 0.9em;
+    color: #888;
+    margin-top: 15px;
+}
+
+.api-note a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.api-note a:hover {
+    text-decoration: underline;
+}
+
+/* Switch Toggle */
+.switch-toggle {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+}
+
+.switch-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.switch-slider {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background: #ccc;
+    border-radius: 30px;
+    transition: background 0.3s;
+}
+
+.switch-slider::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.switch-toggle input[type="checkbox"]:checked + .switch-slider {
+    background: #00ff88;
+}
+
+.switch-toggle input[type="checkbox"]:checked + .switch-slider::before {
+    transform: translateX(30px);
+}
+
+/* Circuit Warning */
+.circuit-warning {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    animation: slideDown 0.3s ease-out;
+}
+
+.warning-box {
+    background: #ff4444;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(255, 68, 68, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.warning-icon {
+    font-size: 1.5em;
+}
+
+.warning-text {
+    font-size: 1.1em;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* AI Analysis Section */
+.ai-analysis-section {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.ai-analysis-section h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.ai-btn {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+}
+
+.ai-btn:hover:not(:disabled) {
+    background: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ai-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.ai-status {
+    font-size: 0.9em;
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    background: #f0f0f0;
+    font-weight: 600;
+}
+
+/* AI Analysis Result */
+.ai-analysis-result {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border-left: 4px solid #667eea;
+}
+
+.ai-analysis-result h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.ai-result-content {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.ai-response {
+    color: #333;
+}
+
+.ai-response strong {
+    color: #667eea;
+}
+
+.ai-error {
+    color: #ff4444;
+    padding: 10px;
+    background: #ffe0e0;
+    border-radius: 5px;
+}
+
+/* Circuit Path Info */
+.circuit-path-info {
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+.circuit-path-info p {
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.log-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.log-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
