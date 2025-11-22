@@ -33,6 +33,14 @@ function initializePortal() {
     const reposGrid = document.getElementById('reposGrid');
     const loading = document.getElementById('loading');
     
+    // Check if repositories array exists and has data
+    if (!repositories || repositories.length === 0) {
+        console.error('No repositories found');
+        loading.style.display = 'none';
+        document.getElementById('noResults').style.display = 'block';
+        return;
+    }
+    
     // Simulate loading for better UX
     setTimeout(() => {
         loading.style.display = 'none';
@@ -44,20 +52,35 @@ function initializePortal() {
 function displayRepositories(repos) {
     const reposGrid = document.getElementById('reposGrid');
     const noResults = document.getElementById('noResults');
+    const loading = document.getElementById('loading');
     
-    if (repos.length === 0) {
-        reposGrid.style.display = 'none';
-        noResults.style.display = 'block';
+    // Hide loading
+    if (loading) {
+        loading.style.display = 'none';
+    }
+    
+    // Check if repos is valid
+    if (!repos || repos.length === 0) {
+        if (reposGrid) reposGrid.style.display = 'none';
+        if (noResults) noResults.style.display = 'block';
         return;
     }
     
-    reposGrid.style.display = 'grid';
-    noResults.style.display = 'none';
-    reposGrid.innerHTML = '';
+    // Show grid and hide no results
+    if (reposGrid) {
+        reposGrid.style.display = 'grid';
+        reposGrid.innerHTML = '';
+    }
+    if (noResults) {
+        noResults.style.display = 'none';
+    }
     
+    // Create and append cards
     repos.forEach((repo, index) => {
         const card = createRepoCard(repo, index);
-        reposGrid.appendChild(card);
+        if (reposGrid && card) {
+            reposGrid.appendChild(card);
+        }
     });
 }
 
