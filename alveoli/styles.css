@@ -219,10 +219,11 @@ body {
     width: 180px;
     height: 180px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(233, 245, 255, 0.8) 50%, rgba(187, 222, 251, 0.7) 100%);
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(233, 245, 255, 0.85) 50%, rgba(187, 222, 251, 0.75) 100%);
     border: 3px solid #90caf9;
     box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
     animation: breathing 4s ease-in-out infinite;
+    overflow: visible;
 }
 
 @keyframes breathing {
@@ -294,76 +295,92 @@ body {
 
 .capillary {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 20px;
-    background: linear-gradient(to right, #d32f2f 0%, #f44336 50%, #d32f2f 100%);
-    border-radius: 10px;
+    width: 140px;
+    height: 24px;
+    background: linear-gradient(to right, #b71c1c 0%, #d32f2f 50%, #f44336 100%, #d32f2f 100%);
+    border-radius: 12px;
+    border: 2px solid #c62828;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(211, 47, 47, 0.4);
+    z-index: 5;
 }
 
 .blood-cell {
-    width: 16px;
-    height: 16px;
-    background: radial-gradient(circle, #d32f2f 0%, #b71c1c 100%);
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 30% 30%, #f44336 0%, #d32f2f 50%, #b71c1c 100%);
     border-radius: 50%;
+    border: 1px solid #c62828;
     animation: blood-flow 4s linear infinite;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes blood-flow {
     0% {
-        transform: translateX(-50px);
+        transform: translateX(-55px);
     }
     100% {
-        transform: translateX(50px);
+        transform: translateX(55px);
     }
 }
 
 .o2-to-blood, .co2-from-blood {
     position: absolute;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
+    z-index: 6;
 }
 
 .o2-particle {
-    width: 8px;
-    height: 8px;
-    background: #2196f3;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #42a5f5 0%, #2196f3 100%);
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(33, 150, 243, 0.8);
-    animation: o2-to-blood 2s ease-in forwards;
+    box-shadow: 0 0 6px rgba(33, 150, 243, 0.9);
+    animation: o2-into-capillary 2s ease-in forwards;
 }
 
-@keyframes o2-to-blood {
+@keyframes o2-into-capillary {
     0% {
-        transform: translate(0, -40px) scale(1);
+        transform: translate(0, -60px) scale(1);
         opacity: 1;
     }
+    50% {
+        opacity: 0.9;
+        transform: translate(0, -30px) scale(1.1);
+    }
     100% {
-        transform: translate(0, 20px) scale(0.5);
-        opacity: 0;
+        transform: translate(0, 40px) scale(0.8);
+        opacity: 0.7;
     }
 }
 
 .co2-particle {
-    width: 8px;
-    height: 8px;
-    background: #ff9800;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #ffa726 0%, #ff9800 100%);
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(255, 152, 0, 0.8);
-    animation: co2-from-blood 2s ease-out forwards;
+    box-shadow: 0 0 6px rgba(255, 152, 0, 0.9);
+    animation: co2-out-of-capillary 2s ease-out forwards;
 }
 
-@keyframes co2-from-blood {
+@keyframes co2-out-of-capillary {
     0% {
-        transform: translate(0, 20px) scale(0.5);
-        opacity: 0;
+        transform: translate(0, 40px) scale(0.8);
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.9;
+        transform: translate(0, -30px) scale(1.1);
     }
     100% {
-        transform: translate(0, -40px) scale(1);
+        transform: translate(0, -60px) scale(1);
         opacity: 1;
     }
 }

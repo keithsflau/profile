@@ -10,8 +10,8 @@ const repositories = [
         status: "active"
     },
     {
-        name: "肺泡空氣互換實驗",
-        description: "互動式虛擬實驗展示肺泡中空氣與血液之間的氣體交換過程。觀察氧氣如何進入血液，二氧化碳如何從血液排出。可調整呼吸頻率、氣體濃度等參數。",
+        name: "Alveolar Gas Exchange Experiment",
+        description: "Interactive virtual experiment demonstrating gas exchange between air and blood in the alveoli. Observe how oxygen enters the bloodstream and carbon dioxide is removed. Adjust breathing rate, gas concentrations, and other parameters.",
         icon: "🫁",
         url: "alveoli/",
         branch: "SecSci",

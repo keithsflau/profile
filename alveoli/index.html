@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>肺泡空氣互換實驗 - SecSci</title>
+    <title>Alveolar Gas Exchange Experiment - SecSci</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="experiment-container">
         <header class="experiment-header">
-            <h1>🫁 肺泡空氣互換實驗</h1>
-            <p>互動式虛擬實驗室</p>
-            <a href="../" class="back-link">← 返回入口</a>
+            <h1>🫁 Alveolar Gas Exchange Experiment</h1>
+            <p>Interactive Virtual Laboratory</p>
+            <a href="../" class="back-link">← Back to Portal</a>
         </header>
 
         <div class="experiment-layout">
             <!-- Left Panel: Controls -->
             <div class="controls-panel">
-                <h2>實驗控制</h2>
+                <h2>Experiment Controls</h2>
                 
                 <div class="control-group">
                     <label for="breathingRate">
                         <span class="control-icon">🫁</span>
-                        呼吸頻率: <span id="breathValue">12</span> 次/分鐘
+                        Breathing Rate: <span id="breathValue">12</span> breaths/min
                     </label>
                     <input type="range" id="breathingRate" min="6" max="30" value="12" class="slider">
                 </div>
@@ -30,7 +30,7 @@
                 <div class="control-group">
                     <label for="o2Concentration">
                         <span class="control-icon">💨</span>
-                        吸入氧氣濃度: <span id="o2Value">21</span>%
+                        Inhaled O₂ Concentration: <span id="o2Value">21</span>%
                     </label>
                     <input type="range" id="o2Concentration" min="10" max="30" value="21" class="slider">
                 </div>
@@ -38,7 +38,7 @@
                 <div class="control-group">
                     <label for="co2Concentration">
                         <span class="control-icon">💨</span>
-                        血液CO₂濃度: <span id="co2Value">5</span>%
+                        Blood CO₂ Concentration: <span id="co2Value">5</span>%
                     </label>
                     <input type="range" id="co2Concentration" min="2" max="10" value="5" class="slider">
                 </div>
@@ -46,14 +46,14 @@
                 <div class="control-group">
                     <label for="animationSpeed">
                         <span class="control-icon">⚡</span>
-                        動畫速度: <span id="speedValue">1.0</span>x
+                        Animation Speed: <span id="speedValue">1.0</span>x
                     </label>
                     <input type="range" id="animationSpeed" min="0.5" max="3.0" step="0.1" value="1.0" class="slider">
                 </div>
 
                 <div class="control-buttons">
-                    <button class="control-btn" id="playPauseBtn">⏸ 暫停</button>
-                    <button class="control-btn" id="resetBtn">🔄 重置</button>
+                    <button class="control-btn" id="playPauseBtn">⏸ Pause</button>
+                    <button class="control-btn" id="resetBtn">🔄 Reset</button>
                 </div>
             </div>
 
@@ -100,21 +100,21 @@
                 </div>
 
                 <div class="gas-exchange-display">
-                    <h3>氣體交換過程</h3>
+                    <h3>Gas Exchange Process</h3>
                     <div class="exchange-equation">
                         <div class="exchange-step">
                             <span class="gas o2">O₂</span>
                             <span class="arrow">→</span>
-                            <span class="process">肺泡</span>
+                            <span class="process">Alveoli</span>
                             <span class="arrow">→</span>
-                            <span class="process">血液</span>
+                            <span class="process">Blood</span>
                         </div>
                         <div class="exchange-step">
                             <span class="gas co2">CO₂</span>
                             <span class="arrow">←</span>
-                            <span class="process">肺泡</span>
+                            <span class="process">Alveoli</span>
                             <span class="arrow">←</span>
-                            <span class="process">血液</span>
+                            <span class="process">Blood</span>
                         </div>
                     </div>
                 </div>
@@ -122,48 +122,48 @@
                 <div class="molecules-display">
                     <div class="molecule-card o2-card">
                         <div class="molecule-icon">O₂</div>
-                        <div class="molecule-label">氧氣</div>
-                        <div class="molecule-count" id="o2Count">吸入中...</div>
+                        <div class="molecule-label">Oxygen</div>
+                        <div class="molecule-count" id="o2Count">Inhaling...</div>
                     </div>
                     <div class="molecule-card co2-card">
                         <div class="molecule-icon">CO₂</div>
-                        <div class="molecule-label">二氧化碳</div>
-                        <div class="molecule-count" id="co2Count">呼出中...</div>
+                        <div class="molecule-label">Carbon Dioxide</div>
+                        <div class="molecule-count" id="co2Count">Exhaling...</div>
                     </div>
                 </div>
             </div>
 
             <!-- Right Panel: Data & Info -->
             <div class="data-panel">
-                <h2>數據與分析</h2>
+                <h2>Data & Analysis</h2>
                 
                 <div class="stats-display">
                     <div class="stat-item">
-                        <h3>呼吸頻率</h3>
+                        <h3>Breathing Rate</h3>
                         <div class="stat-value" id="breathRateValue">12</div>
-                        <div class="stat-unit">次/分鐘</div>
+                        <div class="stat-unit">breaths/min</div>
                     </div>
                     
                     <div class="stat-item">
-                        <h3>氧氣交換率</h3>
+                        <h3>O₂ Exchange Rate</h3>
                         <div class="stat-value" id="o2ExchangeRate">95</div>
                         <div class="stat-unit">%</div>
                     </div>
                     
                     <div class="stat-item">
-                        <h3>二氧化碳清除率</h3>
+                        <h3>CO₂ Clearance Rate</h3>
                         <div class="stat-value" id="co2ClearanceRate">88</div>
                         <div class="stat-unit">%</div>
                     </div>
                 </div>
 
                 <div class="info-box">
-                    <h3>📚 知識點</h3>
+                    <h3>📚 Key Concepts</h3>
                     <ul>
-                        <li>肺泡是氣體交換的主要場所</li>
-                        <li>氧氣通過擴散作用進入血液</li>
-                        <li>二氧化碳從血液擴散進入肺泡</li>
-                        <li>交換效率取決於濃度和表面積</li>
+                        <li>Alveoli are the primary site of gas exchange</li>
+                        <li>Oxygen diffuses into the blood through concentration gradient</li>
+                        <li>Carbon dioxide diffuses from blood into alveoli</li>
+                        <li>Exchange efficiency depends on concentration and surface area</li>
                     </ul>
                 </div>
             </div>
@@ -171,22 +171,22 @@
 
         <!-- Instructions Panel -->
         <div class="instructions-panel">
-            <h2>📚 實驗說明</h2>
+            <h2>📚 Instructions</h2>
             <div class="instructions-content">
-                <p><strong>目的：</strong>觀察肺泡中空氣與血液之間的氣體交換過程。</p>
+                <p><strong>Objective:</strong> Observe the gas exchange process between air and blood in the alveoli.</p>
                 <ol>
-                    <li>調整呼吸頻率來控制動畫速度</li>
-                    <li>觀察氧氣（O₂）如何從空氣進入肺泡，再進入血液</li>
-                    <li>觀察二氧化碳（CO₂）如何從血液進入肺泡，再排出體外</li>
-                    <li>調整氣體濃度參數，觀察對交換效率的影響</li>
+                    <li>Adjust breathing rate to control animation speed</li>
+                    <li>Observe how oxygen (O₂) enters the alveoli from air and diffuses into blood</li>
+                    <li>Observe how carbon dioxide (CO₂) diffuses from blood into alveoli and is exhaled</li>
+                    <li>Adjust gas concentration parameters to observe effects on exchange efficiency</li>
                 </ol>
                 <div class="info-box">
-                    <strong>關鍵概念：</strong>
+                    <strong>Key Concepts:</strong>
                     <ul>
-                        <li>氣體交換遵循擴散定律（濃度差驅動）</li>
-                        <li>肺泡壁極薄（僅一層細胞），有利於氣體擴散</li>
-                        <li>血紅蛋白在血液中運送氧氣</li>
-                        <li>正常呼吸頻率約為 12-20 次/分鐘</li>
+                        <li>Gas exchange follows diffusion laws (driven by concentration gradient)</li>
+                        <li>Alveolar walls are extremely thin (one cell layer), facilitating rapid gas diffusion</li>
+                        <li>Hemoglobin transports oxygen in the blood</li>
+                        <li>Normal breathing rate is approximately 12-20 breaths per minute</li>
                     </ul>
                 </div>
             </div>

@@ -1,36 +1,37 @@
-// 肺泡空氣互換實驗 - 互動式動畫
+// Alveolar Gas Exchange Experiment - Interactive Animation
 
-// 實驗狀態
+// Experiment state
 let experimentState = {
-    breathingRate: 12, // 次/分鐘
+    breathingRate: 12, // breaths per minute
     o2Concentration: 21, // %
     co2Concentration: 5, // %
     animationSpeed: 1.0,
     isPlaying: true,
-    phase: 'inhale' // 'inhale' 或 'exhale'
+    phase: 'inhale' // 'inhale' or 'exhale'
 };
 
-// 動畫相關
+// Animation related
 let animationInterval = null;
-let breathCycleDuration = 5000; // 毫秒
+let breathCycleDuration = 5000; // milliseconds
 let animationFrame = null;
 
-// 初始化實驗
+// Initialize experiment
 document.addEventListener('DOMContentLoaded', () => {
     initializeExperiment();
     setupControls();
     startAnimation();
 });
 
-// 初始化實驗
+// Initialize experiment
 function initializeExperiment() {
     updateDisplay();
     updateBreathCycle();
     createO2Molecules();
     createCO2Molecules();
+    createBloodFlow();
 }
 
-// 設置控制面板
+// Setup control panel
 function setupControls() {
     const breathingSlider = document.getElementById('breathingRate');
     const o2Slider = document.getElementById('o2Concentration');
@@ -67,10 +68,10 @@ function setupControls() {
     playPauseBtn.addEventListener('click', () => {
         experimentState.isPlaying = !experimentState.isPlaying;
         if (experimentState.isPlaying) {
-            playPauseBtn.textContent = '⏸ 暫停';
+            playPauseBtn.textContent = '⏸ Pause';
             startAnimation();
         } else {
-            playPauseBtn.textContent = '▶ 播放';
+            playPauseBtn.textContent = '▶ Play';
             stopAnimation();
         }
     });
@@ -91,9 +92,9 @@ function setupControls() {
     });
 }
 
-// 更新呼吸週期
+// Update breath cycle
 function updateBreathCycle() {
-    // 計算每個呼吸週期的持續時間（毫秒）
+    // Calculate duration of each breath cycle (milliseconds)
     breathCycleDuration = (60 / experimentState.breathingRate) * 1000 / experimentState.animationSpeed;
     
     if (animationInterval) {
@@ -105,13 +106,13 @@ function updateBreathCycle() {
     }
 }
 
-// 開始動畫
+// Start animation
 function startAnimation() {
     if (animationInterval) {
         clearInterval(animationInterval);
     }
     
-    // 呼吸週期循環
+    // Breath cycle loop
     animationInterval = setInterval(() => {
         if (experimentState.phase === 'inhale') {
             performInhale();
@@ -126,11 +127,11 @@ function startAnimation() {
         }
     }, breathCycleDuration / 2);
     
-    // 連續動畫
+    // Continuous animation
     animateLoop();
 }
 
-// 停止動畫
+// Stop animation
 function stopAnimation() {
     if (animationInterval) {
         clearInterval(animationInterval);
@@ -140,39 +141,39 @@ function stopAnimation() {
     }
 }
 
-// 執行吸氣動畫
+// Perform inhale animation
 function performInhale() {
-    // 創建氧氣分子從氣道進入肺泡
+    // Create oxygen molecules entering from airway into alveoli
     createInhaleO2Molecules();
     
-    // 更新肺泡大小（吸氣時擴張）
+    // Expand alveoli (inhale expands)
     expandAlveoli();
     
-    // 顯示氧氣進入血液的動畫
+    // Show oxygen entering blood (O₂ flows into capillary)
     animateO2ToBlood();
     
-    // 更新狀態顯示
-    document.getElementById('o2Count').textContent = '吸入中...';
-    document.getElementById('co2Count').textContent = '等待呼出';
+    // Update status display
+    document.getElementById('o2Count').textContent = 'Inhaling...';
+    document.getElementById('co2Count').textContent = 'Waiting to exhale';
 }
 
-// 執行呼氣動畫
+// Perform exhale animation
 function performExhale() {
-    // 創建二氧化碳分子從肺泡排出
+    // Create carbon dioxide molecules exiting from alveoli
     createExhaleCO2Molecules();
     
-    // 更新肺泡大小（呼氣時收縮）
+    // Contract alveoli (exhale contracts)
     contractAlveoli();
     
-    // 顯示二氧化碳從血液進入肺泡的動畫
+    // Show carbon dioxide from blood entering alveoli (CO₂ flows out of capillary)
     animateCO2FromBlood();
     
-    // 更新狀態顯示
-    document.getElementById('o2Count').textContent = '已完成交換';
-    document.getElementById('co2Count').textContent = '呼出中...';
+    // Update status display
+    document.getElementById('o2Count').textContent = 'Exchange complete';
+    document.getElementById('co2Count').textContent = 'Exhaling...';
 }
 
-// 創建吸入的氧氣分子
+// Create inhaled oxygen molecules
 function createInhaleO2Molecules() {
     const moleculesIn = document.getElementById('moleculesIn');
     const count = Math.floor(experimentState.o2Concentration / 5);
@@ -199,7 +200,7 @@ function createInhaleO2Molecules() {
     }
 }
 
-// 創建呼出的二氧化碳分子
+// Create exhaled carbon dioxide molecules
 function createExhaleCO2Molecules() {
     const moleculesOut = document.getElementById('moleculesOut');
     const count = Math.floor(experimentState.co2Concentration * 2);
@@ -226,7 +227,7 @@ function createExhaleCO2Molecules() {
     }
 }
 
-// 擴張肺泡
+// Expand alveoli
 function expandAlveoli() {
     const alveoli = document.querySelectorAll('.alveolus');
     alveoli.forEach(alveolus => {
@@ -234,53 +235,103 @@ function expandAlveoli() {
     });
 }
 
-// 收縮肺泡
+// Contract alveoli
 function contractAlveoli() {
-    // 由 CSS 動畫處理
+    // Handled by CSS animation
 }
 
-// 動畫 O₂ 進入血液
+// Animate O₂ entering blood (flowing into capillary)
 function animateO2ToBlood() {
     for (let i = 1; i <= 3; i++) {
         const o2ToBlood = document.getElementById(`o2ToBlood${i}`);
-        const particle = document.createElement('div');
-        particle.className = 'o2-particle';
-        particle.style.cssText = `
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            animation: o2-to-blood ${breathCycleDuration / 4}ms ease-in forwards;
-        `;
-        o2ToBlood.appendChild(particle);
+        const alveolus = document.getElementById(`alveolus${i}`);
+        const capillary = alveolus.querySelector('.capillary');
         
-        setTimeout(() => particle.remove(), breathCycleDuration / 4);
+        // Create O₂ molecules flowing from alveolus into capillary
+        for (let j = 0; j < 3; j++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.className = 'o2-particle';
+                const startX = 90; // Center of alveolus
+                const startY = 90;
+                const endX = 90; // Center of capillary (aligned with alveolus)
+                const endY = 160; // Bottom of alveolus where capillary is
+                
+                particle.style.cssText = `
+                    position: absolute;
+                    left: ${startX}px;
+                    top: ${startY}px;
+                    width: 8px;
+                    height: 8px;
+                    background: #2196f3;
+                    border-radius: 50%;
+                    box-shadow: 0 0 4px rgba(33, 150, 243, 0.8);
+                    z-index: 10;
+                    animation: o2-into-capillary ${breathCycleDuration / 4}ms ease-in forwards;
+                `;
+                
+                o2ToBlood.appendChild(particle);
+                setTimeout(() => particle.remove(), breathCycleDuration / 4);
+            }, j * 100);
+        }
     }
 }
 
-// 動畫 CO₂ 從血液出來
+// Animate CO₂ from blood entering alveoli (flowing out of capillary)
 function animateCO2FromBlood() {
     for (let i = 1; i <= 3; i++) {
         const co2FromBlood = document.getElementById(`co2FromBlood${i}`);
-        const particle = document.createElement('div');
-        particle.className = 'co2-particle';
-        particle.style.cssText = `
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            animation: co2-from-blood ${breathCycleDuration / 4}ms ease-out forwards;
-        `;
-        co2FromBlood.appendChild(particle);
+        const alveolus = document.getElementById(`alveolus${i}`);
+        const capillary = alveolus.querySelector('.capillary');
         
-        setTimeout(() => particle.remove(), breathCycleDuration / 4);
+        // Create CO₂ molecules flowing from capillary into alveolus
+        for (let j = 0; j < 3; j++) {
+            setTimeout(() => {
+                const particle = document.createElement('div');
+                particle.className = 'co2-particle';
+                const startX = 90; // Center of capillary
+                const startY = 160; // Position in capillary
+                const endX = 90; // Center of alveolus
+                const endY = 90; // Center of alveolus
+                
+                particle.style.cssText = `
+                    position: absolute;
+                    left: ${startX}px;
+                    top: ${startY}px;
+                    width: 8px;
+                    height: 8px;
+                    background: #ff9800;
+                    border-radius: 50%;
+                    box-shadow: 0 0 4px rgba(255, 152, 0, 0.8);
+                    z-index: 10;
+                    animation: co2-out-of-capillary ${breathCycleDuration / 4}ms ease-out forwards;
+                `;
+                
+                co2FromBlood.appendChild(particle);
+                setTimeout(() => particle.remove(), breathCycleDuration / 4);
+            }, j * 100);
+        }
     }
 }
 
-// 創建肺泡內的 O₂ 分子
+// Create blood flow animation in capillaries
+function createBloodFlow() {
+    for (let i = 1; i <= 3; i++) {
+        const capillary = document.querySelector(`#alveolus${i} .capillary`);
+        const bloodCell = document.getElementById(`bloodCell${i}`);
+        
+        if (bloodCell) {
+            bloodCell.style.animation = `blood-flow ${breathCycleDuration * 2}ms linear infinite`;
+        }
+    }
+}
+
+// Create O₂ molecules inside alveoli
 function createO2Molecules() {
     for (let i = 1; i <= 3; i++) {
         const container = document.getElementById(`o2Molecules${i}`);
+        if (!container) continue;
+        
         const count = 8;
         
         for (let j = 0; j < count; j++) {
@@ -298,10 +349,12 @@ function createO2Molecules() {
     }
 }
 
-// 創建肺泡內的 CO₂ 分子
+// Create CO₂ molecules inside alveoli
 function createCO2Molecules() {
     for (let i = 1; i <= 3; i++) {
         const container = document.getElementById(`co2Molecules${i}`);
+        if (!container) continue;
+        
         const count = 6;
         
         for (let j = 0; j < count; j++) {
@@ -319,27 +372,32 @@ function createCO2Molecules() {
     }
 }
 
-// 動畫循環
+// Animation loop
 function animateLoop() {
     if (!experimentState.isPlaying) return;
     
-    // 持續的動畫效果
+    // Continuous animation effects
     animationFrame = requestAnimationFrame(animateLoop);
 }
 
-// 更新顯示
+// Update display
 function updateDisplay() {
-    document.getElementById('breathRateValue').textContent = experimentState.breathingRate;
+    const breathRateEl = document.getElementById('breathRateValue');
+    if (breathRateEl) {
+        breathRateEl.textContent = experimentState.breathingRate;
+    }
     
-    // 計算交換率（基於濃度）
+    // Calculate exchange rate (based on concentration)
     const o2ExchangeRate = Math.min(95 + (experimentState.o2Concentration - 21) * 2, 100);
     const co2ClearanceRate = Math.min(88 + (experimentState.co2Concentration - 5) * 3, 100);
     
-    document.getElementById('o2ExchangeRate').textContent = Math.round(o2ExchangeRate);
-    document.getElementById('co2ClearanceRate').textContent = Math.round(co2ClearanceRate);
+    const o2RateEl = document.getElementById('o2ExchangeRate');
+    const co2RateEl = document.getElementById('co2ClearanceRate');
+    if (o2RateEl) o2RateEl.textContent = Math.round(o2ExchangeRate);
+    if (co2RateEl) co2RateEl.textContent = Math.round(co2ClearanceRate);
 }
 
-// 添加 CSS 動畫樣式
+// Add CSS animation styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes inhale-o2 {
@@ -375,10 +433,32 @@ style.textContent = `
             transform: translateX(-50%) scale(0.8);
         }
     }
+    
+    @keyframes o2-into-capillary {
+        0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(0, 70px) scale(0.7);
+            opacity: 0.8;
+        }
+    }
+    
+    @keyframes co2-out-of-capillary {
+        0% {
+            transform: translate(0, 0) scale(0.7);
+            opacity: 0.8;
+        }
+        100% {
+            transform: translate(0, -70px) scale(1);
+            opacity: 1;
+        }
+    }
 `;
 document.head.appendChild(style);
 
-// 初始執行
+// Initial execution
 performInhale();
 setTimeout(() => {
     experimentState.phase = 'exhale';

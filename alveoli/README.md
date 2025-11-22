@@ -1,63 +1,72 @@
-# 肺泡空氣互換實驗
+# Alveolar Gas Exchange Experiment
 
-## 簡介
+## Introduction
 
-這是一個互動式虛擬實驗，展示肺泡中空氣與血液之間的氣體交換過程。實驗以動畫形式演示呼吸過程中氧氣和二氧化碳的流動。
+This is an interactive virtual experiment that demonstrates the gas exchange process between air and blood in the alveoli (air sacs). The experiment uses animations to show the flow of oxygen and carbon dioxide during respiration.
 
-## 功能特點
+## Features
 
-- 🫁 **即時動畫演示**：顯示肺泡的擴張和收縮，以及氣體分子的流動
-- 🎛️ **可調參數**：
-  - 呼吸頻率（6-30 次/分鐘）
-  - 吸入氧氣濃度（10-30%）
-  - 血液二氧化碳濃度（2-10%）
-  - 動畫播放速度（0.5x-3.0x）
-- 📊 **實時數據顯示**：
-  - 氧氣交換率
-  - 二氧化碳清除率
-  - 呼吸頻率統計
-- 📚 **教學資訊**：包含關鍵概念和實驗說明
+- 🫁 **Real-time Animation Display**: Shows the expansion and contraction of alveoli (air sacs), and the flow of gas molecules
+- 🎛️ **Adjustable Parameters**:
+  - Breathing rate (6-30 breaths per minute)
+  - Inhaled oxygen concentration (10-30%)
+  - Blood carbon dioxide concentration (2-10%)
+  - Animation playback speed (0.5x-3.0x)
+- 📊 **Real-time Data Display**:
+  - Oxygen exchange rate
+  - Carbon dioxide clearance rate
+  - Breathing rate statistics
+- 📚 **Educational Information**: Includes key concepts and experiment instructions
 
-## 實驗內容
+## Experiment Content
 
-### 氣體交換過程
+### Gas Exchange Process
 
-1. **吸入（Inhale）**：
-   - 氧氣（O₂）從空氣進入氣道
-   - 通過肺泡壁擴散進入肺泡
-   - 進一步擴散進入血液中的紅血球
+1. **Inhalation (Inhale)**:
+   - Oxygen (O₂) enters from the air through the airway
+   - O₂ diffuses through the alveolar wall into the air sac (alveolus)
+   - O₂ further diffuses from the alveolus into the blood in the capillary (flows into blood vessel)
 
-2. **呼出（Exhale）**：
-   - 二氧化碳（CO₂）從血液擴散進入肺泡
-   - 通過氣道排出體外
+2. **Exhalation (Exhale)**:
+   - Carbon dioxide (CO₂) diffuses from the blood in the capillary into the alveolus (flows out of blood vessel)
+   - CO₂ is expelled through the airway
 
-### 關鍵概念
+### Key Concepts
 
-- 氣體交換遵循擴散定律（由濃度差驅動）
-- 肺泡壁極薄（僅一層細胞），有利於氣體快速擴散
-- 血紅蛋白在血液中運送氧氣
-- 正常呼吸頻率約為 12-20 次/分鐘
+- Gas exchange follows diffusion laws (driven by concentration gradient)
+- Alveolar walls are extremely thin (one cell layer), facilitating rapid gas diffusion
+- Hemoglobin transports oxygen in the blood
+- Normal breathing rate is approximately 12-20 breaths per minute
 
-## 使用方式
+## Visual Components
 
-1. 打開 `index.html` 文件
-2. 使用左側控制面板調整參數
-3. 觀察中央動畫區域的氣體交換過程
-4. 查看右側數據面板的實時統計
+- **Air Sacs (Alveoli)**: Large, light blue structures representing the air sacs where gas exchange occurs
+- **Capillaries**: Red blood vessels surrounding the alveoli
+- **Gas Flow**: 
+  - Blue molecules (O₂) flowing from alveoli into capillaries (into blood vessel)
+  - Orange molecules (CO₂) flowing from capillaries into alveoli (out of blood vessel)
+- **Blood Flow**: Red blood cells moving through capillaries
 
-## 技術實現
+## Usage
 
-- 純 HTML/CSS/JavaScript 實現
-- 使用 CSS 動畫和 JavaScript 動態創建元素
-- 響應式設計，支援不同螢幕尺寸
+1. Open the `index.html` file
+2. Use the left control panel to adjust parameters
+3. Observe the gas exchange process in the central animation area
+4. View real-time statistics in the right data panel
 
-## 教育用途
+## Technical Implementation
 
-適合用於：
-- 生物學教學
-- 呼吸系統學習
-- 氣體交換機制理解
-- 互動式科學教育
+- Pure HTML/CSS/JavaScript implementation
+- Uses CSS animations and JavaScript dynamic element creation
+- Responsive design supporting different screen sizes
+
+## Educational Use
+
+Suitable for:
+- Biology education
+- Respiratory system learning
+- Understanding gas exchange mechanisms
+- Interactive science education
 
 ---
 
