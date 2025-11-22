@@ -1,0 +1,565 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkSystemFont, 'Segoe UI', 'Microsoft JhengHei', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    min-height: 100vh;
+    color: #1565c0;
+    padding: 20px;
+}
+
+.experiment-container {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.experiment-header {
+    text-align: center;
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.experiment-header h1 {
+    font-size: 2.5rem;
+    color: #1565c0;
+    margin-bottom: 10px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #1976d2;
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 2px solid #1976d2;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.back-link:hover {
+    background: #1976d2;
+    color: white;
+}
+
+.experiment-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr 350px;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.controls-panel, .data-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.controls-panel h2, .data-panel h2 {
+    color: #1565c0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.control-group {
+    margin-bottom: 25px;
+}
+
+.control-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #1565c0;
+}
+
+.control-icon {
+    font-size: 1.2rem;
+}
+
+.slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #bbdefb;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2196f3;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #2196f3;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.control-buttons {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.control-btn:hover {
+    background: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.visualization-panel {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.alveoli-container {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #e1f5fe 0%, #b3e5fc 100%);
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.airway {
+    position: relative;
+    width: 80px;
+    height: 120px;
+    margin-bottom: 30px;
+}
+
+.airway-tube {
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(to bottom, #eceff1 0%, #cfd8dc 100%);
+    border-radius: 40px;
+    position: relative;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.airway-tube::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    border-radius: 30px;
+}
+
+.molecules-in, .molecules-out {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.molecules-out {
+    top: 0;
+    left: 0;
+}
+
+.alveoli-group {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.alveolus {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(233, 245, 255, 0.8) 50%, rgba(187, 222, 251, 0.7) 100%);
+    border: 3px solid #90caf9;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+    animation: breathing 4s ease-in-out infinite;
+}
+
+@keyframes breathing {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+.alveolus-wall {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px dashed rgba(33, 150, 243, 0.5);
+    pointer-events: none;
+}
+
+.o2-molecules, .co2-molecules {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.o2-molecule {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #2196f3 0%, #1976d2 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.6);
+    animation: float-o2 3s ease-in-out infinite;
+}
+
+@keyframes float-o2 {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(10px, -10px) scale(1.1);
+        opacity: 1;
+    }
+}
+
+.co2-molecule {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ff9800 0%, #f57c00 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+    animation: float-co2 3s ease-in-out infinite;
+}
+
+@keyframes float-co2 {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-10px, 10px) scale(1.1);
+        opacity: 1;
+    }
+}
+
+.capillary {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 20px;
+    background: linear-gradient(to right, #d32f2f 0%, #f44336 50%, #d32f2f 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blood-cell {
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(circle, #d32f2f 0%, #b71c1c 100%);
+    border-radius: 50%;
+    animation: blood-flow 4s linear infinite;
+}
+
+@keyframes blood-flow {
+    0% {
+        transform: translateX(-50px);
+    }
+    100% {
+        transform: translateX(50px);
+    }
+}
+
+.o2-to-blood, .co2-from-blood {
+    position: absolute;
+    pointer-events: none;
+}
+
+.o2-particle {
+    width: 8px;
+    height: 8px;
+    background: #2196f3;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(33, 150, 243, 0.8);
+    animation: o2-to-blood 2s ease-in forwards;
+}
+
+@keyframes o2-to-blood {
+    0% {
+        transform: translate(0, -40px) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(0, 20px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.co2-particle {
+    width: 8px;
+    height: 8px;
+    background: #ff9800;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(255, 152, 0, 0.8);
+    animation: co2-from-blood 2s ease-out forwards;
+}
+
+@keyframes co2-from-blood {
+    0% {
+        transform: translate(0, 20px) scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(0, -40px) scale(1);
+        opacity: 1;
+    }
+}
+
+.gas-exchange-display {
+    text-align: center;
+    padding: 20px;
+    background: #e1f5fe;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.gas-exchange-display h3 {
+    margin-bottom: 15px;
+    color: #1565c0;
+}
+
+.exchange-equation {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.exchange-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+.gas {
+    font-weight: 700;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.gas.o2 {
+    background: #2196f3;
+    color: white;
+}
+
+.gas.co2 {
+    background: #ff9800;
+    color: white;
+}
+
+.arrow {
+    font-size: 1.5rem;
+    color: #1565c0;
+}
+
+.process {
+    color: #1565c0;
+    font-weight: 600;
+}
+
+.molecules-display {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    width: 100%;
+}
+
+.molecule-card {
+    text-align: center;
+    padding: 20px;
+    background: #e1f5fe;
+    border-radius: 15px;
+    min-width: 150px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.molecule-card.o2-card {
+    border: 3px solid #2196f3;
+}
+
+.molecule-card.co2-card {
+    border: 3px solid #ff9800;
+}
+
+.molecule-icon {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.molecule-card.o2-card .molecule-icon {
+    color: #2196f3;
+}
+
+.molecule-card.co2-card .molecule-icon {
+    color: #ff9800;
+}
+
+.molecule-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.molecule-count {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1565c0;
+}
+
+.stats-display {
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background: #e1f5fe;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.stat-item h3 {
+    font-size: 0.9rem;
+    color: #1565c0;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1565c0;
+}
+
+.stat-unit {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.info-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e1f5fe;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+}
+
+.info-box h3 {
+    color: #1565c0;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.info-box ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.info-box li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.instructions-panel {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.instructions-panel h2 {
+    color: #1565c0;
+    margin-bottom: 20px;
+}
+
+.instructions-content ol {
+    margin-left: 20px;
+    margin-top: 15px;
+}
+
+.instructions-content li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+@media (max-width: 1200px) {
+    .experiment-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .controls-panel, .data-panel {
+        order: 2;
+    }
+    
+    .visualization-panel {
+        order: 1;
+    }
+    
+    .alveoli-group {
+        flex-direction: column;
+    }
+}
