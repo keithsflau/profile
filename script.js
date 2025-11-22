@@ -24,6 +24,7 @@ const repositories = [
 
 // Initialize the portal
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Portal initialized. Repositories count:', repositories.length);
     initializePortal();
     setupSearch();
 });
@@ -34,16 +35,19 @@ function initializePortal() {
     const loading = document.getElementById('loading');
     
     // Check if repositories array exists and has data
+    console.log('Initializing portal. Repositories:', repositories);
     if (!repositories || repositories.length === 0) {
         console.error('No repositories found');
-        loading.style.display = 'none';
-        document.getElementById('noResults').style.display = 'block';
+        if (loading) loading.style.display = 'none';
+        const noResults = document.getElementById('noResults');
+        if (noResults) noResults.style.display = 'block';
         return;
     }
     
     // Simulate loading for better UX
     setTimeout(() => {
-        loading.style.display = 'none';
+        if (loading) loading.style.display = 'none';
+        console.log('Displaying repositories:', repositories);
         displayRepositories(repositories);
     }, 500);
 }
