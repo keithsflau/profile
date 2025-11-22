@@ -215,6 +215,39 @@ body {
     pointer-events: none;
 }
 
+/* Airway arrows */
+.air-arrow-in, .air-arrow-out {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2.5rem;
+    font-weight: bold;
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 11;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.air-arrow-in {
+    top: 5px;
+    color: #2196f3;
+}
+
+.air-arrow-out {
+    bottom: 5px;
+    color: #ff9800;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        opacity: 0.7; 
+        transform: translateX(-50%) scale(1); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: translateX(-50%) scale(1.3); 
+    }
+}
+
 .air-arrow-in, .air-arrow-out {
     position: absolute;
     left: 50%;
@@ -495,7 +528,7 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 8;
+    z-index: 10;
 }
 
 .o2-arrow-container, .co2-arrow-container {
@@ -503,79 +536,93 @@ body {
 }
 
 .o2-arrow-container {
-    top: 40%;
-    right: 20%;
+    top: 50%;
+    right: 15%;
+    transform: translateY(-50%);
 }
 
 .co2-arrow-container {
-    bottom: 35%;
-    left: 15%;
+    bottom: 25%;
+    left: 10%;
+    transform: translateY(0);
 }
 
 .exchange-arrow {
     position: relative;
-    width: 80px;
-    height: 8px;
+    width: 100px;
+    height: 12px;
     background: transparent;
+    z-index: 10;
 }
 
 .o2-arrow {
     background: linear-gradient(to right, #f44336 0%, #e53935 100%);
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(244, 67, 54, 0.6);
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.8), 0 2px 8px rgba(244, 67, 54, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .o2-arrow::after {
     content: '';
     position: absolute;
-    right: -12px;
+    right: -18px;
     top: 50%;
     transform: translateY(-50%);
     width: 0;
     height: 0;
-    border-left: 12px solid #f44336;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
+    border-left: 18px solid #f44336;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    filter: drop-shadow(2px 0 4px rgba(244, 67, 54, 0.6));
 }
 
 .co2-arrow {
     background: linear-gradient(to left, #2196f3 0%, #1976d2 100%);
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(33, 150, 243, 0.6);
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(33, 150, 243, 0.8), 0 2px 8px rgba(33, 150, 243, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 .co2-arrow::after {
     content: '';
     position: absolute;
-    left: -12px;
+    left: -18px;
     top: 50%;
     transform: translateY(-50%);
     width: 0;
     height: 0;
-    border-right: 12px solid #2196f3;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
+    border-right: 18px solid #2196f3;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    filter: drop-shadow(-2px 0 4px rgba(33, 150, 243, 0.6));
 }
 
 .arrow-label {
     position: absolute;
-    top: -25px;
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    z-index: 11;
 }
 
 .o2-arrow .arrow-label {
     color: #f44336;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #f44336;
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.4);
 }
 
 .co2-arrow .arrow-label {
     color: #2196f3;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #2196f3;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
 }
 
 .gas-exchange-display {
