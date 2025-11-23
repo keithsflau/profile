@@ -1,7 +1,7 @@
 body,
 #root {
   width: 100%;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
   color: #000000;
 }
 
@@ -75,7 +75,7 @@ body,
     0 0 0 1px rgba(220, 200, 180, 0.2) inset;
   border: 2px solid rgba(220, 200, 180, 0.4);
   color: #000000;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -119,7 +119,7 @@ body,
 .action-panel h2 {
   margin: 0.2rem 0;
   color: #000000;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
 }
 
 .action-buttons {
@@ -171,7 +171,7 @@ body,
   flex-direction: column;
   gap: 0.8rem;
   color: #000000;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
 }
 
 .player-card {
@@ -251,7 +251,7 @@ body,
   padding: 1rem;
   color: #000000;
   pointer-events: none;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
   position: relative;
   box-shadow: 
     0 8px 24px rgba(0, 0, 0, 0.08) inset,
@@ -261,12 +261,12 @@ body,
 
 .board-center h2 {
   color: #000000;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
 }
 
 .board-center p {
   color: #000000;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
 }
 
 .board-tile {
@@ -372,7 +372,7 @@ body,
   -webkit-box-orient: vertical;
   text-align: center;
   margin-bottom: 0.2rem;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
   transition: all 0.3s ease;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -416,6 +416,21 @@ body,
   transform: scale(1.2) translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   animation: bounce 0.6s ease infinite;
+}
+
+.player-token.player-moving {
+  animation: playerMove 0.1s ease-in-out infinite;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes playerMove {
+  0%, 100% {
+    transform: scale(1.1) translateY(0);
+  }
+  50% {
+    transform: scale(1.15) translateY(-3px);
+  }
 }
 
 .player-icon {

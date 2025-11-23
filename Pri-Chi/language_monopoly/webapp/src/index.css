@@ -1,5 +1,5 @@
 :root {
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #000000;
@@ -61,7 +61,7 @@ button {
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
   position: relative;
   overflow: hidden;
-  font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+  font-family: "Microsoft JhengHei", "微軟正黑體", "Microsoft JhengHei UI", "JhengHei", "正黑體", sans-serif;
 }
 
 button::before {

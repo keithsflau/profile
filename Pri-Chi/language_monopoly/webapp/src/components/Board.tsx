@@ -1,4 +1,5 @@
 import clsx from "classnames";
+import { useEffect, useState } from "react";
 import type { BoardSpace, PlayerState, PropertyState } from "../types";
 
 const GRID_SIZE = 11;
@@ -45,6 +46,8 @@ interface BoardProps {
   propertyStates: Record<number, PropertyState>;
   selectedSpace?: number;
   onSelectSpace: (spaceId: number) => void;
+  lastDice?: [number, number];
+  currentPlayerIndex?: number;
 }
 
 export const Board = ({
@@ -53,11 +56,92 @@ export const Board = ({
   propertyStates,
   selectedSpace,
   onSelectSpace,
+  lastDice,
+  currentPlayerIndex,
 }: BoardProps) => {
+  const [animatingPlayers, setAnimatingPlayers] = useState<Record<string, { from: number; to: number; progress: number }>>({});
+  const [previousPositions, setPreviousPositions] = useState<Record<string, number>>({});
+
+  // 檢測玩家位置變化並觸發動畫
+  useEffect(() => {
+    if (lastDice && currentPlayerIndex !== undefined && players.length > 0) {
+      const currentPlayer = players[currentPlayerIndex];
+      if (currentPlayer) {
+        const prevPos = previousPositions[currentPlayer.id] ?? currentPlayer.position;
+        if (prevPos !== currentPlayer.position) {
+          // 計算實際步數（處理環形棋盤）
+          let steps = currentPlayer.position - prevPos;
+          if (steps < 0) {
+            steps = spaces.length + steps; // 繞了一圈
+          }
+          
+          // 開始動畫
+          setAnimatingPlayers(prev => ({
+            ...prev,
+            [currentPlayer.id]: {
+              from: prevPos,
+              to: currentPlayer.position,
+              progress: 0,
+            },
+          }));
+
+          // 播放移動音效
+          import("../utils/sound").then(({ playMoveSound, playLandSound }) => {
+            playMoveSound();
+            
+            // 計算動畫時間（每步約80ms，最多2秒）
+            const duration = Math.min(steps * 80, 2000);
+            
+            // 動畫進度更新
+            const startTime = Date.now();
+            const animate = () => {
+              const elapsed = Date.now() - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              
+              setAnimatingPlayers(prev => ({
+                ...prev,
+                [currentPlayer.id]: {
+                  from: prevPos,
+                  to: currentPlayer.position,
+                  progress,
+                },
+              }));
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              } else {
+                // 動畫完成，播放落地音效
+                setTimeout(() => {
+                  playLandSound();
+                }, 50);
+                setAnimatingPlayers(prev => {
+                  const next = { ...prev };
+                  delete next[currentPlayer.id];
+                  return next;
+                });
+              }
+            };
+            
+            requestAnimationFrame(animate);
+          });
+        }
+        setPreviousPositions(prev => ({
+          ...prev,
+          [currentPlayer.id]: currentPlayer.position,
+        }));
+      }
+    }
+  }, [players, lastDice, currentPlayerIndex, spaces.length]);
+
   const tokensBySpace = players.reduce<Record<number, PlayerState[]>>(
     (acc, player) => {
-      if (!acc[player.position]) acc[player.position] = [];
-      acc[player.position].push(player);
+      const animating = animatingPlayers[player.id];
+      const displayPosition = animating 
+        ? Math.round(animating.from + (animating.to - animating.from) * animating.progress)
+        : player.position;
+      
+      if (!acc[displayPosition]) acc[displayPosition] = [];
+      acc[displayPosition].push(player);
       return acc;
     },
     {}
@@ -104,10 +188,13 @@ export const Board = ({
               {occupants.map((p) => {
                 const playerIndex = players.findIndex(pl => pl.id === p.id);
                 const icon = chineseAncientIcons[playerIndex % chineseAncientIcons.length];
+                const isAnimating = animatingPlayers[p.id] !== undefined;
                 return (
                   <span
                     key={p.id}
-                    className="player-token"
+                    className={clsx("player-token", {
+                      "player-moving": isAnimating,
+                    })}
                     style={{ 
                       backgroundColor: p.color,
                       borderColor: p.color,
