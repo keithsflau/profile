@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primarychi Portal - 小學語文學習平台入口</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "楷体", "KaiTi", "STKaiti", "KaiTi SC", "STKaiti SC", "Kaiti SC", "BiauKai", "標楷體", serif;
+      min-height: 100vh;
+      background: 
+        linear-gradient(135deg, rgba(255, 249, 230, 0.9) 0%, rgba(245, 237, 227, 0.95) 50%, rgba(255, 244, 230, 0.9) 100%),
+        url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='dragonPattern' x='0' y='0' width='400' height='400' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 100 80 Q 120 60, 140 80 Q 160 100, 140 120 Q 120 140, 100 120 Q 90 110, 100 100 Z' fill='rgba(220,180,120,0.12)' stroke='rgba(200,160,100,0.15)' stroke-width='1.5'/%3E%3Cpath d='M 140 100 Q 180 60, 220 100 Q 260 140, 300 100 Q 340 60, 380 100 Q 360 120, 340 100 Q 320 80, 300 100 Q 280 120, 260 100 Q 240 80, 220 100 Q 200 120, 180 100 Q 160 80, 140 100 Z' fill='rgba(220,180,120,0.12)' stroke='rgba(200,160,100,0.15)' stroke-width='2'/%3E%3Cpath d='M 380 100 Q 400 80, 420 100 Q 400 120, 390 110 Q 380 105, 380 100 Z' fill='rgba(220,180,120,0.12)' stroke='rgba(200,160,100,0.15)' stroke-width='1.5'/%3E%3Ccircle cx='180' cy='90' r='4' fill='rgba(240,200,150,0.15)'/%3E%3Ccircle cx='220' cy='95' r='4' fill='rgba(240,200,150,0.15)'/%3E%3Ccircle cx='260' cy='90' r='4' fill='rgba(240,200,150,0.15)'/%3E%3Ccircle cx='300' cy='95' r='4' fill='rgba(240,200,150,0.15)'/%3E%3Ccircle cx='340' cy='90' r='4' fill='rgba(240,200,150,0.15)'/%3E%3Cpath d='M 200 110 Q 210 120, 200 130' stroke='rgba(200,160,100,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M 240 105 Q 250 115, 240 125' stroke='rgba(200,160,100,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M 280 110 Q 290 120, 280 130' stroke='rgba(200,160,100,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M 320 105 Q 330 115, 320 125' stroke='rgba(200,160,100,0.15)' stroke-width='2' fill='none'/%3E%3Cpath d='M 300 220 Q 280 200, 260 220 Q 240 240, 220 220 Q 200 200, 180 220 Q 160 240, 140 220 Q 120 200, 100 220 Q 80 240, 60 220 Q 40 200, 20 220 Q 40 200, 60 220 Q 80 240, 100 220 Q 120 200, 140 220 Q 160 240, 180 220 Q 200 200, 220 220 Q 240 240, 260 220 Q 280 200, 300 220 Z' fill='rgba(220,180,120,0.1)' stroke='rgba(200,160,100,0.12)' stroke-width='2'/%3E%3Cpath d='M 80 60 Q 100 40, 120 60 Q 140 80, 160 60 Q 180 40, 200 60 Q 220 80, 240 60 Q 260 40, 280 60 Q 300 80, 320 60' stroke='rgba(220,180,120,0.12)' stroke-width='2.5' fill='none'/%3E%3Cpath d='M 80 340 Q 100 320, 120 340 Q 140 360, 160 340 Q 180 320, 200 340 Q 220 360, 240 340 Q 260 320, 280 340 Q 300 360, 320 340' stroke='rgba(220,180,120,0.12)' stroke-width='2.5' fill='none'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='400' fill='url(%23dragonPattern)'/%3E%3C/svg%3E");
+      background-attachment: fixed;
+      background-size: 400px 400px;
+      color: #000000;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .portal-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      color: #000;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-weight: bold;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      color: #333;
+      margin-top: 0.5rem;
+    }
+
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .package-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 250, 245, 0.95) 100%);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(220, 200, 180, 0.3) inset;
+      border: 2px solid rgba(220, 200, 180, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: #000;
+      display: block;
+      animation: fadeInUp 0.8s ease backwards;
+    }
+
+    .package-card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .package-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .package-card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .package-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s;
+    }
+
+    .package-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.15),
+        0 0 0 2px rgba(255, 220, 150, 0.5) inset,
+        0 10px 30px rgba(255, 230, 200, 0.4);
+      border-color: rgba(255, 200, 150, 0.6);
+    }
+
+    .package-card:hover::before {
+      left: 100%;
+    }
+
+    .package-card.featured {
+      border: 3px solid rgba(255, 200, 100, 0.6);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(220, 200, 180, 0.3) inset,
+        0 0 20px rgba(255, 200, 100, 0.3);
+    }
+
+    .package-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .package-card:hover .package-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .package-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #000;
+    }
+
+    .package-description {
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .package-status {
+      font-size: 0.85rem;
+      color: #666;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .package-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #d9534f;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: gap 0.3s ease;
+    }
+
+    .package-card:hover .package-link {
+      gap: 1rem;
+    }
+
+    .package-link::after {
+      content: '→';
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    .package-card:hover .package-link::after {
+      transform: translateX(5px);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 2px solid rgba(220, 200, 180, 0.3);
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .packages-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .portal-container {
+        padding: 2rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="portal-container">
+    <header class="header">
+      <h1>🏛️ Primarychi Portal</h1>
+      <p>探索不同的語文學習套件</p>
+    </header>
+
+    <div class="packages-grid">
+      <a href="portal/language_monopoly/index.html" class="package-card featured">
+        <span class="package-icon">🎮</span>
+        <h2 class="package-title">語文大富翁 (Language Monopoly)</h2>
+        <p class="package-description">
+          互動式中國語文學習遊戲，透過大富翁遊戲學習成語、部首、詩詞等語文知識。支援2-4人同時遊戲，包含問答挑戰功能。
+        </p>
+        <span class="package-link">開始遊戲</span>
+      </a>
+
+      <!-- 未來可以加入更多套件 -->
+      <!-- 範例：
+      <a href="../portal/other-package/" class="package-card">
+        <span class="package-icon">📚</span>
+        <h2 class="package-title">其他套件名稱</h2>
+        <p class="package-description">套件描述</p>
+        <span class="package-status">即將推出</span>
+        <span class="package-link">了解更多</span>
+      </a>
+      -->
+    </div>
+
+    <footer class="footer">
+      <p>Primarychi Portal © 2025</p>
+      <p>小學語文學習平台 | 讓語文學習更有趣</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 龍紋圖案 -->
+    <pattern id="dragonPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- 龍身曲線 -->
+      <path d="M 20 100 Q 50 80, 80 100 Q 110 120, 140 100 Q 170 80, 180 100" 
+            stroke="rgba(180, 150, 120, 0.15)" stroke-width="2" fill="none"/>
+      <path d="M 25 110 Q 55 90, 85 110 Q 115 130, 145 110 Q 175 90, 185 110" 
+            stroke="rgba(180, 150, 120, 0.12)" stroke-width="1.5" fill="none"/>
+      <!-- 龍鱗 -->
+      <circle cx="50" cy="90" r="2" fill="rgba(180, 150, 120, 0.1)"/>
+      <circle cx="70" cy="95" r="2" fill="rgba(180, 150, 120, 0.1)"/>
+      <circle cx="90" cy="105" r="2" fill="rgba(180, 150, 120, 0.1)"/>
+      <circle cx="110" cy="115" r="2" fill="rgba(180, 150, 120, 0.1)"/>
+      <circle cx="130" cy="105" r="2" fill="rgba(180, 150, 120, 0.1)"/>
+      <circle cx="150" cy="95" r="2" fill="rgba(180, 150, 120, 0.1)"/>
+    </pattern>
+    
+    <!-- 鳳凰圖案 -->
+    <pattern id="phoenixPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- 鳳凰翅膀 -->
+      <path d="M 30 50 Q 40 30, 50 50 Q 60 70, 70 50" 
+            stroke="rgba(200, 160, 100, 0.15)" stroke-width="1.5" fill="none"/>
+      <path d="M 150 50 Q 160 30, 170 50 Q 180 70, 190 50" 
+            stroke="rgba(200, 160, 100, 0.15)" stroke-width="1.5" fill="none"/>
+      <!-- 鳳尾 -->
+      <path d="M 100 80 Q 110 60, 120 80 Q 130 100, 140 80" 
+            stroke="rgba(200, 160, 100, 0.12)" stroke-width="1" fill="none"/>
+      <path d="M 100 90 Q 115 70, 130 90 Q 145 110, 160 90" 
+            stroke="rgba(200, 160, 100, 0.12)" stroke-width="1" fill="none"/>
+    </pattern>
+    
+    <!-- 山水圖案 -->
+    <pattern id="landscapePattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- 遠山 -->
+      <path d="M 0 120 Q 30 100, 60 120 Q 90 100, 120 120 Q 150 100, 180 120 Q 200 110, 200 120 L 200 200 L 0 200 Z" 
+            fill="rgba(160, 180, 200, 0.08)"/>
+      <!-- 近山 -->
+      <path d="M 0 150 Q 40 130, 80 150 Q 120 130, 160 150 Q 200 140, 200 150 L 200 200 L 0 200 Z" 
+            fill="rgba(140, 160, 180, 0.1)"/>
+      <!-- 樹木 -->
+      <path d="M 40 140 L 40 160 M 35 150 L 45 150" 
+            stroke="rgba(100, 140, 80, 0.15)" stroke-width="1.5"/>
+      <path d="M 120 140 L 120 160 M 115 150 L 125 150" 
+            stroke="rgba(100, 140, 80, 0.15)" stroke-width="1.5"/>
+    </pattern>
+    
+    <!-- 花鳥圖案 -->
+    <pattern id="flowerBirdPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- 梅花 -->
+      <circle cx="30" cy="40" r="3" fill="rgba(220, 100, 100, 0.12)"/>
+      <circle cx="35" cy="35" r="2.5" fill="rgba(220, 100, 100, 0.12)"/>
+      <circle cx="25" cy="35" r="2.5" fill="rgba(220, 100, 100, 0.12)"/>
+      <circle cx="30" cy="30" r="2" fill="rgba(220, 100, 100, 0.12)"/>
+      <!-- 竹子 -->
+      <path d="M 160 30 L 160 60" stroke="rgba(80, 140, 80, 0.15)" stroke-width="2"/>
+      <path d="M 165 35 L 165 65" stroke="rgba(80, 140, 80, 0.15)" stroke-width="2"/>
+      <path d="M 155 40 L 155 70" stroke="rgba(80, 140, 80, 0.15)" stroke-width="2"/>
+      <!-- 鳥 -->
+      <ellipse cx="80" cy="50" rx="4" ry="3" fill="rgba(200, 150, 100, 0.1)"/>
+      <path d="M 84 50 L 88 48" stroke="rgba(200, 150, 100, 0.12)" stroke-width="1"/>
+    </pattern>
+    
+    <!-- 書法筆觸 -->
+    <pattern id="calligraphyPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- 筆觸效果 -->
+      <path d="M 20 80 Q 40 60, 60 80 Q 80 100, 100 80" 
+            stroke="rgba(100, 80, 60, 0.1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M 120 100 Q 140 80, 160 100 Q 180 120, 200 100" 
+            stroke="rgba(100, 80, 60, 0.1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- 墨點 -->
+      <circle cx="50" cy="70" r="2" fill="rgba(80, 60, 40, 0.15)"/>
+      <circle cx="150" cy="90" r="2" fill="rgba(80, 60, 40, 0.15)"/>
+    </pattern>
+    
+    <!-- 綜合傳統紋樣 -->
+    <pattern id="traditionalPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+      <!-- 回紋 -->
+      <path d="M 10 10 L 20 10 L 20 20 L 10 20 Z M 15 15 L 15 15" 
+            stroke="rgba(180, 150, 120, 0.12)" stroke-width="1" fill="none"/>
+      <path d="M 180 10 L 190 10 L 190 20 L 180 20 Z" 
+            stroke="rgba(180, 150, 120, 0.12)" stroke-width="1" fill="none"/>
+      <!-- 如意雲頭 -->
+      <path d="M 50 20 Q 55 15, 60 20 Q 65 15, 70 20" 
+            stroke="rgba(200, 180, 160, 0.15)" stroke-width="1.5" fill="none"/>
+      <path d="M 130 20 Q 135 15, 140 20 Q 145 15, 150 20" 
+            stroke="rgba(200, 180, 160, 0.15)" stroke-width="1.5" fill="none"/>
+      <!-- 蓮花 -->
+      <circle cx="100" cy="30" r="4" fill="rgba(240, 180, 200, 0.1)"/>
+      <circle cx="98" cy="28" r="2" fill="rgba(240, 180, 200, 0.12)"/>
+      <circle cx="102" cy="28" r="2" fill="rgba(240, 180, 200, 0.12)"/>
+      <circle cx="100" cy="26" r="2" fill="rgba(240, 180, 200, 0.12)"/>
+    </pattern>
+  </defs>
+</svg>
+
