@@ -136,9 +136,25 @@ export const Board = ({
   const tokensBySpace = players.reduce<Record<number, PlayerState[]>>(
     (acc, player) => {
       const animating = animatingPlayers[player.id];
-      const displayPosition = animating 
-        ? Math.round(animating.from + (animating.to - animating.from) * animating.progress)
-        : player.position;
+      let displayPosition = player.position;
+      
+      if (animating) {
+        // 計算中間位置（處理環形）
+        let from = animating.from;
+        let to = animating.to;
+        let diff = to - from;
+        
+        // 如果繞了一圈（從後往前）
+        if (diff < -spaces.length / 2) {
+          diff += spaces.length;
+        } else if (diff > spaces.length / 2) {
+          diff -= spaces.length;
+        }
+        
+        displayPosition = Math.round(from + diff * animating.progress);
+        if (displayPosition < 1) displayPosition += spaces.length;
+        if (displayPosition > spaces.length) displayPosition -= spaces.length;
+      }
       
       if (!acc[displayPosition]) acc[displayPosition] = [];
       acc[displayPosition].push(player);
