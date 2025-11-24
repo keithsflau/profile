@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Systems Engineering: Plant vs. Animal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom animations and specific overrides */
+        .organelle {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .organelle:hover {
+            filter: brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.5));
+            transform: scale(1.02);
+            transform-origin: center;
+        }
+        .organelle.active {
+            filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 255, 0, 0.8));
+            stroke: white;
+            stroke-width: 3px;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar for info panel */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #1f2937; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #4b5563; 
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; 
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center gap-3 mb-4 md:mb-0">
+                <div class="bg-blue-500 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white">Cellular Systems Engineering</h1>
+                    <p class="text-xs text-slate-400">Interactive Morphology & Function Guide</p>
+                </div>
+            </div>
+            
+            <div class="flex bg-slate-700 rounded-lg p-1">
+                <button onclick="switchView('animal')" id="btn-animal" class="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-blue-600 text-white shadow">Animal System</button>
+                <button onclick="switchView('plant')" id="btn-plant" class="px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white transition-colors">Plant System</button>
+                <button onclick="switchView('compare')" id="btn-compare" class="px-4 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white transition-colors">Comparison Data</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 md:p-6 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Left Column: Visualizer (Canvas) -->
+        <div id="visualizer-container" class="lg:w-7/12 bg-slate-800 rounded-xl shadow-xl border border-slate-700 overflow-hidden relative min-h-[400px] flex items-center justify-center">
+            
+            <!-- Instructions Overlay -->
+            <div class="absolute top-4 left-4 z-10 bg-slate-900/80 backdrop-blur-sm p-3 rounded-lg border border-slate-600">
+                <p class="text-xs text-slate-300 font-mono"><span class="text-yellow-400">►</span> Select an organelle to analyze specs.</p>
+            </div>
+
+            <!-- SVG Container -->
+            <svg id="cell-svg" viewBox="0 0 600 600" class="w-full h-full max-h-[600px] select-none">
+                <defs>
+                    <!-- Gradients for realistic look -->
+                    <radialGradient id="grad-cytoplasm-animal" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:rgb(255,230,230);stop-opacity:0.1" />
+                        <stop offset="100%" style="stop-color:rgb(255,200,200);stop-opacity:0.3" />
+                    </radialGradient>
+                    <radialGradient id="grad-cytoplasm-plant" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                        <stop offset="0%" style="stop-color:rgb(220,255,220);stop-opacity:0.1" />
+                        <stop offset="100%" style="stop-color:rgb(180,255,180);stop-opacity:0.3" />
+                    </radialGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Animal Cell Group -->
+                <g id="animal-cell" style="display: block;">
+                    <!-- Membrane -->
+                    <path d="M100,300 C100,150 200,80 300,80 C400,80 500,150 500,300 C500,450 400,520 300,520 C200,520 100,450 100,300 Z" 
+                          fill="url(#grad-cytoplasm-animal)" stroke="#ec4899" stroke-width="4" 
+                          class="organelle" onclick="selectOrganelle('membrane')"/>
+                    
+                    <!-- Nucleus -->
+                    <circle cx="300" cy="300" r="60" fill="#a855f7" stroke="#7e22ce" stroke-width="3" 
+                            class="organelle" onclick="selectOrganelle('nucleus')"/>
+                    <circle cx="300" cy="300" r="20" fill="#e9d5ff" pointer-events="none"/> <!-- Nucleolus -->
+
+                    <!-- Mitochondria (Power) -->
+                    <g transform="translate(180, 200) rotate(-30)" class="organelle" onclick="selectOrganelle('mitochondria')">
+                        <ellipse cx="0" cy="0" rx="30" ry="15" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+                        <path d="M-20,0 Q-10,-10 0,0 T20,0" fill="none" stroke="#7c2d12" stroke-width="2"/>
+                    </g>
+                    <g transform="translate(400, 380) rotate(15)" class="organelle" onclick="selectOrganelle('mitochondria')">
+                        <ellipse cx="0" cy="0" rx="30" ry="15" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+                        <path d="M-20,0 Q-10,-10 0,0 T20,0" fill="none" stroke="#7c2d12" stroke-width="2"/>
+                    </g>
+
+                    <!-- Ribosomes (Dots) -->
+                    <g class="organelle" onclick="selectOrganelle('ribosomes')">
+                        <circle cx="250" cy="250" r="3" fill="#ef4444" />
+                        <circle cx="260" cy="240" r="3" fill="#ef4444" />
+                        <circle cx="350" cy="260" r="3" fill="#ef4444" />
+                        <circle cx="340" cy="350" r="3" fill="#ef4444" />
+                        <circle cx="200" cy="320" r="3" fill="#ef4444" />
+                    </g>
+
+                    <!-- ER -->
+                    <path d="M230,280 Q200,250 220,220 T250,200" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"
+                          class="organelle" onclick="selectOrganelle('er')"/>
+                    
+                     <!-- Golgi -->
+                     <path d="M380,280 Q410,290 380,300 M375,310 Q415,320 375,330 M380,340 Q410,350 380,360" 
+                           fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round"
+                           class="organelle" onclick="selectOrganelle('golgi')"/>
+
+                     <!-- Centrioles (Animal Only) -->
+                     <g transform="translate(220, 380)" class="organelle" onclick="selectOrganelle('centrioles')">
+                        <rect x="0" y="0" width="20" height="6" fill="#fbbf24" transform="rotate(45)"/>
+                        <rect x="0" y="0" width="20" height="6" fill="#fbbf24" transform="rotate(135)"/>
+                     </g>
+                </g>
+
+                <!-- Plant Cell Group -->
+                <g id="plant-cell" style="display: none;">
+                    <!-- Cell Wall (Outer) -->
+                    <rect x="100" y="80" width="400" height="440" rx="20" ry="20" 
+                          fill="#166534" stroke="#14532d" stroke-width="12"
+                          class="organelle" onclick="selectOrganelle('cell_wall')"/>
+                    
+                    <!-- Membrane (Inner) -->
+                    <rect x="110" y="90" width="380" height="420" rx="15" ry="15" 
+                          fill="url(#grad-cytoplasm-plant)" stroke="#22c55e" stroke-width="2"
+                          class="organelle" onclick="selectOrganelle('membrane')"/>
+
+                    <!-- Central Vacuole (Big) -->
+                    <path d="M150,150 Q300,120 450,150 L450,300 Q300,350 150,300 Z" 
+                          fill="#3b82f6" fill-opacity="0.6" stroke="#2563eb" stroke-width="2"
+                          class="organelle" onclick="selectOrganelle('vacuole')"/>
+
+                    <!-- Nucleus (Pushed to side) -->
+                    <circle cx="200" cy="450" r="50" fill="#a855f7" stroke="#7e22ce" stroke-width="3" 
+                            class="organelle" onclick="selectOrganelle('nucleus')"/>
+                    <circle cx="200" cy="450" r="15" fill="#e9d5ff" pointer-events="none"/>
+
+                    <!-- Chloroplasts (Plant Only) -->
+                    <g transform="translate(420, 420)" class="organelle" onclick="selectOrganelle('chloroplast')">
+                        <ellipse cx="0" cy="0" rx="25" ry="15" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+                        <line x1="-15" y1="0" x2="15" y2="0" stroke="#15803d" stroke-width="2"/>
+                    </g>
+                    <g transform="translate(160, 120)" class="organelle" onclick="selectOrganelle('chloroplast')">
+                        <ellipse cx="0" cy="0" rx="25" ry="15" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+                        <line x1="-15" y1="0" x2="15" y2="0" stroke="#15803d" stroke-width="2"/>
+                    </g>
+                    <g transform="translate(420, 200) rotate(90)" class="organelle" onclick="selectOrganelle('chloroplast')">
+                        <ellipse cx="0" cy="0" rx="25" ry="15" fill="#4ade80" stroke="#15803d" stroke-width="2"/>
+                        <line x1="-15" y1="0" x2="15" y2="0" stroke="#15803d" stroke-width="2"/>
+                    </g>
+
+                    <!-- Mitochondria -->
+                    <g transform="translate(450, 350) rotate(-45)" class="organelle" onclick="selectOrganelle('mitochondria')">
+                        <ellipse cx="0" cy="0" rx="25" ry="12" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+                        <path d="M-15,0 Q-5,-8 5,0 T15,0" fill="none" stroke="#7c2d12" stroke-width="2"/>
+                    </g>
+
+                    <!-- Golgi -->
+                    <path d="M140,350 Q160,360 140,370 M135,380 Q165,390 135,400" 
+                          fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round"
+                          class="organelle" onclick="selectOrganelle('golgi')"/>
+                </g>
+            </svg>
+            
+            <!-- Comparison Table Overlay (Hidden by default) -->
+            <div id="comparison-view" class="hidden absolute inset-0 bg-slate-800 p-6 overflow-y-auto custom-scroll w-full h-full">
+                <h2 class="text-2xl font-bold text-blue-400 mb-6 border-b border-slate-700 pb-2">Comparative Analysis</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-slate-400 border-b border-slate-600">
+                                <th class="p-3">Component / Feature</th>
+                                <th class="p-3 text-pink-400">Animal Cell</th>
+                                <th class="p-3 text-green-400">Plant Cell</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                                <td class="p-3 font-semibold">Cell Wall</td>
+                                <td class="p-3 text-red-400">Absent</td>
+                                <td class="p-3 text-green-400">Present (Cellulose)</td>
+                            </tr>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                                <td class="p-3 font-semibold">Chloroplasts</td>
+                                <td class="p-3 text-red-400">Absent</td>
+                                <td class="p-3 text-green-400">Present (Photosynthesis)</td>
+                            </tr>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                                <td class="p-3 font-semibold">Vacuoles</td>
+                                <td class="p-3">Small, temporary, multiple</td>
+                                <td class="p-3">One large central vacuole (90% vol)</td>
+                            </tr>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                                <td class="p-3 font-semibold">Shape</td>
+                                <td class="p-3">Irregular, Round</td>
+                                <td class="p-3">Fixed, Rectangular, Cubic</td>
+                            </tr>
+                            <tr class="border-b border-slate-700 hover:bg-slate-700/50">
+                                <td class="p-3 font-semibold">Energy Source</td>
+                                <td class="p-3">Mitochondria (Cellular Respiration)</td>
+                                <td class="p-3">Chloroplasts & Mitochondria</td>
+                            </tr>
+                             <tr class="hover:bg-slate-700/50">
+                                <td class="p-3 font-semibold">Centrioles</td>
+                                <td class="p-3 text-green-400">Present (Cell division)</td>
+                                <td class="p-3 text-red-400">Absent (usually)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6 bg-slate-700/50 p-4 rounded-lg border border-slate-600">
+                    <h3 class="font-bold text-yellow-400 mb-2">Engineering Summary</h3>
+                    <p class="text-sm text-slate-300">
+                        Plant cells are designed for <span class="text-white font-bold">static structural integrity</span> and self-generated power (solar). Animal cells are optimized for <span class="text-white font-bold">mobility and flexibility</span>, relying on external intake for fuel.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Info Panel -->
+        <div class="lg:w-5/12 flex flex-col gap-4">
+            
+            <!-- Context Box -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 id="info-title" class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-300">
+                        System Overview
+                    </h2>
+                    <span id="info-badge" class="bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded border border-slate-600 uppercase tracking-wider">
+                        Idle
+                    </span>
+                </div>
+                
+                <p id="info-desc" class="text-slate-300 mb-6 leading-relaxed">
+                    Select a component from the diagram to view its biological function and engineering equivalent.
+                </p>
+
+                <!-- Data Grid -->
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-1">Biological Function</p>
+                        <p id="bio-func" class="text-white font-medium">-</p>
+                    </div>
+                    
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 rounded-bl-full -mr-8 -mt-8"></div>
+                        <p class="text-xs text-blue-400 uppercase font-bold mb-1 flex items-center gap-2">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            Engineering Analogy
+                        </p>
+                        <p id="eng-analogy" class="text-blue-100 font-mono text-sm">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats/Fact Box -->
+            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex-grow">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-3">System Trivia</h3>
+                <div id="trivia-content" class="text-sm text-slate-300 italic border-l-2 border-yellow-500 pl-4">
+                    Click "Animal System" or "Plant System" to begin the simulation.
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 p-6 text-center text-slate-500 text-sm">
+        <p>&copy; 2023 Cellular Engineering. Designed for Educational Use.</p>
+    </footer>
+
+    <script>
+        // Data Store
+        const organelleData = {
+            nucleus: {
+                title: "Nucleus",
+                badge: "Control Center",
+                bio: "Contains genetic material (DNA) and controls the cell's activities, including growth and reproduction.",
+                analogy: "Main CPU & Architectural Blueprint Archive. Issues commands to the rest of the factory.",
+                trivia: "The nucleus membrane has pores that strictly control what data (RNA) enters and leaves."
+            },
+            mitochondria: {
+                title: "Mitochondria",
+                badge: "Power Generator",
+                bio: "Site of cellular respiration; converts glucose into ATP (Adenosine Triphosphate), the cell's energy currency.",
+                analogy: "Power Plant / Generator. Burns fuel to create electricity (ATP) for machinery.",
+                trivia: "Mitochondria have their own separate DNA, suggesting they were once independent bacteria."
+            },
+            membrane: {
+                title: "Cell Membrane",
+                badge: "Security Perimeter",
+                bio: "Semi-permeable barrier that controls the movement of substances in and out of the cell.",
+                analogy: "Factory Walls & Security Gates with ID scanners. Keeps bad things out, lets raw materials in.",
+                trivia: "It's a 'fluid mosaic', meaning the proteins within it float around like rafts on a lipid sea."
+            },
+            cell_wall: {
+                title: "Cell Wall",
+                badge: "Structural Frame",
+                bio: "Rigid outer layer found in plant cells (outside the membrane). Made of cellulose.",
+                analogy: "Reinforced Concrete Exterior / Exoskeleton. Provides rigid shape and protection against pressure.",
+                trivia: "The pressure of the internal liquid against the wall (turgor pressure) helps plants stand upright."
+            },
+            chloroplast: {
+                title: "Chloroplast",
+                badge: "Solar Panel",
+                bio: "Contains chlorophyll; converts light energy into sugars (glucose) via photosynthesis.",
+                analogy: "Solar Power Array & Food Production Facility. Converts sunlight directly into fuel.",
+                trivia: "Like mitochondria, chloroplasts also contain their own unique DNA."
+            },
+            vacuole: {
+                title: "Vacuole",
+                badge: "Storage Warehouse",
+                bio: "Storage sac for water, nutrients, and waste. In plants, the Central Vacuole is massive.",
+                analogy: "Water Tower & Waste Management Depot. Maintains internal pressure.",
+                trivia: "In a dehydrated plant, the vacuole shrinks, causing the plant to wilt."
+            },
+            ribosomes: {
+                title: "Ribosomes",
+                badge: "Assembly Line",
+                bio: "Small structures responsible for protein synthesis based on instructions from the Nucleus.",
+                analogy: "Manufacturing Robots. They take the blueprints and build the actual product.",
+                trivia: "Ribosomes can float freely or be attached to the Rough ER."
+            },
+            er: {
+                title: "Endoplasmic Reticulum",
+                badge: "Transport System",
+                bio: "Network of passageways. Rough ER processes proteins; Smooth ER creates lipids and detoxifies.",
+                analogy: "Conveyor Belts & Assembly Hall. Moves materials around the factory floor.",
+                trivia: "The 'Rough' ER looks rough because it's studded with Ribosomes."
+            },
+            golgi: {
+                title: "Golgi Apparatus",
+                badge: "Shipping Department",
+                bio: "Modifies, sorts, and packages proteins and lipids for secretion or delivery to other organelles.",
+                analogy: "Packaging & Shipping Center. Adds labels, boxes products, and ships them out.",
+                trivia: "Often looks like a stack of deflated balloons or pancakes."
+            },
+            centrioles: {
+                title: "Centrioles",
+                badge: "Logistics Coordinator",
+                bio: "Cylinder-shaped structures that help organize microtubule assembly during cell division.",
+                analogy: "Construction Foremen. They organize the scaffolding when the factory needs to expand or split.",
+                trivia: "Found mostly in animal cells; higher plants typically don't need them to divide."
+            }
+        };
+
+        // State
+        let currentMode = 'animal';
+        let selectedPart = null;
+
+        // DOM Elements
+        const animalGroup = document.getElementById('animal-cell');
+        const plantGroup = document.getElementById('plant-cell');
+        const visualizerContainer = document.getElementById('visualizer-container');
+        const comparisonView = document.getElementById('comparison-view');
+        
+        const btnAnimal = document.getElementById('btn-animal');
+        const btnPlant = document.getElementById('btn-plant');
+        const btnCompare = document.getElementById('btn-compare');
+
+        // Text Elements
+        const infoTitle = document.getElementById('info-title');
+        const infoBadge = document.getElementById('info-badge');
+        const infoDesc = document.getElementById('info-desc');
+        const bioFunc = document.getElementById('bio-func');
+        const engAnalogy = document.getElementById('eng-analogy');
+        const triviaContent = document.getElementById('trivia-content');
+
+        function switchView(mode) {
+            currentMode = mode;
+            
+            // Reset UI bits
+            resetSelection();
+            
+            // Button Styling
+            const activeClass = "bg-blue-600 text-white shadow";
+            const inactiveClass = "text-slate-300 hover:text-white";
+            
+            [btnAnimal, btnPlant, btnCompare].forEach(btn => {
+                btn.className = `px-4 py-2 rounded-md text-sm font-medium transition-colors ${inactiveClass}`;
+            });
+
+            if(mode === 'animal') {
+                btnAnimal.className = `px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeClass}`;
+                animalGroup.style.display = 'block';
+                plantGroup.style.display = 'none';
+                comparisonView.classList.add('hidden');
+                document.getElementById('cell-svg').classList.remove('hidden');
+                
+                infoTitle.textContent = "Animal System";
+                infoDesc.textContent = "A flexible, heterotrophic unit. Lacks a rigid wall, allowing for mobility and complex tissue formation.";
+                infoBadge.textContent = "Consumer";
+                
+            } else if(mode === 'plant') {
+                btnPlant.className = `px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeClass}`;
+                animalGroup.style.display = 'none';
+                plantGroup.style.display = 'block';
+                comparisonView.classList.add('hidden');
+                document.getElementById('cell-svg').classList.remove('hidden');
+
+                infoTitle.textContent = "Plant System";
+                infoDesc.textContent = "A rigid, autotrophic unit. Features structural reinforcement and internal power generation via photosynthesis.";
+                infoBadge.textContent = "Producer";
+            } else {
+                btnCompare.className = `px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeClass}`;
+                comparisonView.classList.remove('hidden');
+                document.getElementById('cell-svg').classList.add('hidden');
+                
+                infoTitle.textContent = "System Comparison";
+                infoDesc.textContent = "Reviewing architectural differences between the two cell types.";
+                infoBadge.textContent = "Analysis";
+            }
+        }
+
+        function selectOrganelle(key) {
+            // Remove active class from all SVG elements
+            document.querySelectorAll('.organelle').forEach(el => el.classList.remove('active'));
+            
+            // Add active class to clicked element (and its siblings if grouped)
+            // Note: simple implementation targeting specific clicked item. 
+            // In a more complex SVG, we might query by data attribute.
+            const clicked = event.target.closest('.organelle');
+            if(clicked) clicked.classList.add('active');
+
+            const data = organelleData[key];
+            if (!data) return;
+
+            // Update Text with Fade Animation
+            const elements = [infoTitle, infoDesc, bioFunc, engAnalogy, triviaContent, infoBadge];
+            
+            elements.forEach(el => {
+                el.classList.remove('fade-in');
+                void el.offsetWidth; // Trigger reflow
+                el.classList.add('fade-in');
+            });
+
+            infoTitle.textContent = data.title;
+            infoBadge.textContent = data.badge;
+            infoDesc.textContent = data.bio; // Using Bio as main desc for clarity
+            bioFunc.textContent = data.bio;
+            engAnalogy.textContent = data.analogy;
+            triviaContent.textContent = data.trivia;
+        }
+
+        function resetSelection() {
+            document.querySelectorAll('.organelle').forEach(el => el.classList.remove('active'));
+            bioFunc.textContent = "-";
+            engAnalogy.textContent = "-";
+            triviaContent.textContent = "Select a component to begin analysis.";
+        }
+
+        // Initialize
+        switchView('animal');
+
+    </script>
+</body>
+</html>
