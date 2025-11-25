@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Integrated Science: Living Things & Habitats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans', sans-serif; }
+        .hidden-section { display: none; }
+        
+        /* Base Fade In */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* New: Floating Animation for Home Cards */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delay { animation: float 7s ease-in-out infinite; animation-delay: 1s; }
+
+        /* New: Shake Animation for Wrong Answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+
+        /* New: Pop Animation for Correct Answers */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .animate-pop { animation: pop 0.3s ease-in-out; }
+
+        /* New: Staggered Card Entrance */
+        .card-enter {
+            opacity: 0;
+            animation: slideUpFade 0.5s ease-out forwards;
+        }
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #059669; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-emerald-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <!-- Science Icon -->
+                    <svg class="w-8 h-8 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    <span class="font-bold text-xl tracking-wide">IS-F1 Module 2</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <button onclick="showSection('home')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-emerald-600 transition bg-emerald-800" id="btn-home">Overview</button>
+                        <button onclick="showSection('mrsgren')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-emerald-600 transition" id="btn-mrsgren">MRS GREN</button>
+                        <button onclick="showSection('habitats')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-emerald-600 transition" id="btn-habitats">Habitats & HK</button>
+                        <button onclick="showSection('quiz')" class="nav-btn px-3 py-2 rounded-md text-sm font-medium hover:bg-emerald-600 transition" id="btn-quiz">Quiz Challenge</button>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button onclick="toggleMobileMenu()" type="button" class="bg-emerald-800 inline-flex items-center justify-center p-2 rounded-md text-emerald-100 hover:text-white hover:bg-emerald-600 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-emerald-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="showSection('home')" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600 w-full text-left">Overview</button>
+                <button onclick="showSection('mrsgren')" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600 w-full text-left">MRS GREN</button>
+                <button onclick="showSection('habitats')" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600 w-full text-left">Habitats & HK</button>
+                <button onclick="showSection('quiz')" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600 w-full text-left">Quiz</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- SECTION: HOME -->
+        <div id="home" class="section-content fade-in">
+            <div class="text-center py-12">
+                <h1 class="text-4xl font-bold text-slate-900 mb-4 tracking-tight">Unit 2: Living Things and Habitats</h1>
+                <p class="text-xl text-slate-600 max-w-2xl mx-auto">Welcome, Junior Scientists! In this module, we will explore what separates the living from the non-living, and how organisms adapt to their environments right here in Hong Kong.</p>
+                
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Added animate-float -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500 text-left animate-float">
+                        <h3 class="text-lg font-bold text-blue-700 mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Engineering Perspective
+                        </h3>
+                        <p class="text-slate-600 text-sm">Think of an animal's body like a machine designed for a specific purpose. This is called <span class="font-bold text-slate-800">Adaptation</span>. Just like we engineer bridges to withstand wind, nature engineers birds to have hollow bones for flight.</p>
+                    </div>
+                    <!-- Added animate-float-delay -->
+                    <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-emerald-500 text-left animate-float-delay">
+                        <h3 class="text-lg font-bold text-emerald-700 mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Key Definitions
+                        </h3>
+                        <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+                            <li><strong>Habitat:</strong> The place where an organism lives.</li>
+                            <li><strong>Biotic Factors:</strong> Living influences (predators, food).</li>
+                            <li><strong>Abiotic Factors:</strong> Non-living influences (temperature, light).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <button onclick="showSection('mrsgren')" class="bg-emerald-600 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-emerald-700 hover:shadow-lg transition transform hover:-translate-y-1 active:scale-95 duration-200">Start Learning &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: MRS GREN -->
+        <div id="mrsgren" class="section-content hidden-section fade-in">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Characteristics of Living Things</h2>
+                <p class="text-slate-600 mt-2">Remember the acronym <span class="font-bold text-emerald-600 text-xl">MRS GREN</span> to identify if something is alive.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="mrsgren-grid">
+                <!-- Staggered delay applied via style tag -->
+                <!-- M -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.1s">
+                    <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">M</div>
+                    <h3 class="text-xl font-bold mb-2">Movement</h3>
+                    <p class="text-sm text-slate-600">Animals move to find food or escape. Plants move slowly (e.g., towards light).</p>
+                </div>
+                <!-- R -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.2s">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">R</div>
+                    <h3 class="text-xl font-bold mb-2">Respiration</h3>
+                    <p class="text-sm text-slate-600">Releasing energy from food. Not just breathing! Plants do this too.</p>
+                </div>
+                <!-- S -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.3s">
+                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">S</div>
+                    <h3 class="text-xl font-bold mb-2">Sensitivity</h3>
+                    <p class="text-sm text-slate-600">Detecting changes in the environment (stimuli) and reacting to them.</p>
+                </div>
+                <!-- G -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.4s">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">G</div>
+                    <h3 class="text-xl font-bold mb-2">Growth</h3>
+                    <p class="text-sm text-slate-600">Increasing in size and complexity permanently.</p>
+                </div>
+                <!-- R -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.5s">
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">R</div>
+                    <h3 class="text-xl font-bold mb-2">Reproduction</h3>
+                    <p class="text-sm text-slate-600">Producing offspring to ensure the species does not die out.</p>
+                </div>
+                <!-- E -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.6s">
+                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">E</div>
+                    <h3 class="text-xl font-bold mb-2">Excretion</h3>
+                    <p class="text-sm text-slate-600">Getting rid of waste products produced inside the body (e.g., CO2, urine).</p>
+                </div>
+                <!-- N -->
+                <div class="card-enter bg-white p-5 rounded-lg shadow hover:shadow-lg transition border border-slate-100 group transform hover:-translate-y-1 duration-300" style="animation-delay: 0.7s">
+                    <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 group-hover:rotate-12 transition duration-300">N</div>
+                    <h3 class="text-xl font-bold mb-2">Nutrition</h3>
+                    <p class="text-sm text-slate-600">Taking in food/nutrients for energy. Plants make their own!</p>
+                </div>
+                 <!-- Check -->
+                 <div class="card-enter bg-emerald-50 p-5 rounded-lg border-2 border-dashed border-emerald-300 flex flex-col items-center justify-center text-center transform hover:scale-105 transition duration-300 cursor-pointer" style="animation-delay: 0.8s" onclick="alert('No! A car does not Grow, Reproduce, or have Sensitivity on its own. It needs all 7 to be alive.')">
+                    <h3 class="text-lg font-bold text-emerald-800 mb-2">Concept Check</h3>
+                    <p class="text-sm text-emerald-700 mb-3">Is a car alive? It moves and excretes gas.</p>
+                    <button class="px-4 py-2 bg-emerald-600 text-white text-xs rounded hover:bg-emerald-700 shadow-md">Reveal Answer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: HABITATS & HK -->
+        <div id="habitats" class="section-content hidden-section fade-in">
+            
+            <div class="flex flex-col md:flex-row gap-8 mb-12">
+                <!-- Explanation -->
+                <div class="md:w-1/3">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">Habitats & Environment</h2>
+                    <p class="text-slate-600 mb-4">A habitat provides organisms with food, water, shelter, and space. The environment consists of two types of factors.</p>
+                    
+                    <div class="bg-white rounded-lg shadow p-4 mb-4 border-l-4 border-slate-500 hover:shadow-md transition duration-300">
+                        <h4 class="font-bold text-slate-700">Abiotic Factors (Non-living)</h4>
+                        <p class="text-sm text-slate-500">Temperature, Light intensity, Water supply, Air/Oxygen.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500 hover:shadow-md transition duration-300">
+                        <h4 class="font-bold text-green-700">Biotic Factors (Living)</h4>
+                        <p class="text-sm text-slate-500">Predators, Prey, Competitors, Decomposers.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive HK Map / Cards -->
+                <div class="md:w-2/3">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4 flex items-center">
+                        <span class="mr-2 animate-bounce">🇭🇰</span> Hong Kong Habitats Explorer
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- Card 1 -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer" onclick="toggleDetails('detail-maipo')">
+                            <div class="h-32 bg-sky-200 relative overflow-hidden group-hover:opacity-90 transition">
+                                <div class="absolute bottom-0 w-full h-12 bg-sky-700 opacity-50"></div>
+                                <div class="absolute bottom-0 left-4 w-2 h-16 bg-green-800 rounded-t"></div>
+                                <div class="absolute bottom-0 left-8 w-2 h-12 bg-green-800 rounded-t"></div>
+                                <div class="absolute bottom-0 left-12 w-2 h-20 bg-green-800 rounded-t"></div>
+                                <div class="absolute top-4 right-4 text-4xl transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2">🦅</div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-lg group-hover:text-emerald-700 transition">Mangroves (Mai Po)</h4>
+                                <p class="text-xs text-slate-500 mt-1">Click to see adaptations</p>
+                            </div>
+                            <!-- Hidden Details -->
+                            <div id="detail-maipo" class="hidden p-4 bg-slate-50 border-t text-sm animate-pop">
+                                <p><strong>Conditions:</strong> Muddy, salty water, unstable soil.</p>
+                                <p class="mt-2"><strong>Adaptations:</strong></p>
+                                <ul class="list-disc list-inside text-slate-600">
+                                    <li><em>Mangrove Trees:</em> Prop roots for support in mud.</li>
+                                    <li><em>Mudskippers:</em> Strong fins to crawl on land.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer" onclick="toggleDetails('detail-rocky')">
+                            <div class="h-32 bg-stone-300 relative overflow-hidden group-hover:opacity-90 transition">
+                                <div class="absolute bottom-0 w-full h-10 bg-blue-500 opacity-30"></div>
+                                <div class="absolute top-8 left-8 text-4xl transition-transform duration-500 group-hover:translate-x-2">🐚</div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-lg group-hover:text-emerald-700 transition">Rocky Shores</h4>
+                                <p class="text-xs text-slate-500 mt-1">Click to see adaptations</p>
+                            </div>
+                            <div id="detail-rocky" class="hidden p-4 bg-slate-50 border-t text-sm animate-pop">
+                                <p><strong>Conditions:</strong> Strong waves, alternating wet/dry (tides).</p>
+                                <p class="mt-2"><strong>Adaptations:</strong></p>
+                                <ul class="list-disc list-inside text-slate-600">
+                                    <li><em>Limpets:</em> Muscular foot to suction onto rocks.</li>
+                                    <li><em>Barnacles:</em> Hard shell to prevent drying out.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer" onclick="toggleDetails('detail-woodland')">
+                            <div class="h-32 bg-green-200 relative overflow-hidden group-hover:opacity-90 transition">
+                                <div class="absolute bottom-0 w-full h-full flex justify-center items-end">
+                                    <div class="text-5xl mb-2 transition-transform duration-500 group-hover:scale-110">🐗</div>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-lg group-hover:text-emerald-700 transition">Woodlands (Country Parks)</h4>
+                                <p class="text-xs text-slate-500 mt-1">Click to see adaptations</p>
+                            </div>
+                            <div id="detail-woodland" class="hidden p-4 bg-slate-50 border-t text-sm animate-pop">
+                                <p><strong>Conditions:</strong> Shady, humid, plenty of shelter.</p>
+                                <p class="mt-2"><strong>Adaptations:</strong></p>
+                                <ul class="list-disc list-inside text-slate-600">
+                                    <li><em>Wild Boar:</em> Strong snout for digging roots.</li>
+                                    <li><em>Moss:</em> Grows in low light conditions.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                         <!-- Card 4 -->
+                         <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group cursor-pointer" onclick="toggleDetails('detail-urban')">
+                            <div class="h-32 bg-slate-300 relative overflow-hidden group-hover:opacity-90 transition">
+                                <div class="absolute bottom-0 w-full h-16 bg-slate-400"></div>
+                                <div class="absolute top-6 left-1/2 transform -translate-x-1/2 text-4xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-6">🐦</div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-lg group-hover:text-emerald-700 transition">Urban Areas</h4>
+                                <p class="text-xs text-slate-500 mt-1">Click to see adaptations</p>
+                            </div>
+                            <div id="detail-urban" class="hidden p-4 bg-slate-50 border-t text-sm animate-pop">
+                                <p><strong>Conditions:</strong> Human presence, concrete, food waste.</p>
+                                <p class="mt-2"><strong>Adaptations:</strong></p>
+                                <ul class="list-disc list-inside text-slate-600">
+                                    <li><em>Pigeons/Sparrows:</em> Eat varied diet (scraps).</li>
+                                    <li><em>Banyan Trees:</em> Roots grow into walls/concrete.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: QUIZ -->
+        <div id="quiz" class="section-content hidden-section fade-in">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-emerald-600 p-6 text-white text-center">
+                    <h2 class="text-2xl font-bold">F1 Integrated Science Challenge</h2>
+                    <p class="text-emerald-100 text-sm">Test your knowledge on Module 2</p>
+                </div>
+                
+                <div id="quiz-container" class="p-8">
+                    <!-- Question Area -->
+                    <div id="question-area">
+                        <div class="flex justify-between text-xs font-bold text-slate-400 mb-4">
+                            <span>QUESTION <span id="q-number">1</span>/5</span>
+                            <span>SCORE: <span id="score">0</span></span>
+                        </div>
+                        <h3 id="question-text" class="text-xl font-bold text-slate-800 mb-6 min-h-[60px]">Loading...</h3>
+                        
+                        <div id="options-container" class="space-y-3">
+                            <!-- Options injected by JS -->
+                        </div>
+                        
+                        <div id="feedback" class="mt-6 p-4 rounded-lg hidden"></div>
+                        
+                        <button id="next-btn" onclick="nextQuestion()" class="mt-6 w-full bg-slate-800 text-white py-3 rounded-lg hover:bg-slate-700 transition hidden shadow-lg transform active:scale-95">Next Question</button>
+                    </div>
+
+                    <!-- Result Area -->
+                    <div id="result-area" class="hidden text-center py-8">
+                        <div class="text-6xl mb-4 animate-bounce">🏆</div>
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">Quiz Complete!</h3>
+                        <p class="text-slate-600 mb-6">You scored <span id="final-score" class="font-bold text-emerald-600 text-xl">0</span> out of 5.</p>
+                        <button onclick="restartQuiz()" class="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 shadow-lg transform active:scale-95">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">© 2023 F1 Integrated Science Department.</p>
+            <p class="text-xs text-slate-500 mt-1">Designed for educational purposes in Hong Kong.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Navigation Logic ---
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(el => {
+                el.classList.add('hidden-section');
+            });
+            // Show target
+            const target = document.getElementById(sectionId);
+            target.classList.remove('hidden-section');
+            
+            // Re-trigger CSS animations for this section
+            // Removing and adding the class forces the animation to restart
+            target.classList.remove('fade-in');
+            void target.offsetWidth; // trigger reflow
+            target.classList.add('fade-in');
+
+            // If MRS GREN section, re-trigger card animations
+            if(sectionId === 'mrsgren') {
+                const cards = document.querySelectorAll('.card-enter');
+                cards.forEach(card => {
+                    card.style.animationName = 'none';
+                    void card.offsetWidth; /* trigger reflow */
+                    card.style.animationName = 'slideUpFade';
+                });
+            }
+            
+            // Update active state in nav (desktop)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-800');
+                btn.classList.add('hover:bg-emerald-600');
+            });
+            
+            const btnId = `btn-${sectionId}`;
+            const btn = document.getElementById(btnId);
+            if(btn) {
+                btn.classList.add('bg-emerald-800');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0,0);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleDetails(id) {
+            const el = document.getElementById(id);
+            if(el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // --- Quiz Logic ---
+        const questions = [
+            {
+                q: "Which of the following is an Abiotic factor?",
+                options: ["A bacteria", "A tree", "Temperature", "A tiger"],
+                answer: 2,
+                note: "Correct! Temperature is non-living (Abiotic)."
+            },
+            {
+                q: "In MRS GREN, what does the 'S' stand for?",
+                options: ["Sleeping", "Sensitivity", "Strength", "Speed"],
+                answer: 1,
+                note: "Correct! Sensitivity is detecting changes in the environment."
+            },
+            {
+                q: "Which adaptation helps a Mudskipper survive in Mai Po Mangroves?",
+                options: ["Thick fur", "Strong fins to crawl", "White feathers", "Sharp claws for climbing trees"],
+                answer: 1,
+                note: "Correct! They need to move on the mud when the tide is low."
+            },
+            {
+                q: "What is a 'Habitat'?",
+                options: ["A living thing", "The place where an organism lives", "A type of food", "A non-living factor"],
+                answer: 1,
+                note: "Correct! It is the home of the organism."
+            },
+            {
+                q: "Why do Barnacles on a rocky shore have hard shells?",
+                options: ["To look pretty", "To attract mates", "To prevent water loss (drying out)", "To swim faster"],
+                answer: 2,
+                note: "Correct! The tide goes out, leaving them exposed to the sun."
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function loadQuiz() {
+            currentQ = 0;
+            score = 0;
+            document.getElementById('result-area').classList.add('hidden');
+            document.getElementById('question-area').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('q-number').innerText = currentQ + 1;
+            document.getElementById('score').innerText = score;
+            document.getElementById('question-text').innerText = q.q;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 hover:border-emerald-500 transition relative transform duration-200 active:scale-98";
+                btn.innerHTML = `<span class="font-bold mr-2">${String.fromCharCode(65 + index)}:</span> ${opt}`;
+                btn.onclick = () => checkAnswer(index, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            // Disable all buttons
+            const buttons = document.querySelectorAll('#options-container button');
+            buttons.forEach(b => b.disabled = true);
+
+            const q = questions[currentQ];
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden');
+
+            if (selectedIndex === q.answer) {
+                score++;
+                btnElement.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800', 'animate-pop');
+                feedback.innerHTML = `<span class="font-bold text-emerald-600">Correct!</span> ${q.note}`;
+                feedback.className = "mt-6 p-4 rounded-lg bg-emerald-50 border border-emerald-200 animate-pop";
+            } else {
+                btnElement.classList.add('bg-red-100', 'border-red-500', 'text-red-800', 'animate-shake');
+                // Highlight correct one
+                buttons[q.answer].classList.add('bg-emerald-100', 'border-emerald-500');
+                feedback.innerHTML = `<span class="font-bold text-red-600">Incorrect.</span> The correct answer was ${questions[currentQ].options[questions[currentQ].answer]}.`;
+                feedback.className = "mt-6 p-4 rounded-lg bg-red-50 border border-red-200 animate-shake";
+            }
+
+            document.getElementById('score').innerText = score;
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ < questions.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('question-area').classList.add('hidden');
+            document.getElementById('result-area').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+        }
+
+        function restartQuiz() {
+            loadQuiz();
+        }
+
+        // Initialize Quiz
+        loadQuiz();
+
+    </script>
+</body>
+</html>

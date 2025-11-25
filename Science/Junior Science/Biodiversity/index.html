@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioHK | Biodiversity in Hong Kong</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'opensans': ['Open Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        'bio-green': '#10B981', // Emerald 500
+                        'bio-teal': '#14B8A6',  // Teal 500
+                        'bio-blue': '#0EA5E9',  // Sky 500
+                        'bio-yellow': '#FBBF24', // Amber 400
+                        'glass-white': 'rgba(255, 255, 255, 0.7)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Glassmorphism Utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(to right, #059669, #0284c7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hover bounce for CTA */
+        .hover-bounce:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="font-opensans bg-slate-50 text-slate-800 antialiased selection:bg-bio-green selection:text-white">
+
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-poppins font-bold text-emerald-700 tracking-wide">
+                <i class="fa-solid fa-leaf mr-2"></i>BioHK
+            </a>
+            <div class="hidden md:flex space-x-8 font-semibold text-slate-600">
+                <a href="#learn" class="hover:text-bio-green transition-colors">Levels</a>
+                <a href="#wildlife" class="hover:text-bio-green transition-colors">HK Wildlife</a>
+                <a href="#quiz" class="hover:text-bio-green transition-colors">Quiz</a>
+            </div>
+            <button class="md:hidden text-emerald-700 text-2xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full z-0 opacity-20 bg-gradient-to-br from-emerald-400 via-teal-300 to-sky-300"></div>
+        
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-emerald-100 text-emerald-800 text-sm font-bold mb-4 uppercase tracking-wider">
+                HK Secondary Biology
+            </span>
+            <h1 class="text-5xl md:text-7xl font-poppins font-extrabold mb-6 leading-tight text-slate-900">
+                Biodiversity: <br>
+                <span class="text-gradient">The Web of Life</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Discover the amazing variety of life right here in Hong Kong, from our country parks to our marine parks.
+            </p>
+            <a href="#learn" class="inline-block bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold py-4 px-10 rounded-full transition-all duration-300 hover-bounce shadow-lg hover:shadow-emerald-500/30">
+                Start Learning <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <section id="learn" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-poppins font-bold text-slate-800 mb-4">The 3 Levels of Biodiversity</h2>
+                <div class="w-20 h-1 bg-bio-green mx-auto rounded-full"></div>
+                <p class="mt-4 text-slate-500">Biodiversity is more than just counting animals. It happens on three scales.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border-t-4 border-emerald-400">
+                    <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 text-3xl mb-6">
+                        <i class="fa-solid fa-dna"></i>
+                    </div>
+                    <h3 class="text-2xl font-poppins font-bold text-slate-800 mb-3">Genetic Diversity</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        The variety of genes within a species. This is why you look different from your classmates! It helps species adapt to changes in the environment.
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border-t-4 border-teal-400">
+                    <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 text-3xl mb-6">
+                        <i class="fa-solid fa-crow"></i>
+                    </div>
+                    <h3 class="text-2xl font-poppins font-bold text-slate-800 mb-3">Species Diversity</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        The variety of different species (plants, animals, fungi) in a specific area. Hong Kong has over 3,300 species of vascular plants!
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow border-t-4 border-sky-400">
+                    <div class="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center text-sky-600 text-3xl mb-6">
+                        <i class="fa-solid fa-earth-asia"></i>
+                    </div>
+                    <h3 class="text-2xl font-poppins font-bold text-slate-800 mb-3">Ecosystem Diversity</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        The variety of habitats. In HK, we have mangroves, rocky shores, woodlands, and urban parks. Each supports different life forms.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="wildlife" class="py-20 bg-slate-50 relative">
+        <div class="absolute right-0 top-1/4 w-1/3 h-1/2 bg-yellow-100 rounded-l-full opacity-50 blur-3xl -z-10"></div>
+
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-poppins font-bold text-slate-800 mb-12 text-center">
+                Iconic Hong Kong Species
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1550949008-61e860b299c8?auto=format&fit=crop&q=80&w=800" 
+                             alt="Spoonbill" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-bio-yellow text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                            <i class="fa-solid fa-star mr-1"></i> Fun Fact
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wide">Bird</span>
+                        </div>
+                        <h3 class="text-xl font-bold font-poppins text-slate-800 mb-2">Black-faced Spoonbill</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            A global endangered species. They migrate to the Mai Po Nature Reserve in Hong Kong every winter to feed in the wetlands.
+                        </p>
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                            <p class="text-xs text-slate-700 italic">"They use their spoon-shaped bills to sweep water for fish!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1570481662006-a3d137409c0c?auto=format&fit=crop&q=80&w=800" 
+                             alt="Chinese White Dolphin" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-bio-yellow text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                            <i class="fa-solid fa-star mr-1"></i> Fun Fact
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xs font-bold text-sky-600 uppercase tracking-wide">Mammal</span>
+                        </div>
+                        <h3 class="text-xl font-bold font-poppins text-slate-800 mb-2">Chinese White Dolphin</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            Also known as the Pink Dolphin. Adults are actually pink due to blood vessels near the skin surface regulating body heat.
+                        </p>
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                            <p class="text-xs text-slate-700 italic">"They are usually found near Lantau Island."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                    <div class="h-64 overflow-hidden relative">
+                         <img src="https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&q=80&w=800" 
+                             alt="Romer's Tree Frog" 
+                             class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-bio-yellow text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                            <i class="fa-solid fa-star mr-1"></i> Fun Fact
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xs font-bold text-lime-600 uppercase tracking-wide">Amphibian</span>
+                        </div>
+                        <h3 class="text-xl font-bold font-poppins text-slate-800 mb-2">Romer's Tree Frog</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            Endemic to Hong Kong (found nowhere else!). They are tiny, roughly the size of a fingernail.
+                        </p>
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                            <p class="text-xs text-slate-700 italic">"Once thought extinct, they were rediscovered in 1984."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz" class="py-20 bg-gradient-to-br from-emerald-600 to-teal-800 text-white">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-poppins font-bold mb-4">Test Your Knowledge</h2>
+                <p class="text-emerald-100">Can you score 3/3?</p>
+            </div>
+
+            <div class="glass-card bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl relative overflow-hidden">
+                
+                <div class="absolute top-6 right-6 bg-white/20 px-4 py-2 rounded-lg font-mono text-sm">
+                    Score: <span id="score-display">0</span>/3
+                </div>
+
+                <div id="quiz-container">
+                    <div class="question-block" id="q1">
+                        <h3 class="text-xl font-bold mb-6"><span class="text-bio-yellow">Q1.</span> Which level of biodiversity refers to the variety of habitats?</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">A. Genetic Diversity</button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">B. Ecosystem Diversity</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">C. Species Diversity</button>
+                        </div>
+                        <div class="feedback mt-4 hidden font-bold"></div>
+                        <button onclick="nextQuestion('q1', 'q2')" class="next-btn mt-6 hidden bg-bio-yellow text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-yellow-300 transition-colors">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+
+                    <div class="question-block hidden" id="q2">
+                        <h3 class="text-xl font-bold mb-6"><span class="text-bio-yellow">Q2.</span> Where does the Black-faced Spoonbill migrate to in Hong Kong?</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">A. Victoria Peak</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">B. Mong Kok</button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">C. Mai Po Nature Reserve</button>
+                        </div>
+                        <div class="feedback mt-4 hidden font-bold"></div>
+                        <button onclick="nextQuestion('q2', 'q3')" class="next-btn mt-6 hidden bg-bio-yellow text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-yellow-300 transition-colors">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+
+                    <div class="question-block hidden" id="q3">
+                        <h3 class="text-xl font-bold mb-6"><span class="text-bio-yellow">Q3.</span> Romer's Tree Frog is "endemic" to Hong Kong. What does "endemic" mean?</h3>
+                        <div class="grid grid-cols-1 gap-4">
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">A. Found only in that specific place</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">B. It is dangerous</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-all">C. It lives in trees only</button>
+                        </div>
+                        <div class="feedback mt-4 hidden font-bold"></div>
+                        <button onclick="showFinalResult()" class="next-btn mt-6 hidden bg-bio-yellow text-slate-900 font-bold py-2 px-6 rounded-lg hover:bg-yellow-300 transition-colors">Finish Quiz</button>
+                    </div>
+
+                    <div class="hidden text-center" id="final-result">
+                        <div class="text-6xl mb-4">🎉</div>
+                        <h3 class="text-2xl font-bold mb-2">Quiz Completed!</h3>
+                        <p class="mb-6">You scored <span id="final-score" class="text-bio-yellow font-bold text-xl"></span> out of 3.</p>
+                        <button onclick="location.reload()" class="bg-white text-emerald-700 font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition-colors">
+                            Restart Lesson
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-400 py-10">
+        <div class="container mx-auto px-6 text-center">
+            <p class="font-poppins font-bold text-2xl text-white mb-2">BioHK</p>
+            <p class="text-sm mb-6">Empowering HK Students to protect our nature.</p>
+            <div class="h-px w-20 bg-slate-700 mx-auto mb-6"></div>
+            <p class="text-xs">&copy; 2023 Biology Education Unit. Designed for Secondary School Students.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz Logic
+        let score = 0;
+
+        function checkAnswer(btn, isCorrect) {
+            // Find parent container
+            const parent = btn.closest('.question-block');
+            const buttons = parent.querySelectorAll('.quiz-btn');
+            const feedback = parent.querySelector('.feedback');
+            const nextBtn = parent.querySelector('.next-btn');
+
+            // Disable all buttons in this question
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.add('cursor-not-allowed', 'opacity-50');
+            });
+
+            // Styling feedback
+            if (isCorrect) {
+                btn.classList.remove('bg-white/10', 'opacity-50');
+                btn.classList.add('bg-green-500', 'border-green-400', 'text-white');
+                feedback.textContent = "Correct! Well done.";
+                feedback.classList.add('text-green-300');
+                score++;
+                document.getElementById('score-display').textContent = score;
+            } else {
+                btn.classList.remove('bg-white/10', 'opacity-50');
+                btn.classList.add('bg-red-500', 'border-red-400', 'text-white');
+                feedback.textContent = "Oops! That's not right.";
+                feedback.classList.add('text-red-300');
+                
+                // Highlight the correct answer automatically (optional education feature)
+                // In this simplified version, we just show red.
+            }
+
+            feedback.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuestion(currentId, nextId) {
+            document.getElementById(currentId).classList.add('hidden');
+            document.getElementById(nextId).classList.remove('hidden');
+            document.getElementById(nextId).classList.add('animate-fade-in-up');
+        }
+
+        function showFinalResult() {
+            document.getElementById('q3').classList.add('hidden');
+            document.getElementById('final-result').classList.remove('hidden');
+            document.getElementById('final-score').textContent = score;
+        }
+
+        // Add a simple fade-in animation to Tailwind config dynamically (optional)
+        // or just use CSS via JS if needed. Tailwind `animate-pulse` is built in.
+    </script>
+</body>
+</html>

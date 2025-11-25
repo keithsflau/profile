@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Physics: Heat Conduction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        /* Animation for heat pulse */
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .heat-source {
+            animation: pulse-red 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="font-bold text-xl"><i class="fa-solid fa-temperature-high mr-2"></i>HK Physics Lab</div>
+            <div class="text-sm font-light opacity-90">Form 1: Energy Module</div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16 px-4 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">What is Conduction?</h1>
+            <p class="text-lg md:text-xl opacity-90 mb-8">Why does the spoon get hot in your cup noodles? Let's discover how heat travels through solids.</p>
+            <a href="#simulation" class="bg-white text-indigo-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-lg inline-block">
+                Start Experiment <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-16">
+
+        <section>
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">The Particle Theory</h2>
+                    <p class="text-lg leading-relaxed text-gray-600 mb-4">
+                        Imagine you are standing in a crowded MTR train during rush hour. If one person starts pushing, they bump into the next person, who bumps into the next.
+                    </p>
+                    <p class="text-lg leading-relaxed text-gray-600">
+                        <strong class="text-indigo-600">Conduction</strong> works the same way! When particles are heated, they gain <strong class="text-indigo-600">Kinetic Energy</strong>. They vibrate faster and bump into their neighbors, passing the energy along.
+                    </p>
+                </div>
+                <div class="flex-1 bg-white p-6 rounded-2xl shadow-xl border border-gray-100">
+                    <div class="text-center mb-2 font-semibold text-gray-500">Key Keywords</div>
+                    <ul class="space-y-3">
+                        <li class="flex items-center bg-indigo-50 p-3 rounded-lg">
+                            <div class="bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3"><i class="fa-solid fa-atom"></i></div>
+                            <span><strong>Particles</strong> (粒状)</span>
+                        </li>
+                        <li class="flex items-center bg-red-50 p-3 rounded-lg">
+                            <div class="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3"><i class="fa-solid fa-fire"></i></div>
+                            <span><strong>Vibration</strong> (振動)</span>
+                        </li>
+                        <li class="flex items-center bg-green-50 p-3 rounded-lg">
+                            <div class="bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3"><i class="fa-solid fa-bolt"></i></div>
+                            <span><strong>Energy Transfer</strong> (能量轉移)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulation" class="bg-slate-900 rounded-3xl p-6 md:p-10 shadow-2xl text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-20 text-9xl"><i class="fa-solid fa-microscope"></i></div>
+            
+            <h2 class="text-2xl font-bold mb-2 relative z-10">Interactive Lab: Heat the Rod!</h2>
+            <p class="text-slate-300 mb-6 relative z-10">Click the "Add Heat" button to heat the left side of the metal rod. Watch how the vibration travels.</p>
+
+            <div class="bg-black rounded-xl border-2 border-slate-700 overflow-hidden relative h-48 w-full mb-6">
+                <canvas id="particleCanvas" class="w-full h-full"></canvas>
+                <div class="absolute bottom-2 right-2 text-xs text-slate-500">Particle Simulation View</div>
+            </div>
+
+            <div class="flex gap-4 relative z-10">
+                <button onclick="addHeat()" class="heat-source bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl transition transform active:scale-95 flex items-center">
+                    <i class="fa-solid fa-fire mr-2"></i> Add Heat (Bunsen Burner)
+                </button>
+                <button onclick="resetSim()" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-3 px-6 rounded-xl transition">
+                    <i class="fa-solid fa-rotate-left mr-2"></i> Cool Down
+                </button>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold text-center mb-10">Conductors vs. Insulators</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-green-500">
+                    <h3 class="text-2xl font-bold text-green-700 mb-4"><i class="fa-solid fa-check-circle mr-2"></i>Good Conductors</h3>
+                    <p class="text-gray-600 mb-4">Materials that allow heat to flow through them easily. Usually metals.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Copper</span>
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Aluminum</span>
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Iron</span>
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Gold</span>
+                    </div>
+                    <div class="mt-6 p-4 bg-green-50 rounded-xl flex items-start">
+                        <i class="fa-solid fa-lightbulb text-green-600 mt-1 mr-3"></i>
+                        <p class="text-sm text-green-800"><strong>Why?</strong> Metals have "free electrons" that help carry energy faster!</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-orange-500">
+                    <h3 class="text-2xl font-bold text-orange-700 mb-4"><i class="fa-solid fa-hand-paper mr-2"></i>Insulators (Poor Conductors)</h3>
+                    <p class="text-gray-600 mb-4">Materials that stop or slow down heat transfer. Useful for handles and clothing.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Plastic</span>
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Wood</span>
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Air</span>
+                        <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-semibold">Glass</span>
+                    </div>
+                    <div class="mt-6 p-4 bg-orange-50 rounded-xl flex items-start">
+                        <i class="fa-solid fa-lightbulb text-orange-600 mt-1 mr-3"></i>
+                        <p class="text-sm text-orange-800"><strong>Why?</strong> Particles are held tightly in place and there are no free electrons.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-indigo-50 rounded-3xl p-8">
+            <h2 class="text-3xl font-bold text-center mb-8">Conduction in Hong Kong 🇭🇰</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-4xl mb-3">🍲</div>
+                    <h4 class="font-bold text-lg mb-2">Hot Pot (Da Bin Lo)</h4>
+                    <p class="text-sm text-gray-600">The metal pot conducts heat from the stove to the soup very quickly so your beef cooks in seconds!</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-4xl mb-3">🚇</div>
+                    <h4 class="font-bold text-lg mb-2">MTR Metal Poles</h4>
+                    <p class="text-sm text-gray-600">Why do they feel cold? Metal conducts heat <strong>away</strong> from your hand faster than plastic does.</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="text-4xl mb-3">🥟</div>
+                    <h4 class="font-bold text-lg mb-2">Dim Sum Basket</h4>
+                    <p class="text-sm text-gray-600">Bamboo steamers are insulators. They keep the heat inside to cook the Har Gow but don't burn the waiter's hands.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold mb-6">Quick Quiz 📝</h2>
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <div id="quiz-container">
+                    <div class="mb-6">
+                        <p class="font-semibold text-lg mb-3">1. Which state of matter is best at conduction?</p>
+                        <div class="space-y-2">
+                            <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded border hover:bg-gray-50">A. Gas</button>
+                            <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded border hover:bg-gray-50">B. Liquid</button>
+                            <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded border hover:bg-gray-50">C. Solid</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="font-semibold text-lg mb-3">2. Why is the handle of a frying pan usually made of plastic?</p>
+                        <div class="space-y-2">
+                            <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded border hover:bg-gray-50">A. Because plastic is a conductor</button>
+                            <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded border hover:bg-gray-50">B. Because plastic is an insulator</button>
+                            <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded border hover:bg-gray-50">C. Because plastic is heavy</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="result-area" class="hidden mt-4 p-4 bg-indigo-100 text-indigo-800 rounded-lg font-bold text-center">
+                    Great job! You have completed the quiz.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-sm">
+        <p>&copy; 2025 HK Physics Dept. Form 1 Educational Material.</p>
+        <p class="mt-2">Designed for easy learning.</p>
+    </footer>
+
+    <script>
+        // --- Particle Simulation Logic ---
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        // Resize canvas resolution
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            initParticles();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor(x, y) {
+                this.baseX = x;
+                this.baseY = y;
+                this.x = x;
+                this.y = y;
+                this.energy = 0; // 0 to 100 (Heat level)
+                this.size = 8;
+            }
+
+            update(neighbors) {
+                // Vibration based on energy
+                const vibrationAmt = this.energy * 0.05; 
+                this.x = this.baseX + (Math.random() - 0.5) * vibrationAmt;
+                this.y = this.baseY + (Math.random() - 0.5) * vibrationAmt;
+
+                // Transfer energy to right neighbor (simple conduction logic)
+                // Lose some heat to environment (cooling)
+                this.energy *= 0.99; 
+
+                // Draw
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                
+                // Color turns from Blue (Cold) to Red (Hot)
+                const r = Math.min(50 + this.energy * 2, 255);
+                const b = Math.max(255 - this.energy * 2, 50);
+                
+                ctx.fillStyle = `rgb(${r}, 50, ${b})`;
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const gap = 25;
+            const count = Math.floor(canvas.width / gap);
+            const startX = (canvas.width - (count * gap)) / 2;
+            
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(startX + i * gap, canvas.height / 2));
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Trails
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                // Conduction Logic:
+                // If previous particle is hotter, transfer heat to current
+                if (i > 0) {
+                    if (particles[i-1].energy > particles[i].energy) {
+                        const transfer = (particles[i-1].energy - particles[i].energy) * 0.1;
+                        particles[i].energy += transfer;
+                        particles[i-1].energy -= transfer * 0.05; // Source loses a tiny bit
+                    }
+                }
+                particles[i].update();
+            }
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function addHeat() {
+            // Heat up the first few particles
+            if(particles.length > 0) {
+                particles[0].energy = 200; // High energy burst
+                if(particles[1]) particles[1].energy = 150;
+            }
+        }
+
+        function resetSim() {
+            particles.forEach(p => p.energy = 0);
+        }
+
+        // Initialize Sim
+        setTimeout(() => {
+            resizeCanvas();
+            animate();
+        }, 100);
+
+
+        // --- Quiz Logic ---
+        function checkAnswer(btn, isCorrect) {
+            // Reset styles in this question group
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.classList.remove('bg-green-500', 'bg-red-500', 'text-white');
+                b.classList.add('hover:bg-gray-50');
+            });
+
+            // Apply style
+            btn.classList.remove('hover:bg-gray-50');
+            if (isCorrect) {
+                btn.classList.add('bg-green-500', 'text-white');
+                // Simple feedback logic
+                btn.innerHTML += ' <i class="fa-solid fa-check"></i>';
+            } else {
+                btn.classList.add('bg-red-500', 'text-white');
+                btn.innerHTML += ' <i class="fa-solid fa-xmark"></i>';
+            }
+        }
+    </script>
+</body>
+</html>

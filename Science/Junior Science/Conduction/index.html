@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Physics: Conduction Comparison</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Animation for the Bunsen Burner visual */
+        @keyframes flame-flicker {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .flame-icon {
+            animation: flame-flicker 0.2s infinite alternate; 
+            color: #ef4444;
+            filter: drop-shadow(0 0 10px #f87171);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-indigo-700 text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="font-bold text-xl tracking-wide"><i class="fa-solid fa-flask mr-2"></i>HK Physics Lab</div>
+            <div class="text-xs md:text-sm font-light bg-indigo-800 px-3 py-1 rounded-full">Form 1: Heat Transfer</div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+
+        <header class="text-center space-y-4">
+            <h1 class="text-4xl font-extrabold text-slate-900">Metal vs. Glass</h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Why does a metal spoon get hot instantly in hot soup, but a glass noodle bowl stays cool enough to touch? Let's compare the speed of conduction.
+            </p>
+        </header>
+
+        <section class="bg-slate-900 rounded-3xl p-2 md:p-8 shadow-2xl border border-slate-700">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 px-4">
+                <div class="text-white mb-4 md:mb-0">
+                    <h2 class="text-2xl font-bold"><i class="fa-solid fa-eye mr-2"></i>Comparison Experiment</h2>
+                    <p class="text-slate-400 text-sm">Observe how fast the vibration travels in different materials.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="startHeating()" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-6 rounded-full shadow-lg shadow-red-900/50 transition transform active:scale-95 flex items-center">
+                        <i class="fa-solid fa-fire mr-2"></i> Turn On Bunsen Burner
+                    </button>
+                    <button onclick="resetSim()" class="bg-slate-600 hover:bg-slate-500 text-white font-bold py-2 px-6 rounded-full transition">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative bg-black rounded-xl border-2 border-slate-600 overflow-hidden h-[400px] w-full">
+                <canvas id="simCanvas" class="w-full h-full"></canvas>
+                
+                <div class="absolute top-4 right-4 bg-gray-800/80 text-white text-xs p-3 rounded backdrop-blur-sm border border-gray-600">
+                    <div class="flex items-center mb-2">
+                        <span class="w-3 h-3 rounded-full bg-slate-400 mr-2"></span> Silver Particles = Metal
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-3 h-3 rounded-full bg-cyan-800 mr-2"></span> Blue Particles = Glass
+                    </div>
+                </div>
+                
+                <div id="flame-group" class="absolute left-4 top-0 h-full flex flex-col justify-around opacity-0 transition-opacity duration-500 pointer-events-none">
+                    <div class="text-4xl flame-icon absolute" style="top: 25%"><i class="fa-solid fa-fire"></i></div>
+                    <div class="text-4xl flame-icon absolute" style="top: 70%"><i class="fa-solid fa-fire"></i></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mt-4 text-white text-center font-mono text-sm">
+                <div class="bg-slate-800 p-2 rounded border border-slate-600">
+                    <span class="text-slate-400 block text-xs">TOP ROD (COPPER)</span>
+                    Status: <span id="metal-status" class="text-green-400 font-bold">Cool</span>
+                </div>
+                <div class="bg-slate-800 p-2 rounded border border-slate-600">
+                    <span class="text-slate-400 block text-xs">BOTTOM ROD (GLASS)</span>
+                    Status: <span id="glass-status" class="text-cyan-400 font-bold">Cool</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-gray-400">
+                <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                    <i class="fa-solid fa-bolt text-yellow-500 mr-2"></i> Why is Metal fast?
+                </h3>
+                <p class="text-gray-600 mb-4">
+                    Metals (like Copper) have <strong>Free Electrons</strong>. 
+                </p>
+                <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
+                    <li>Particles vibrate AND free electrons zip around.</li>
+                    <li>Electrons collide with distant particles very quickly.</li>
+                    <li><strong>Result:</strong> The "Heat Wave" travels fast.</li>
+                </ul>
+                <div class="mt-4 bg-gray-100 p-3 rounded text-xs text-gray-500">
+                    <em>Think of it like sending an email (electron) vs passing a note hand-to-hand (vibration).</em>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-cyan-500">
+                <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                    <i class="fa-solid fa-hand-stop text-cyan-600 mr-2"></i> Why is Glass slow?
+                </h3>
+                <p class="text-gray-600 mb-4">
+                    Glass is an <strong>Insulator</strong>. It has NO free electrons.
+                </p>
+                <ul class="list-disc pl-5 space-y-2 text-sm text-gray-600">
+                    <li>Heat can ONLY move by neighbor-to-neighbor vibration.</li>
+                    <li>The vibration dampens (fades out) quickly.</li>
+                    <li><strong>Result:</strong> The end of the rod stays cool for a long time.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-6 text-center text-xs">
+        <p>Interactive Physics Module for Form 1 Science</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const flameGroup = document.getElementById('flame-group');
+        const metalStatus = document.getElementById('metal-status');
+        const glassStatus = document.getElementById('glass-status');
+
+        let animationId;
+        let metalParticles = [];
+        let glassParticles = [];
+        let isHeating = false;
+
+        // Configuration
+        const config = {
+            particleCount: 30,
+            particleSize: 6,
+            spacing: 0, // calculated dynamically
+            // PHYSICS CONSTANTS
+            metalConductivity: 0.35, // Fast transfer
+            glassConductivity: 0.04, // Slow transfer
+            coolingFactor: 0.985,    // Energy loss over time (simulates environment loss)
+        };
+
+        class Particle {
+            constructor(x, y, type) {
+                this.baseX = x;
+                this.baseY = y;
+                this.x = x;
+                this.y = y;
+                this.energy = 0; // 0 (Cold) to 100 (Hot)
+                this.type = type; // 'metal' or 'glass'
+            }
+
+            update() {
+                // 1. Visual Vibration (Amplitude depends on Energy)
+                // Random shake proportional to heat
+                const shake = this.energy * 0.08; 
+                this.x = this.baseX + (Math.random() - 0.5) * shake;
+                this.y = this.baseY + (Math.random() - 0.5) * shake;
+
+                // 2. Natural Cooling (Environment absorbs heat)
+                this.energy *= config.coolingFactor;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, config.particleSize, 0, Math.PI * 2);
+
+                // Color Logic
+                let r, g, b;
+                
+                if (this.type === 'metal') {
+                    // Metal: Starts Grey (150,150,150), goes to Bright Red (255, 50, 50)
+                    const heatRatio = Math.min(this.energy / 100, 1);
+                    r = 150 + (105 * heatRatio); // 150 -> 255
+                    g = 150 - (100 * heatRatio); // 150 -> 50
+                    b = 150 - (100 * heatRatio); // 150 -> 50
+                } else {
+                    // Glass: Starts Dark Cyan (20, 80, 100), goes to Red-Orange
+                    const heatRatio = Math.min(this.energy / 100, 1);
+                    r = 20 + (235 * heatRatio);  // 20 -> 255
+                    g = 80 - (30 * heatRatio);   // 80 -> 50
+                    b = 100 - (50 * heatRatio);  // 100 -> 50
+                }
+
+                ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+                ctx.fill();
+                
+                // Add a "glow" if very hot
+                if (this.energy > 80) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'red';
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                ctx.closePath();
+                ctx.shadowBlur = 0; // Reset
+            }
+        }
+
+        function init() {
+            // Responsive Sizing
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            
+            metalParticles = [];
+            glassParticles = [];
+            
+            // Calculate layout
+            const padding = 50;
+            const usableWidth = canvas.width - (padding * 2);
+            config.spacing = usableWidth / config.particleCount;
+            
+            const metalY = canvas.height * 0.35;
+            const glassY = canvas.height * 0.75;
+
+            for (let i = 0; i < config.particleCount; i++) {
+                const x = padding + (i * config.spacing);
+                metalParticles.push(new Particle(x, metalY, 'metal'));
+                glassParticles.push(new Particle(x, glassY, 'glass'));
+            }
+            
+            // Labels on Canvas
+            drawLabels();
+        }
+
+        function calculateConduction(particles, conductivityRate) {
+            // Iterate through particles to transfer heat
+            // We use a temp array to avoid updating energy while reading it in the same frame
+            let energyChanges = new Array(particles.length).fill(0);
+
+            for (let i = 0; i < particles.length; i++) {
+                const current = particles[i];
+                
+                // Heat Transfer from Left Neighbor
+                if (i > 0) {
+                    const left = particles[i - 1];
+                    if (left.energy > current.energy) {
+                        // The amount transferred is proportional to the difference
+                        const transfer = (left.energy - current.energy) * conductivityRate;
+                        energyChanges[i] += transfer;
+                        energyChanges[i-1] -= transfer * 0.1; // Source loses a little
+                    }
+                }
+            }
+
+            // Apply changes
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].energy += energyChanges[i];
+                particles[i].update(); // Apply vibration and cooling
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Connecting Lines first (bonds)
+            ctx.lineWidth = 2;
+            for(let i=0; i<config.particleCount-1; i++) {
+                // Metal Bonds
+                ctx.strokeStyle = `rgba(150, 150, 150, 0.3)`;
+                ctx.beginPath();
+                ctx.moveTo(metalParticles[i].x, metalParticles[i].y);
+                ctx.lineTo(metalParticles[i+1].x, metalParticles[i+1].y);
+                ctx.stroke();
+
+                // Glass Bonds (More rigid/faint look)
+                ctx.strokeStyle = `rgba(0, 100, 150, 0.3)`;
+                ctx.beginPath();
+                ctx.moveTo(glassParticles[i].x, glassParticles[i].y);
+                ctx.lineTo(glassParticles[i+1].x, glassParticles[i+1].y);
+                ctx.stroke();
+            }
+
+            // Input Heat Source Logic
+            if (isHeating) {
+                // Continuously heat the first 3 particles
+                for(let k=0; k<3; k++) {
+                    metalParticles[k].energy = lerp(metalParticles[k].energy, 250, 0.1);
+                    glassParticles[k].energy = lerp(glassParticles[k].energy, 250, 0.1);
+                }
+            }
+
+            // Calculate Physics
+            calculateConduction(metalParticles, config.metalConductivity);
+            calculateConduction(glassParticles, config.glassConductivity);
+
+            // Draw Particles
+            metalParticles.forEach(p => p.draw());
+            glassParticles.forEach(p => p.draw());
+
+            // Draw Labels
+            drawLabels();
+            updateStatusText();
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Helper to draw text on canvas
+        function drawLabels() {
+            ctx.fillStyle = 'white';
+            ctx.font = "bold 14px Inter";
+            ctx.fillText("COPPER ROD (Conductor)", 20, (canvas.height * 0.35) - 30);
+            ctx.fillText("GLASS ROD (Insulator)", 20, (canvas.height * 0.75) - 30);
+        }
+
+        function updateStatusText() {
+            // Check end of rod temperature
+            const metalEnd = metalParticles[metalParticles.length-1].energy;
+            const glassEnd = glassParticles[glassParticles.length-1].energy;
+
+            if(metalEnd > 50) {
+                metalStatus.innerText = "HOT! 🔥";
+                metalStatus.className = "text-red-500 font-bold animate-pulse";
+            } else if (metalEnd > 20) {
+                metalStatus.innerText = "Warming up...";
+                metalStatus.className = "text-yellow-400 font-bold";
+            }
+
+            if(glassEnd > 50) {
+                glassStatus.innerText = "HOT! 🔥";
+            } else if (glassEnd > 10) {
+                glassStatus.innerText = "Slightly Warm";
+            } else {
+                glassStatus.innerText = "Cool";
+            }
+        }
+
+        // Helper: Linear Interpolation
+        function lerp(start, end, amt) {
+            return (1 - amt) * start + amt * end;
+        }
+
+        function startHeating() {
+            isHeating = true;
+            flameGroup.style.opacity = '1';
+        }
+
+        function resetSim() {
+            isHeating = false;
+            flameGroup.style.opacity = '0';
+            metalParticles.forEach(p => p.energy = 0);
+            glassParticles.forEach(p => p.energy = 0);
+            metalStatus.innerText = "Cool";
+            metalStatus.className = "text-green-400 font-bold";
+            glassStatus.innerText = "Cool";
+            glassStatus.className = "text-cyan-400 font-bold";
+        }
+
+        // Startup
+        window.addEventListener('resize', () => {
+            init();
+        });
+        
+        init();
+        animate();
+
+    </script>
+</body>
+</html>

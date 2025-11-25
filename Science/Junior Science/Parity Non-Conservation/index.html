@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parity Non-Conservation</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+        }
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: #1e293b; /* slate-800 */
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 leading-relaxed">
+
+    <nav class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold tracking-wider">Physics: The Broken Mirror</div>
+            <div class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#intro" class="hover:text-blue-400 transition">Introduction</a>
+                <a href="#theory" class="hover:text-blue-400 transition">The Theory</a>
+                <a href="#experiment" class="hover:text-blue-400 transition">Wu's Experiment</a>
+                <a href="#impact" class="hover:text-blue-400 transition">Legacy</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-b from-slate-900 to-slate-800 text-white py-24 px-4">
+        <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Parity Non-Conservation</h1>
+            <p class="text-xl md:text-2xl text-slate-300 font-light mb-8 italic">"God is left-handed."</p>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-10">
+                Until 1956, physicists believed nature was a perfect mirror: left and right were symmetric. Then, a single experiment shattered this belief, proving that the universe distinguishes between left and right in weak interactions.
+            </p>
+            <a href="#experiment" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-8 rounded-full transition shadow-lg transform hover:-translate-y-1">
+                Run the Simulation
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-20">
+
+        <section id="intro">
+            <div class="flex items-center mb-6">
+                <div class="w-1 h-8 bg-blue-600 mr-4"></div>
+                <h2 class="text-3xl font-bold text-slate-900">What is Parity?</h2>
+            </div>
+            <p class="mb-4 text-lg">
+                In quantum mechanics, **Parity ($P$)** describes the property of a physical system under spatial inversion—flipping coordinates $(x, y, z)$ to $(-x, -y, -z)$. Simply put, it is the symmetry of a mirror reflection.
+            </p>
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 my-6">
+                <p class="mb-2 font-semibold text-slate-700">Conservation of Parity (The Old Law):</p>
+                <p class="text-slate-600">
+                    If you watch a physics experiment in a mirror, the reflection should obey the same physical laws as the real world. This holds true for Gravity, Electromagnetism, and the Strong Nuclear Force.
+                </p>
+            </div>
+        </section>
+
+        <section id="theory">
+            <div class="flex items-center mb-6">
+                <div class="w-1 h-8 bg-blue-600 mr-4"></div>
+                <h2 class="text-3xl font-bold text-slate-900">The Lee & Yang Hypothesis</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <p class="mb-4">
+                        In 1956, physicists **T.D. Lee** and **C.N. Yang** were investigating the "Theta-Tau Puzzle." They made a bold proposal that shocked the community:
+                    </p>
+                    <blockquote class="border-l-4 border-blue-600 pl-4 italic text-slate-700 my-4 bg-slate-50 py-2 pr-2">
+                        "Parity is not conserved in weak interactions."
+                    </blockquote>
+                    <p>
+                        This meant that in processes like $\beta$-decay, nature possesses a fundamental "chirality" (handedness).
+                    </p>
+                </div>
+                <div class="bg-slate-100 p-6 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-center mb-4 text-slate-700 font-serif">Mathematical Formalism</h4>
+                    <p class="text-center mb-4 text-sm">The Parity operator $P$ acting on a wavefunction $\psi$:</p>
+                    $$ P\psi(\mathbf{r}) = \eta_P \psi(-\mathbf{r}) $$
+                    <p class="text-xs text-slate-500 mt-4 text-center leading-relaxed">
+                        If $|P\psi|^2 \neq |\psi|^2$ under certain interactions, parity is violated. This implies the Hamiltonian $H$ does not commute with $P$: $[H, P] \neq 0$.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experiment">
+            <div class="flex items-center mb-6">
+                <div class="w-1 h-8 bg-red-600 mr-4"></div>
+                <h2 class="text-3xl font-bold text-slate-900">The Wu Experiment (Simulation)</h2>
+            </div>
+
+            <p class="mb-6 text-lg">
+                To test the hypothesis, experimentalist **Chien-Shiung Wu** designed a brilliant experiment. She cooled Cobalt-60 ($^{60}Co$) nuclei to near absolute zero ($0.01K$) and applied a strong magnetic field to align their spins.
+            </p>
+
+            <div class="bg-slate-900 rounded-xl shadow-2xl overflow-hidden border border-slate-700">
+                
+                <div class="p-4 bg-slate-800 flex flex-wrap gap-4 items-center justify-between border-b border-slate-700">
+                    <div class="flex space-x-4">
+                        <button id="btn-high-temp" onclick="setMode('high')" class="px-4 py-2 rounded bg-slate-600 text-slate-300 hover:bg-slate-500 transition text-sm font-medium ring-2 ring-transparent focus:ring-blue-500">
+                            Room Temp (Thermal Chaos)
+                        </button>
+                        <button id="btn-low-temp" onclick="setMode('low')" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500 transition text-sm font-medium shadow-lg ring-2 ring-transparent focus:ring-blue-400">
+                            Low Temp ($< 0.01K$) + Magnetic Field
+                        </button>
+                    </div>
+                    <div class="text-slate-400 text-xs md:text-sm">
+                        <span id="status-text">Status: Random Spin Distribution</span>
+                    </div>
+                </div>
+
+                <div class="canvas-container flex justify-center items-center">
+                    <canvas id="wuCanvas" width="800" height="400"></canvas>
+                    
+                    <div class="absolute bottom-4 right-4 bg-black/70 p-3 rounded text-xs text-white backdrop-blur-sm border border-white/10">
+                        <div class="flex items-center mb-1"><span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span> $^{60}Co$ Nucleus</div>
+                        <div class="flex items-center mb-1"><span class="w-3 h-3 border border-white mr-2 flex justify-center items-center text-[8px]">↑</span> Spin Direction</div>
+                        <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></span> Electron ($\beta$-ray)</div>
+                    </div>
+                </div>
+                
+                <div class="p-6 bg-slate-50 text-slate-800 border-t border-slate-200">
+                    <h3 class="font-bold text-lg mb-2">What to observe:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-sm md:text-base text-slate-700">
+                        <li><strong>Room Temp:</strong> Thermal energy disrupts alignment. Spins are random. Electrons are emitted equally in all directions (Isotropic).</li>
+                        <li><strong>Low Temp (The Discovery):</strong> The magnetic field aligns the nuclear spins (Up). If parity were conserved, electrons should go Up and Down equally. Instead, <strong>electrons preferentially shoot DOWN</strong> (opposite to the spin). This asymmetry proves Parity Violation.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="bg-blue-50 p-8 rounded-2xl border border-blue-100 mb-12">
+            <h2 class="text-2xl font-bold text-blue-900 mb-4">Historical Impact</h2>
+            <div class="space-y-4 text-blue-900/80 leading-relaxed">
+                <p>
+                    The results were stunning. The universe was not symmetric. In 1957, Lee and Yang were awarded the **Nobel Prize in Physics**—the quickest recognition in Nobel history (just one year after their paper).
+                </p>
+                <p>
+                    Although Chien-Shiung Wu did not share the Nobel Prize—a point of historical controversy—her experimental validation is considered one of the most elegant and technically difficult in the history of physics. She is widely known as the "First Lady of Physics."
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-10 text-center text-sm">
+        <p>© 2023 Physics Education | Designed for interactive learning</p>
+        <p class="mt-2 opacity-60">In memory of T.D. Lee, C.N. Yang, and C.S. Wu.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('wuCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let animationId;
+        let mode = 'high'; // 'high' (random) or 'low' (aligned)
+        
+        // Configuration
+        const ATOM_COUNT = 15;
+        const ATOMS = [];
+        const ELECTRONS = [];
+        
+        class Atom {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.spinAngle = Math.random() * Math.PI * 2; // Radians
+                this.timer = Math.random() * 100;
+            }
+
+            update() {
+                // In low temp mode, spin aligns upwards (0 or 2PI visually, but let's say -PI/2 is up)
+                if (mode === 'low') {
+                    // Smoothly rotate towards -PI/2 (Up)
+                    const targetAngle = -Math.PI / 2;
+                    const diff = targetAngle - this.spinAngle;
+                    
+                    // Normalize angle logic simplified for demo
+                    if(Math.abs(diff) > 0.1) {
+                        this.spinAngle += diff * 0.05;
+                    } else {
+                        this.spinAngle = targetAngle;
+                    }
+                } else {
+                    // High temp: random slow rotation simulating thermal chaos
+                    this.spinAngle += (Math.random() - 0.5) * 0.1;
+                }
+
+                // Emit electron logic
+                this.timer++;
+                if (this.timer > 60 + Math.random() * 50) {
+                    this.emitElectron();
+                    this.timer = 0;
+                }
+            }
+
+            emitElectron() {
+                // KEY PHYSICS LOGIC HERE
+                let direction;
+                
+                if (mode === 'high') {
+                    // Isotropic emission
+                    direction = Math.random() * Math.PI * 2;
+                } else {
+                    // Parity Violation Mode:
+                    // Spin is pointing UP (-PI/2).
+                    // In our universe (V-A theory), electrons prefer to be emitted opposite to spin.
+                    // So electrons should go DOWN (+PI/2).
+                    
+                    // Add some spread (gaussian-ish) but biased heavily down
+                    const baseDir = Math.PI / 2; // Down
+                    const spread = (Math.random() - 0.5) * 1.5; // spread
+                    direction = baseDir + spread;
+                }
+                
+                ELECTRONS.push(new Electron(this.x, this.y, direction));
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                // Draw Atom Core
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI * 2);
+                ctx.fillStyle = '#3b82f6'; // blue-500
+                ctx.fill();
+                
+                // Draw Spin Vector (Arrow)
+                ctx.rotate(this.spinAngle);
+                ctx.beginPath();
+                ctx.moveTo(0, 5);
+                ctx.lineTo(0, -5);
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Arrowhead
+                ctx.beginPath();
+                ctx.moveTo(-3, -5);
+                ctx.lineTo(0, -10);
+                ctx.lineTo(3, -5);
+                ctx.fillStyle = 'white';
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        class Electron {
+            constructor(x, y, angle) {
+                this.x = x;
+                this.y = y;
+                this.vx = Math.cos(angle) * 3;
+                this.vy = Math.sin(angle) * 3;
+                this.life = 100;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.life / 100;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#facc15'; // yellow-400
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // Initialize Atoms
+        function init() {
+            ATOMS.length = 0;
+            const cols = 5;
+            const rows = 3;
+            const paddingX = canvas.width / (cols + 1);
+            const paddingY = canvas.height / (rows + 1);
+
+            for(let i=0; i<cols; i++) {
+                for(let j=0; j<rows; j++) {
+                    ATOMS.push(new Atom(
+                        paddingX * (i + 1),
+                        paddingY * (j + 1)
+                    ));
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update Atoms
+            ATOMS.forEach(atom => {
+                atom.update();
+                atom.draw();
+            });
+
+            // Update Electrons
+            for (let i = ELECTRONS.length - 1; i >= 0; i--) {
+                const e = ELECTRONS[i];
+                e.update();
+                e.draw();
+                if (e.life <= 0) {
+                    ELECTRONS.splice(i, 1);
+                }
+            }
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Interaction Logic
+        function setMode(newMode) {
+            mode = newMode;
+            const statusText = document.getElementById('status-text');
+            const btnHigh = document.getElementById('btn-high-temp');
+            const btnLow = document.getElementById('btn-low-temp');
+
+            if (mode === 'high') {
+                statusText.innerText = "Status: Thermal Noise, Isotropic Emission";
+                statusText.className = "text-slate-400 text-xs md:text-sm";
+                
+                btnHigh.classList.add('ring-2', 'ring-blue-500');
+                btnLow.classList.remove('ring-2', 'ring-blue-400');
+            } else {
+                statusText.innerText = "Status: Spins Aligned, Asymmetric Emission (Parity Violation)";
+                statusText.className = "text-yellow-400 text-xs md:text-sm font-bold animate-pulse";
+                
+                btnLow.classList.add('ring-2', 'ring-blue-400');
+                btnHigh.classList.remove('ring-2', 'ring-blue-500');
+            }
+        }
+
+        // Start
+        init();
+        animate();
+        setMode('high'); // Default
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Future Engineer: Renewable Energy</title>
+    
+    <!-- Tailwind CSS (Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        fun: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-green': '#10B981',
+                        'brand-blue': '#3B82F6',
+                        'solar-yellow': '#FBBF24',
+                        'electron-blue': '#60A5FA',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating-element { animation: float 3s ease-in-out infinite; }
+
+        /* Solar Physics Animations */
+        @keyframes fall {
+            0% { top: -20px; opacity: 1; }
+            100% { top: 60px; opacity: 0; }
+        }
+        
+        @keyframes flowRight {
+            0% { left: 10%; opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { left: 90%; opacity: 0; }
+        }
+
+        .photon {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: #FBBF24;
+            border-radius: 50%;
+            box-shadow: 0 0 5px #FBBF24;
+            animation: fall 1s linear infinite;
+        }
+
+        .electron {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: #3B82F6;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: flowRight 2s linear infinite;
+            display: none; /* Hidden by default */
+        }
+
+        /* Atom View Animations */
+        @keyframes wobble {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+        
+        @keyframes eject {
+            0% { top: 50%; left: 80%; opacity: 1; transform: scale(1); }
+            100% { top: -50px; left: 150%; opacity: 0; transform: scale(2); }
+        }
+
+        .electron-wobble { animation: wobble 0.2s linear 3; }
+        .electron-eject { animation: eject 1s ease-out forwards; background-color: #60A5FA !important; box-shadow: 0 0 10px #60A5FA; }
+
+        .atom-ring {
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Turbine Spin */
+        .spin-slow { animation: spin 4s linear infinite; }
+        .spin-med { animation: spin 2s linear infinite; }
+        .spin-fast { animation: spin 0.8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Quiz Feedback */
+        .correct-bg { background-color: #d1fae5 !important; border-color: #10B981 !important; }
+        .wrong-bg { background-color: #fee2e2 !important; border-color: #EF4444 !important; }
+
+        .bulb-glow {
+            filter: drop-shadow(0 0 15px #FBBF24);
+            color: #FBBF24 !important;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-leaf text-brand-green text-2xl"></i>
+                <span class="font-fun text-xl font-bold text-gray-700">HK Future Engineer</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-bold text-gray-500">
+                <a href="#intro" class="hover:text-brand-green transition">Basics</a>
+                <a href="#how-it-works" class="hover:text-brand-green transition">The Physics</a>
+                <a href="#labs" class="text-brand-blue bg-blue-50 px-3 py-1 rounded-full transition">Interactive Labs</a>
+                <a href="#quiz" class="hover:text-brand-green transition">Quiz</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-slate-900 text-white py-24 px-6 overflow-hidden">
+        <div class="absolute inset-0 opacity-40">
+            <img src="https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover">
+        </div>
+        <div class="container mx-auto relative z-10 text-center">
+            <span class="bg-brand-green px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 inline-block">Form 1 Science</span>
+            <h1 class="font-fun text-4xl md:text-6xl mb-6">Powering Hong Kong Naturally</h1>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8 font-light">
+                Explore how engineers harness the Sun, Wind, and Water to create a cleaner future for our city.
+            </p>
+            <a href="#labs" class="bg-brand-blue hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 inline-flex items-center gap-2">
+                <i class="fa-solid fa-flask"></i> Enter the Lab
+            </a>
+        </div>
+    </header>
+
+    <!-- Intro Cards -->
+    <section id="intro" class="py-16 px-6">
+        <div class="container mx-auto">
+            <h2 class="font-fun text-3xl text-center mb-12 text-gray-800">The Big Three Sources</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Solar -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-yellow-400 hover:-translate-y-2 transition">
+                    <div class="text-yellow-400 text-4xl mb-4"><i class="fa-solid fa-sun"></i></div>
+                    <h3 class="font-bold text-xl mb-2">Solar Energy</h3>
+                    <p class="text-sm text-gray-600">Using PV cells to convert sunlight directly into electricity. Common on village houses in NT.</p>
+                </div>
+                <!-- Wind -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-sky-400 hover:-translate-y-2 transition">
+                    <div class="text-sky-400 text-4xl mb-4"><i class="fa-solid fa-wind"></i></div>
+                    <h3 class="font-bold text-xl mb-2">Wind Energy</h3>
+                    <p class="text-sm text-gray-600">Using kinetic energy to turn turbines. See "Lamma Winds" on Lamma Island!</p>
+                </div>
+                <!-- Hydro -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-b-4 border-blue-600 hover:-translate-y-2 transition">
+                    <div class="text-blue-600 text-4xl mb-4"><i class="fa-solid fa-water"></i></div>
+                    <h3 class="font-bold text-xl mb-2">Hydro Energy</h3>
+                    <p class="text-sm text-gray-600">Water flow spins turbines. Pumped storage is used to "store" energy like a battery.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: THE PHYSICS (Updated with Microscope Mode) -->
+    <section id="how-it-works" class="py-20 bg-slate-800 text-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-start gap-12">
+                
+                <!-- Left Column: Story & Details -->
+                <div class="md:w-1/2 space-y-8">
+                    
+                    <!-- Einstein Story Block -->
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                             <i class="fa-solid fa-user-graduate text-yellow-400"></i>
+                             <span class="text-yellow-400 font-bold tracking-widest text-sm uppercase">History Corner</span>
+                        </div>
+                        <h2 class="font-fun text-3xl md:text-4xl mb-4">Einstein's Nobel Prize</h2>
+                        <div class="bg-indigo-900 p-6 rounded-xl border border-indigo-700 shadow-lg">
+                            <p class="text-gray-200 text-sm leading-relaxed mb-4">
+                                Many people think <strong>Albert Einstein</strong> won the Nobel Prize for his Theory of Relativity ($E=mc^2$). 
+                                <br><span class="text-yellow-400 font-bold">Actually, they are wrong!</span>
+                            </p>
+                            <p class="text-gray-200 text-sm leading-relaxed">
+                                In 1921, he won the Nobel Prize in Physics for discovering the <strong>Photoelectric Effect</strong>. He proved that light isn't just a wave—it acts like tiny "bullets" of energy called <strong>Photons</strong>. If these bullets hit a metal hard enough, they kick out electrons!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mechanism Details -->
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-brand-green">Step-by-Step Mechanism</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-4 p-4 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition">
+                                <div class="bg-yellow-400 text-black w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm mt-1">1</div>
+                                <div>
+                                    <strong class="block text-yellow-400">The Attack (Photons)</strong>
+                                    <p class="text-sm text-gray-300">Sunlight arrives as a stream of energy packets called <strong>Photons</strong>. They strike the Silicon atoms in the panel.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4 p-4 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition">
+                                <div class="bg-blue-400 text-black w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm mt-1">2</div>
+                                <div>
+                                    <strong class="block text-blue-400">The Collision (Impact)</strong>
+                                    <p class="text-sm text-gray-300">When a photon hits an electron, it transfers its energy. It's like a fast billiard ball hitting another ball!</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4 p-4 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition">
+                                <div class="bg-green-400 text-black w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm mt-1">3</div>
+                                <div>
+                                    <strong class="block text-green-400">The Escape (Current)</strong>
+                                    <p class="text-sm text-gray-300">With this new energy, the electron breaks free and flows through the wire. This flow is what we call <strong>Electricity</strong>.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Diagram (Dual View) -->
+                <div class="md:w-1/2 w-full sticky top-24">
+                    <div class="bg-slate-700 p-6 rounded-xl border border-slate-600 shadow-2xl relative">
+                        
+                        <!-- Tabs -->
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="switchView('macro')" id="tab-macro" class="flex-1 py-2 bg-slate-600 text-white rounded text-xs font-bold uppercase tracking-wide border-b-2 border-brand-blue">Wafer View</button>
+                            <button onclick="switchView('micro')" id="tab-micro" class="flex-1 py-2 bg-slate-800 text-gray-400 rounded text-xs font-bold uppercase tracking-wide hover:bg-slate-600">Atom View 🔬</button>
+                        </div>
+
+                        <!-- View 1: MACRO (The Panel) -->
+                        <div id="macro-view" class="block">
+                            <div class="relative h-64 bg-slate-900 rounded-lg overflow-hidden border border-slate-600 mb-4">
+                                <!-- Sun -->
+                                <div id="sim-sun" class="absolute top-2 left-1/2 -translate-x-1/2 text-4xl text-gray-600 transition duration-500 z-10">
+                                    <i class="fa-solid fa-sun"></i>
+                                </div>
+                                <!-- Particles -->
+                                <div id="photon-container" class="absolute top-12 left-0 right-0 h-28 pointer-events-none z-10"></div>
+                                <div id="electron-container" class="absolute bottom-6 left-12 right-12 h-4 pointer-events-none"></div>
+                                
+                                <!-- Diagram Assets -->
+                                <div class="absolute top-28 left-10 right-10 h-16 flex flex-col rounded border border-gray-500 overflow-hidden z-0">
+                                    <div class="h-1/2 bg-blue-900 flex items-center justify-center text-[10px] text-blue-200">N-Type Silicon</div>
+                                    <div class="h-1/2 bg-red-900 flex items-center justify-center text-[10px] text-red-200">P-Type Silicon</div>
+                                </div>
+                                <div class="absolute top-36 left-12 w-1 h-20 bg-gray-400"></div> 
+                                <div class="absolute top-36 right-12 w-1 h-20 bg-gray-400"></div> 
+                                <div class="absolute bottom-8 left-12 right-12 h-1 bg-gray-400"></div>
+                                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-3xl text-gray-600 transition" id="sim-bulb">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                            </div>
+                            <button onclick="toggleSolarSim()" id="sim-btn" class="w-full bg-slate-500 hover:bg-yellow-500 hover:text-black text-white font-bold py-3 rounded-lg transition shadow-lg flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-power-off"></i> Activate Panel
+                            </button>
+                        </div>
+
+                        <!-- View 2: MICRO (The Atom) -->
+                        <div id="micro-view" class="hidden">
+                            <div class="relative h-64 bg-slate-900 rounded-lg overflow-hidden border border-slate-600 mb-4 flex items-center justify-center">
+                                
+                                <!-- Silicon Atom Representation -->
+                                <div class="relative">
+                                    <!-- Orbitals -->
+                                    <div class="atom-ring w-48 h-48 opacity-20"></div>
+                                    <div class="atom-ring w-32 h-32 opacity-30"></div>
+                                    <!-- Nucleus -->
+                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-red-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,0.6)] z-20 flex items-center justify-center text-[8px] font-bold">Si</div>
+                                    
+                                    <!-- Electrons (Static for demo) -->
+                                    <div class="absolute top-0 left-1/2 w-2 h-2 bg-blue-400 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                                    <div class="absolute bottom-0 left-1/2 w-2 h-2 bg-blue-400 rounded-full -translate-x-1/2 translate-y-1/2"></div>
+                                    
+                                    <!-- Target Electron -->
+                                    <div id="target-electron" class="absolute top-1/2 right-0 w-3 h-3 bg-blue-500 rounded-full translate-x-1/2 -translate-y-1/2 border border-white z-20"></div>
+                                </div>
+
+                                <!-- Dynamic Photon -->
+                                <div id="micro-photon" class="absolute top-[-20px] left-1/2 w-3 h-3 rounded-full hidden"></div>
+                                
+                                <!-- Feedback Text -->
+                                <div id="micro-feedback" class="absolute bottom-2 w-full text-center text-xs font-mono text-gray-400">Select energy level below...</div>
+
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="fireMicroPhoton('low')" class="bg-red-900 hover:bg-red-600 text-red-100 py-3 rounded-lg font-bold text-xs border border-red-700 transition">
+                                    🔴 Fire Red Light<br><span class="opacity-70 font-normal">(Low Energy)</span>
+                                </button>
+                                <button onclick="fireMicroPhoton('high')" class="bg-blue-900 hover:bg-blue-600 text-blue-100 py-3 rounded-lg font-bold text-xs border border-blue-700 transition">
+                                    🔵 Fire Blue Light<br><span class="opacity-70 font-normal">(High Energy)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: INTERACTIVE LABS -->
+    <section id="labs" class="py-16 bg-blue-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold uppercase">Activity Zone</span>
+                <h2 class="font-fun text-3xl text-gray-800 mt-2">Engineer's Simulations</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Lab 1: Wind Turbine -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl">
+                    <h3 class="font-bold text-xl text-gray-700 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-wind text-sky-400"></i> Wind Speed Lab
+                    </h3>
+                    
+                    <!-- Visual -->
+                    <div class="bg-sky-100 h-48 rounded-xl relative flex justify-center items-end overflow-hidden mb-6">
+                        <i class="fa-solid fa-cloud text-white text-4xl absolute top-4 left-4 floating-element"></i>
+                        <i class="fa-solid fa-cloud text-white text-3xl absolute top-8 right-8 floating-element" style="animation-delay: 1s;"></i>
+                        
+                        <!-- Turbine -->
+                        <div class="relative z-10 flex flex-col items-center mb-[-5px]">
+                            <i id="turbine-blade" class="fa-solid fa-fan text-6xl text-gray-700 origin-center transition-all duration-300"></i>
+                            <div class="w-2 h-20 bg-gray-400"></div>
+                        </div>
+                        <div class="w-full h-4 bg-green-400 absolute bottom-0"></div>
+                    </div>
+
+                    <!-- Controls -->
+                    <label class="block text-sm font-bold text-gray-500 mb-2">Wind Speed Control (m/s)</label>
+                    <input type="range" id="wind-slider" min="0" max="3" step="1" value="0" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-4" oninput="updateWind()">
+                    <div class="flex justify-between text-xs text-gray-400 font-bold uppercase mb-4">
+                        <span>Calm</span>
+                        <span>Breeze</span>
+                        <span>Strong</span>
+                        <span>Storm</span>
+                    </div>
+
+                    <div class="bg-gray-800 text-white p-4 rounded-lg flex justify-between items-center">
+                        <span class="text-xs text-gray-400">ENERGY OUTPUT</span>
+                        <span class="font-mono text-xl text-green-400"><span id="wind-output">0</span> kW</span>
+                    </div>
+                </div>
+
+                <!-- Lab 2: Solar City -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-xl text-gray-700 flex items-center gap-2">
+                            <i class="fa-solid fa-city text-purple-500"></i> Solar City
+                        </h3>
+                        <div class="text-right">
+                            <div class="text-xs text-gray-400">GOAL: 8 HOUSES</div>
+                            <div class="font-bold text-purple-600"><span id="city-score">0</span> / 12</div>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mb-4">Click houses to install panels on the roofs.</p>
+
+                    <!-- Grid -->
+                    <div class="grid grid-cols-4 gap-2 mb-6" id="city-grid">
+                        <!-- Generated by JS for cleaner code -->
+                    </div>
+
+                    <div id="city-msg" class="h-8 text-center text-sm font-bold text-gray-400 flex items-center justify-center bg-gray-50 rounded">
+                        Start building...
+                    </div>
+                    
+                    <button onclick="resetCity()" class="mt-2 text-xs text-gray-400 hover:text-gray-600 underline w-full text-center">Reset Grid</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: QUIZ -->
+    <section id="quiz" class="py-16 bg-white">
+        <div class="container mx-auto px-6 max-w-2xl">
+            <h2 class="font-fun text-3xl text-center mb-8 text-gray-800">Quick Quiz 📝</h2>
+            
+            <div class="bg-white border-2 border-gray-100 rounded-2xl p-8 shadow-lg relative overflow-hidden">
+                
+                <!-- Question View -->
+                <div id="quiz-view">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-xs font-bold bg-gray-100 px-2 py-1 rounded text-gray-500" id="q-progress">Q1 / 4</span>
+                        <span class="text-xs font-bold text-brand-green">Score: <span id="q-score">0</span></span>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-6" id="q-text">Loading question...</h3>
+                    
+                    <div class="space-y-3" id="q-options">
+                        <!-- Options injected here -->
+                    </div>
+
+                    <div id="q-feedback" class="hidden mt-6 p-4 rounded-lg bg-gray-50 border-l-4">
+                        <p class="font-bold" id="feedback-msg"></p>
+                        <button onclick="nextQuestion()" class="mt-3 bg-gray-800 text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-black transition">Next <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Result View -->
+                <div id="result-view" class="hidden text-center py-10">
+                    <div class="inline-block p-6 rounded-full bg-yellow-100 text-yellow-500 text-6xl mb-4">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Quiz Complete!</h3>
+                    <p class="text-gray-500 mb-6">You scored <span id="final-score" class="font-bold text-gray-800 text-xl"></span></p>
+                    <button onclick="startQuiz()" class="bg-brand-blue text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Try Again</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center text-xs">
+        <p>&copy; 2024 HK Future Engineer Module. Designed for Form 1 Integrated Science.</p>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        /* --- 1. VIEW SWITCHER --- */
+        function switchView(mode) {
+            const macroView = document.getElementById('macro-view');
+            const microView = document.getElementById('micro-view');
+            const tabMacro = document.getElementById('tab-macro');
+            const tabMicro = document.getElementById('tab-micro');
+            
+            // Stop macro sim if running
+            if(isSimRunning) toggleSolarSim();
+
+            if (mode === 'macro') {
+                macroView.classList.remove('hidden');
+                microView.classList.add('hidden');
+                
+                // Active Styling
+                tabMacro.classList.remove('bg-slate-800', 'text-gray-400');
+                tabMacro.classList.add('bg-slate-600', 'text-white', 'border-b-2', 'border-brand-blue');
+                
+                // Inactive Styling
+                tabMicro.classList.add('bg-slate-800', 'text-gray-400');
+                tabMicro.classList.remove('bg-slate-600', 'text-white', 'border-b-2', 'border-brand-blue');
+
+            } else {
+                macroView.classList.add('hidden');
+                microView.classList.remove('hidden');
+                
+                // Active Styling
+                tabMicro.classList.remove('bg-slate-800', 'text-gray-400');
+                tabMicro.classList.add('bg-slate-600', 'text-white', 'border-b-2', 'border-brand-blue');
+                
+                // Inactive Styling
+                tabMacro.classList.add('bg-slate-800', 'text-gray-400');
+                tabMacro.classList.remove('bg-slate-600', 'text-white', 'border-b-2', 'border-brand-blue');
+            }
+        }
+
+        /* --- 2. MICRO (ATOM) SIMULATION --- */
+        function fireMicroPhoton(type) {
+            const photon = document.getElementById('micro-photon');
+            const electron = document.getElementById('target-electron');
+            const feedback = document.getElementById('micro-feedback');
+            
+            // Reset animations
+            photon.style.transition = 'none';
+            photon.style.top = '-20px';
+            photon.style.left = '50%';
+            photon.style.opacity = '1';
+            photon.style.display = 'block';
+            
+            electron.classList.remove('electron-wobble', 'electron-eject');
+            void electron.offsetWidth; // Trigger reflow
+
+            // Set Photon Color
+            if(type === 'low') {
+                photon.style.backgroundColor = '#ef4444'; // Red
+                photon.style.boxShadow = '0 0 5px #ef4444';
+            } else {
+                photon.style.backgroundColor = '#3b82f6'; // Blue
+                photon.style.boxShadow = '0 0 5px #3b82f6';
+            }
+
+            // Animate Photon dropping
+            setTimeout(() => {
+                photon.style.transition = 'top 0.5s linear';
+                photon.style.top = '50%'; // Hit nucleus/electron level
+            }, 50);
+
+            // On Impact (0.5s later)
+            setTimeout(() => {
+                photon.style.display = 'none'; // Absorbed
+
+                if(type === 'low') {
+                    // Low Energy: Wobble
+                    electron.classList.add('electron-wobble');
+                    feedback.innerHTML = "<span class='text-red-400'>Photon absorbed but energy too low. Electron stays.</span>";
+                } else {
+                    // High Energy: Eject
+                    electron.classList.add('electron-eject');
+                    feedback.innerHTML = "<span class='text-green-400 font-bold'>SUCCESS! High energy photon knocked electron loose! ⚡</span>";
+                    
+                    // Reset electron after animation
+                    setTimeout(() => {
+                        electron.classList.remove('electron-eject');
+                    }, 2000);
+                }
+            }, 550);
+        }
+
+        /* --- 3. MACRO (PANEL) ANIMATION --- */
+        let simInterval;
+        let isSimRunning = false;
+
+        function toggleSolarSim() {
+            const btn = document.getElementById('sim-btn');
+            const sun = document.getElementById('sim-sun');
+            const bulb = document.getElementById('sim-bulb');
+            const photonCont = document.getElementById('photon-container');
+            const electronCont = document.getElementById('electron-container');
+            
+            isSimRunning = !isSimRunning;
+
+            if (isSimRunning) {
+                // UI Changes
+                btn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop Simulation';
+                btn.classList.replace('bg-slate-500', 'bg-red-500');
+                btn.classList.replace('hover:bg-yellow-500', 'hover:bg-red-600');
+                
+                sun.classList.add('text-yellow-400', 'scale-110');
+                sun.classList.remove('text-gray-600');
+                bulb.classList.add('bulb-glow');
+
+                // Start Particle Loop
+                simInterval = setInterval(() => {
+                    // Create Photon
+                    const p = document.createElement('div');
+                    p.className = 'photon';
+                    p.style.left = Math.random() * 80 + 10 + '%';
+                    p.style.animationDuration = (Math.random() * 0.5 + 0.8) + 's';
+                    photonCont.appendChild(p);
+
+                    // Create Electron (delayed slightly)
+                    setTimeout(() => {
+                        if(!isSimRunning) return;
+                        const e = document.createElement('div');
+                        e.className = 'electron';
+                        e.style.display = 'block'; // make visible
+                        electronCont.appendChild(e);
+                        
+                        // Clean up electron after animation
+                        setTimeout(() => e.remove(), 2000);
+                    }, 500);
+
+                    // Clean up photon
+                    setTimeout(() => p.remove(), 1000);
+
+                }, 400);
+
+            } else {
+                // Reset
+                btn.innerHTML = '<i class="fa-solid fa-power-off"></i> Activate Panel';
+                btn.classList.replace('bg-red-500', 'bg-slate-500');
+                btn.classList.replace('hover:bg-red-600', 'hover:bg-yellow-500');
+                
+                sun.classList.remove('text-yellow-400', 'scale-110');
+                sun.classList.add('text-gray-600');
+                bulb.classList.remove('bulb-glow');
+
+                clearInterval(simInterval);
+                photonCont.innerHTML = '';
+                electronCont.innerHTML = '';
+            }
+        }
+
+
+        /* --- 4. WIND LAB --- */
+        function updateWind() {
+            const val = document.getElementById('wind-slider').value;
+            const blade = document.getElementById('turbine-blade');
+            const output = document.getElementById('wind-output');
+            
+            blade.classList.remove('spin-slow', 'spin-med', 'spin-fast');
+            
+            let power = 0;
+            if (val == 1) { blade.classList.add('spin-slow'); power = 250; }
+            if (val == 2) { blade.classList.add('spin-med'); power = 800; }
+            if (val == 3) { blade.classList.add('spin-fast'); power = 1500; }
+            
+            output.innerText = power;
+        }
+
+
+        /* --- 5. SOLAR CITY --- */
+        const cityGrid = document.getElementById('city-grid');
+        let housesInstalled = 0;
+
+        // Init Grid
+        for(let i=0; i<12; i++) {
+            let btn = document.createElement('button');
+            btn.className = "aspect-square bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-2xl transition hover:bg-gray-300";
+            btn.innerHTML = '<i class="fa-solid fa-house"></i>';
+            btn.onclick = function() { toggleHouse(btn); };
+            cityGrid.appendChild(btn);
+        }
+
+        function toggleHouse(btn) {
+            const icon = btn.querySelector('i');
+            if (btn.classList.contains('bg-purple-500')) {
+                // Remove
+                btn.className = "aspect-square bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-2xl transition hover:bg-gray-300";
+                icon.className = "fa-solid fa-house";
+                housesInstalled--;
+            } else {
+                // Install
+                btn.className = "aspect-square bg-purple-500 rounded-lg flex items-center justify-center text-yellow-300 text-2xl transition shadow-inner transform scale-95";
+                icon.className = "fa-solid fa-solar-panel";
+                housesInstalled++;
+            }
+            updateCityScore();
+        }
+
+        function updateCityScore() {
+            document.getElementById('city-score').innerText = housesInstalled;
+            const msg = document.getElementById('city-msg');
+            
+            if (housesInstalled >= 8) {
+                msg.innerHTML = '<span class="text-green-600 font-bold"><i class="fa-solid fa-check-circle"></i> Target Met! Grid Stable.</span>';
+                msg.classList.add('bg-green-100');
+            } else {
+                msg.innerText = "Keep installing panels...";
+                msg.classList.remove('bg-green-100');
+            }
+        }
+
+        function resetCity() {
+            cityGrid.innerHTML = '';
+            housesInstalled = 0;
+            updateCityScore();
+            // Rebuild
+            for(let i=0; i<12; i++) {
+                let btn = document.createElement('button');
+                btn.className = "aspect-square bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-2xl transition hover:bg-gray-300";
+                btn.innerHTML = '<i class="fa-solid fa-house"></i>';
+                btn.onclick = function() { toggleHouse(btn); };
+                cityGrid.appendChild(btn);
+            }
+        }
+
+
+        /* --- 6. QUIZ ENGINE --- */
+        const questions = [
+            { q: "Which particle from the sun hits the solar panel?", opts: ["Electron", "Proton", "Photon"], a: 2 },
+            { q: "Where is Hong Kong's large wind turbine located?", opts: ["Lamma Island", "The Peak", "Mong Kok"], a: 0 },
+            { q: "What energy relies on water flow?", opts: ["Solar", "Hydro", "Wind"], a: 1 },
+            { q: "What discovery won Einstein the Nobel Prize in 1921?", opts: ["Relativity", "Photoelectric Effect", "Gravity"], a: 1 }
+        ];
+        
+        let qIdx = 0;
+        let score = 0;
+
+        function startQuiz() {
+            qIdx = 0; score = 0;
+            document.getElementById('result-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[qIdx];
+            document.getElementById('q-progress').innerText = `Q${qIdx+1} / ${questions.length}`;
+            document.getElementById('q-score').innerText = score;
+            document.getElementById('q-text').innerText = q.q;
+            document.getElementById('q-feedback').classList.add('hidden');
+            
+            const optsDiv = document.getElementById('q-options');
+            optsDiv.innerHTML = '';
+
+            q.opts.forEach((opt, i) => {
+                let btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-lg bg-gray-50 border border-gray-200 hover:bg-gray-100 transition font-medium opt-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(i, btn);
+                optsDiv.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, btn) {
+            const correct = questions[qIdx].a;
+            // Disable all
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            
+            const fbBox = document.getElementById('q-feedback');
+            const fbMsg = document.getElementById('feedback-msg');
+            fbBox.classList.remove('hidden');
+
+            if (selected === correct) {
+                score++;
+                btn.classList.add('correct-bg');
+                fbBox.classList.add('correct-bg', 'text-green-800');
+                fbBox.classList.remove('wrong-bg', 'text-red-800');
+                fbMsg.innerHTML = "<i class='fa-solid fa-check'></i> Correct!";
+            } else {
+                btn.classList.add('wrong-bg');
+                fbBox.classList.add('wrong-bg', 'text-red-800');
+                fbBox.classList.remove('correct-bg', 'text-green-800');
+                fbMsg.innerHTML = "<i class='fa-solid fa-xmark'></i> Wrong! The answer was " + questions[qIdx].opts[correct];
+            }
+        }
+
+        function nextQuestion() {
+            qIdx++;
+            if (qIdx < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById('quiz-view').classList.add('hidden');
+                document.getElementById('result-view').classList.remove('hidden');
+                document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
+            }
+        }
+
+        // Init
+        startQuiz();
+
+    </script>
+</body>
+</html>

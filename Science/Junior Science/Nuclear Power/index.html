@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuclear Power: Engineering Basics (Form 1)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Animations */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 8s linear infinite;
+        }
+        .neutron {
+            transition: all 0.1s linear;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-blue-900 text-white sticky top-0 z-50 shadow-lg border-b-4 border-yellow-400">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-atom text-yellow-400 text-2xl animate-spin-slow"></i>
+                <span class="font-bold text-xl tracking-tight">HK Engineering Lab</span>
+            </div>
+            <div class="text-sm font-light hidden md:block">Unit: Energy & Electricity</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-br from-blue-800 to-indigo-900 text-white py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">How Do We Split Atoms?</h1>
+            <p class="text-lg md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Welcome, Form 1 Students! Today we explore <span class="text-yellow-400 font-bold">Nuclear Fission</span>. 
+                It's how we generate massive amounts of electricity without burning fossil fuels.
+            </p>
+            <a href="#simulator" class="bg-yellow-400 text-blue-900 font-bold py-3 px-8 rounded-full hover:bg-yellow-300 transition transform hover:scale-105 shadow-lg inline-flex items-center">
+                <i class="fa-solid fa-play mr-2"></i> Start Experiment
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 py-12 space-y-16">
+
+        <!-- CONCEPT 1: Fission Simulator -->
+        <section id="simulator" class="scroll-mt-24">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                <h2 class="text-3xl font-bold text-slate-800">The Chain Reaction Simulator</h2>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+                <div class="p-6 bg-slate-100 border-b border-slate-200">
+                    <p class="mb-4">
+                        <strong class="text-blue-700">Engineer's Note:</strong> Nuclear power works by splitting Uranium atoms. 
+                        When a neutron hits a Uranium atom, it splits (fission), releases heat energy, and shoots out more neutrons. 
+                        These hit other atoms, creating a <em>Chain Reaction</em>.
+                    </p>
+                    <div class="flex flex-wrap gap-4 items-center justify-between bg-white p-4 rounded-lg">
+                        <div class="text-sm">
+                            <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span> Uranium-235
+                            <span class="inline-block w-3 h-3 bg-red-500 rounded-full ml-3 mr-1"></span> Neutron
+                        </div>
+                        <button onclick="resetSimulation()" class="text-sm bg-slate-200 hover:bg-slate-300 px-3 py-1 rounded transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative w-full h-80 bg-slate-900 cursor-crosshair overflow-hidden" id="canvas-container">
+                    <canvas id="fissionCanvas" class="w-full h-full"></canvas>
+                    <div id="start-overlay" class="absolute inset-0 flex items-center justify-center bg-black/60 pointer-events-none">
+                        <p class="text-white font-bold text-xl animate-pulse">Click anywhere to fire a Neutron!</p>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-yellow-50 text-yellow-800 text-sm border-t border-yellow-100 flex items-start">
+                    <i class="fa-solid fa-lightbulb mt-1 mr-2 text-yellow-600"></i>
+                    <p>In a real reactor, we use "Control Rods" to absorb extra neutrons so the reaction doesn't get too fast. In this game, try to clear all the green dots!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT 2: Full Plant Simulation (UPGRADED) -->
+        <section id="plant-simulation" class="scroll-mt-24">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+                <h2 class="text-3xl font-bold text-slate-800">Control Room: Full System Simulation</h2>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
+                <!-- Advanced Control Panel -->
+                <div class="bg-slate-800 p-6 border-b border-slate-700">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                        
+                        <!-- Control Rods Slider -->
+                        <div class="md:col-span-4 bg-slate-700/50 p-4 rounded-xl border border-slate-600">
+                            <label class="flex justify-between text-white text-sm font-bold mb-3">
+                                <span>Control Rods Position</span>
+                                <span id="rod-display" class="text-blue-300">100% (Fully Inserted)</span>
+                            </label>
+                            <input type="range" min="0" max="100" value="100" step="1" 
+                                class="w-full h-3 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400"
+                                oninput="plantSim.setRods(this.value)">
+                            <div class="flex justify-between text-[10px] text-slate-400 mt-2 uppercase font-bold tracking-wider">
+                                <span>0% (Max Power)</span>
+                                <span>100% (Shutdown)</span>
+                            </div>
+                        </div>
+
+                        <!-- Gauges -->
+                        <div class="md:col-span-8 grid grid-cols-3 gap-4">
+                            <!-- Temp -->
+                            <div class="bg-slate-700/30 p-3 rounded-lg text-center border border-slate-600/50">
+                                <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Core Temp</div>
+                                <div class="text-2xl lg:text-3xl font-mono font-bold text-red-500 transition-all duration-300" id="gauge-temp">25°C</div>
+                            </div>
+                            <!-- Pressure -->
+                            <div class="bg-slate-700/30 p-3 rounded-lg text-center border border-slate-600/50">
+                                <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Steam Pressure</div>
+                                <div class="text-2xl lg:text-3xl font-mono font-bold text-blue-400 transition-all duration-300" id="gauge-pressure">0 Bar</div>
+                            </div>
+                            <!-- Output -->
+                            <div class="bg-slate-700/30 p-3 rounded-lg text-center border border-slate-600/50 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-yellow-500/10 animate-pulse hidden" id="power-glow"></div>
+                                <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Power Output</div>
+                                <div class="text-2xl lg:text-3xl font-mono font-bold text-yellow-400 transition-all duration-300 relative z-10" id="gauge-power">0 MW</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Canvas -->
+                <div class="relative w-full h-[500px] bg-slate-900" id="plant-container">
+                    <canvas id="plantCanvas" class="w-full h-full"></canvas>
+                    
+                    <!-- Interactive Labels -->
+                    <div class="absolute top-[20%] left-[8%] md:left-[12%] pointer-events-none text-center transform -translate-x-1/2">
+                        <div class="bg-red-900/80 text-white text-xs font-bold px-3 py-1 rounded-full border border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]">Reactor Core</div>
+                    </div>
+                    <div class="absolute top-[20%] left-[38%] pointer-events-none text-center transform -translate-x-1/2">
+                        <div class="bg-blue-900/80 text-white text-xs font-bold px-3 py-1 rounded-full border border-blue-500">Steam Gen</div>
+                    </div>
+                    <div class="absolute top-[20%] left-[62%] pointer-events-none text-center transform -translate-x-1/2">
+                        <div class="bg-slate-700/80 text-white text-xs font-bold px-3 py-1 rounded-full border border-slate-500">Turbine</div>
+                    </div>
+                    <div class="absolute top-[20%] right-[5%] pointer-events-none text-center">
+                        <div class="bg-yellow-900/80 text-yellow-300 text-xs font-bold px-3 py-1 rounded-full border border-yellow-500 shadow-[0_0_15px_rgba(250,204,21,0.5)]">Grid</div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-slate-950 text-slate-400 text-sm border-t border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-6">
+                        <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-red-500 mr-2 shadow-[0_0_8px_red]"></span> Primary Loop</div>
+                        <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-blue-300 mr-2 shadow-[0_0_8px_cyan]"></span> Secondary Loop</div>
+                        <div class="flex items-center"><span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span> Cooling Loop</div>
+                    </div>
+                    <div class="hidden md:block text-slate-600 italic">
+                        Adjust control rods to generate power safely.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT 3: How the Plant Works (Interactive Tabs) -->
+        <section id="how-it-works">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+                <h2 class="text-3xl font-bold text-slate-800">Deep Dive: From Heat to Electricity</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Interactive Steps -->
+                <div class="md:col-span-1 space-y-2">
+                    <button onclick="setStep(0)" id="btn-step-0" class="step-btn w-full text-left p-4 rounded-lg border-2 border-blue-500 bg-blue-50 shadow-md transition-all">
+                        <div class="font-bold text-blue-900">Step 1: The Reactor Core</div>
+                        <div class="text-xs text-slate-600 mt-1">Generating Heat</div>
+                    </button>
+                    <button onclick="setStep(1)" id="btn-step-1" class="step-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-all">
+                        <div class="font-bold text-slate-700">Step 2: Steam Generator</div>
+                        <div class="text-xs text-slate-500 mt-1">Heat Exchange</div>
+                    </button>
+                    <button onclick="setStep(2)" id="btn-step-2" class="step-btn w-full text-left p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-all">
+                        <div class="font-bold text-slate-700">Step 3: Turbine & Generator</div>
+                        <div class="text-xs text-slate-500 mt-1">Kinetic to Electrical Energy</div>
+                    </button>
+                </div>
+
+                <!-- Visualization Panel -->
+                <div class="md:col-span-2 bg-white rounded-xl shadow-lg border border-slate-200 p-6 relative min-h-[300px]">
+                    
+                    <!-- Content Step 1 -->
+                    <div id="content-step-0" class="step-content transition-opacity duration-300">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-blue-800">The Reactor Vessel</h3>
+                            <i class="fa-solid fa-temperature-high text-red-500 text-3xl"></i>
+                        </div>
+                        <p class="text-slate-600 mb-4">
+                            Inside the thick steel vessel, the Uranium fuel undergoes fission. This creates a massive amount of <strong>Thermal Energy (Heat)</strong>. 
+                        </p>
+                        <div class="bg-slate-100 p-4 rounded-lg text-center">
+                            <p class="font-mono text-sm text-slate-500 mb-2">Energy Transformation:</p>
+                            <div class="flex items-center justify-center space-x-2 font-bold text-sm md:text-base">
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Nuclear Energy</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="bg-red-100 text-red-800 px-2 py-1 rounded">Thermal Energy</span>
+                            </div>
+                        </div>
+                        <img src="/api/placeholder/400/200" alt="Reactor Core Diagram" class="w-full h-40 object-cover mt-4 rounded-md opacity-50 border-2 border-dashed border-slate-300 hidden"> 
+                        <!-- Using CSS shapes instead of images for reliability -->
+                        <div class="mt-6 flex justify-center">
+                            <div class="w-32 h-40 bg-gray-300 rounded-t-full border-4 border-gray-500 relative flex items-center justify-center overflow-hidden">
+                                <div class="absolute w-full h-full bg-red-400 opacity-20 animate-pulse"></div>
+                                <div class="w-4 h-24 bg-yellow-400 mx-1"></div>
+                                <div class="w-4 h-24 bg-yellow-400 mx-1"></div>
+                                <div class="w-4 h-24 bg-yellow-400 mx-1"></div>
+                                <div class="absolute bottom-0 w-full h-4 bg-blue-500"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Step 2 -->
+                    <div id="content-step-1" class="step-content hidden transition-opacity duration-300">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-blue-800">Making Steam</h3>
+                            <i class="fa-solid fa-cloud text-slate-400 text-3xl"></i>
+                        </div>
+                        <p class="text-slate-600 mb-4">
+                            The hot water from the reactor is pumped through pipes into a "Steam Generator". It boils a separate loop of water to create high-pressure steam. 
+                            <br><br>
+                            <em>Why separate loops?</em> So the radioactive water never leaves the containment building!
+                        </p>
+                        <div class="mt-6 flex justify-center items-center space-x-4">
+                            <div class="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-xs text-center p-1">Hot Loop</div>
+                            <i class="fa-solid fa-arrow-right-arrow-left text-slate-400 text-xl"></i>
+                            <div class="w-20 h-20 bg-blue-300 rounded-full flex items-center justify-center text-blue-900 font-bold text-xs text-center border-4 border-white shadow-lg animate-pulse">Steam Loop</div>
+                        </div>
+                    </div>
+
+                    <!-- Content Step 3 -->
+                    <div id="content-step-2" class="step-content hidden transition-opacity duration-300">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-blue-800">Turbine & Generator</h3>
+                            <i class="fa-solid fa-bolt text-yellow-400 text-3xl"></i>
+                        </div>
+                        <p class="text-slate-600 mb-4">
+                            The high-pressure steam shoots into a huge turbine, making it spin incredibly fast (3000 RPM!). 
+                            The turbine turns a magnet inside a coil of wire (the Generator) to create electricity.
+                        </p>
+                        <div class="bg-slate-100 p-4 rounded-lg text-center">
+                            <p class="font-mono text-sm text-slate-500 mb-2">Final Transformation:</p>
+                            <div class="flex items-center justify-center space-x-2 font-bold text-sm md:text-base flex-wrap">
+                                <span class="bg-red-100 text-red-800 px-2 py-1 rounded">Thermal</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">Kinetic</span>
+                                <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                                <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded shadow">Electrical</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-center">
+                            <i class="fa-solid fa-fan text-6xl text-slate-600 animate-spin-slow duration-[1s]"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPT 4: Hong Kong Context -->
+        <section class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-2/3">
+                    <h2 class="text-2xl font-bold text-indigo-900 mb-4">
+                        <i class="fa-solid fa-location-dot mr-2"></i>
+                        Why does this matter in Hong Kong?
+                    </h2>
+                    <p class="text-slate-700 leading-relaxed mb-4">
+                        Hong Kong doesn't have much space for giant solar farms or wind turbines. We need a reliable source of energy that runs 24/7.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i>
+                            <span><strong>Daya Bay:</strong> Located just 50km from HK, it provides about 25% of our city's power.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i>
+                            <span><strong>Low Carbon:</strong> Unlike burning coal or gas, nuclear fission produces Zero CO2 during operation, helping fight climate change.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="md:w-1/3 flex justify-center">
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                        <div class="text-5xl font-bold text-indigo-600 mb-2">25%</div>
+                        <div class="text-sm text-slate-500 uppercase tracking-wide font-semibold">of HK's Electricity</div>
+                        <div class="mt-4 h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 w-1/4"></div>
+                        </div>
+                        <div class="text-xs text-slate-400 mt-2 text-left">Nuclear Contribution</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section>
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+                <h2 class="text-3xl font-bold text-slate-800">Quick Check Quiz</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6" id="quiz-container">
+                <!-- Question 1 -->
+                <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                    <p class="font-bold text-lg mb-4">1. What is the fuel usually used in nuclear reactors?</p>
+                    <div class="space-y-2">
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 transition">A. Coal</button>
+                        <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 transition">B. Uranium</button>
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 transition">C. Hydrogen</button>
+                    </div>
+                    <div class="feedback hidden mt-3 font-bold"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="bg-white p-6 rounded-lg shadow border border-slate-200">
+                    <p class="font-bold text-lg mb-4">2. What type of energy turns the turbine?</p>
+                    <div class="space-y-2">
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 transition">A. Chemical Energy</button>
+                        <button onclick="checkAnswer(this, false)" class="w-full text-left p-3 rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 transition">B. Potential Energy</button>
+                        <button onclick="checkAnswer(this, true)" class="w-full text-left p-3 rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 transition">C. Kinetic Energy</button>
+                    </div>
+                    <div class="feedback hidden mt-3 font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 py-8 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <p class="mb-2">Designed for Form 1 Integrated Science Students (Hong Kong Curriculum)</p>
+            <p class="text-xs">
+                <i class="fa-solid fa-shield-halved mr-1"></i> Safety First: Nuclear Engineers work hard to keep plants safe with multiple containment layers.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. TABBED INTERFACE LOGIC ---
+        function setStep(stepIndex) {
+            // Update buttons
+            document.querySelectorAll('.step-btn').forEach((btn, idx) => {
+                if(idx === stepIndex) {
+                    btn.classList.add('border-blue-500', 'bg-blue-50', 'shadow-md');
+                    btn.classList.remove('border-slate-200');
+                    btn.querySelector('div:first-child').classList.add('text-blue-900');
+                    btn.querySelector('div:first-child').classList.remove('text-slate-700');
+                } else {
+                    btn.classList.remove('border-blue-500', 'bg-blue-50', 'shadow-md');
+                    btn.classList.add('border-slate-200');
+                    btn.querySelector('div:first-child').classList.remove('text-blue-900');
+                    btn.querySelector('div:first-child').classList.add('text-slate-700');
+                }
+            });
+
+            // Update Content
+            document.querySelectorAll('.step-content').forEach((content, idx) => {
+                if(idx === stepIndex) {
+                    content.classList.remove('hidden');
+                    // Small delay for fade effect
+                    setTimeout(() => content.classList.remove('opacity-0'), 10);
+                } else {
+                    content.classList.add('opacity-0');
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        // --- 2. QUIZ LOGIC ---
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const feedback = parent.nextElementSibling;
+            
+            // Disable all buttons in this question
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                feedback.textContent = "Correct! Well done, Engineer.";
+                feedback.classList.add('text-green-600');
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                feedback.textContent = "Not quite. Try reviewing the How It Works section!";
+                feedback.classList.add('text-red-600');
+            }
+            feedback.classList.remove('hidden');
+        }
+
+        // --- 3. PLANT SIMULATION CLASS (IMPROVED PHYSICS) ---
+        class PlantSimulation {
+            constructor() {
+                this.canvas = document.getElementById('plantCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // Physics State
+                this.rodsLevel = 100; // 0 (Out/Max Power) to 100 (In/Off)
+                this.coreTemp = 25;   // Celsius
+                this.pressure = 0;    // Bar
+                this.powerOutput = 0; // MW
+                this.turbineAngle = 0;
+                this.turbineSpeed = 0;
+                
+                this.particles = [];
+                
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                this.initParticles(); // Pre-fill some particles
+                this.animate();
+            }
+
+            resize() {
+                const container = document.getElementById('plant-container');
+                if(container) {
+                    this.canvas.width = container.clientWidth;
+                    this.canvas.height = container.clientHeight;
+                }
+            }
+            
+            initParticles() {
+                // Initialize empty arrays; they get added in update
+                this.particles = []; 
+            }
+
+            setRods(val) {
+                this.rodsLevel = parseInt(val);
+                document.getElementById('rod-display').innerText = `${this.rodsLevel}% (${this.rodsLevel < 10 ? 'MAX POWER' : this.rodsLevel > 90 ? 'SHUTDOWN' : 'Operating'})`;
+                
+                // Dynamic text color
+                const disp = document.getElementById('rod-display');
+                if(this.rodsLevel < 20) disp.className = "text-red-400 animate-pulse font-bold";
+                else if(this.rodsLevel > 90) disp.className = "text-blue-300";
+                else disp.className = "text-yellow-400";
+            }
+
+            updatePhysics() {
+                // 1. Target Temperature based on Control Rods
+                // Rods at 100% -> Target 25C
+                // Rods at 0% -> Target 320C (Typical PWR temp)
+                // Inverted relationship: Lower rods = Higher Temp
+                const targetTemp = 25 + ((100 - this.rodsLevel) * 3); 
+                
+                // Thermal Inertia: Temp doesn't change instantly
+                const changeRate = 0.02; 
+                this.coreTemp += (targetTemp - this.coreTemp) * changeRate;
+
+                // 2. Steam Pressure (Simple Gas Law approx for simulation)
+                // Starts building effectively above 100C
+                if(this.coreTemp > 100) {
+                    const steamPotential = (this.coreTemp - 100) * 0.5;
+                    this.pressure += (steamPotential - this.pressure) * 0.05;
+                } else {
+                    this.pressure *= 0.95; // Pressure drops if cold
+                }
+
+                // 3. Turbine Speed & Power Output
+                // Turbine speed lags behind pressure
+                const targetSpeed = this.pressure * 2; // Arbitrary scaler
+                this.turbineSpeed += (targetSpeed - this.turbineSpeed) * 0.01;
+                
+                // Power is function of turbine speed
+                this.powerOutput = Math.floor(this.turbineSpeed * 10);
+
+                // Update DOM elements
+                document.getElementById('gauge-temp').innerText = Math.floor(this.coreTemp) + "°C";
+                document.getElementById('gauge-pressure').innerText = Math.floor(this.pressure) + " Bar";
+                document.getElementById('gauge-power').innerText = this.powerOutput + " MW";
+
+                // Visual alarms
+                const powerGlow = document.getElementById('power-glow');
+                if(this.powerOutput > 800) powerGlow.classList.remove('hidden');
+                else powerGlow.classList.add('hidden');
+            }
+
+            drawPipe(path, color, width = 8, dashed = false) {
+                const ctx = this.ctx;
+                ctx.beginPath();
+                ctx.moveTo(path[0].x, path[0].y);
+                for(let i=1; i<path.length; i++) {
+                    ctx.lineTo(path[i].x, path[i].y);
+                }
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                if(dashed) ctx.setLineDash([10, 10]);
+                else ctx.setLineDash([]);
+                ctx.stroke();
+                
+                // Inner highlight
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            drawComponent(x, y, w, h, color) {
+                const ctx = this.ctx;
+                // Shadow
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 15;
+                
+                // Body
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, w, h);
+                ctx.shadowBlur = 0; // Reset
+                
+                // Border
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, w, h);
+            }
+
+            // Advanced Particle System
+            manageParticles(path, type, active) {
+                // Add particles if active
+                if(active && Math.random() < 0.2) {
+                    this.particles.push({
+                        path: path,
+                        progress: 0,
+                        type: type,
+                        speed: 1 + (Math.random() * 0.5) // Variation
+                    });
+                }
+
+                // Draw & Update
+                for(let i = this.particles.length - 1; i >= 0; i--) {
+                    let p = this.particles[i];
+                    
+                    // Filter logic to only process this type
+                    if(p.type !== type) continue;
+
+                    // Speed multiplier based on physics
+                    let speedMult = 1;
+                    if(type === 'primary') speedMult = Math.max(0.5, this.coreTemp / 100);
+                    if(type === 'steam') speedMult = Math.max(0.1, this.pressure / 20);
+                    if(type === 'cooling') speedMult = 1.5; // Constant pump speed usually
+                    
+                    p.progress += p.speed * speedMult;
+                    
+                    // Calculate Pos
+                    let currentDist = p.progress;
+                    let pos = {x:0, y:0};
+                    let isActive = false;
+
+                    for(let j=0; j<p.path.length-1; j++) {
+                        const p1 = p.path[j];
+                        const p2 = p.path[j+1];
+                        const dx = p2.x - p1.x;
+                        const dy = p2.y - p1.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+
+                        if(currentDist <= dist) {
+                            const ratio = currentDist / dist;
+                            pos.x = p1.x + dx * ratio;
+                            pos.y = p1.y + dy * ratio;
+                            isActive = true;
+                            break;
+                        } else {
+                            currentDist -= dist;
+                        }
+                    }
+
+                    if(isActive) {
+                        this.ctx.beginPath();
+                        this.ctx.arc(pos.x, pos.y, p.type === 'steam' ? 4 : 3, 0, Math.PI*2);
+                        this.ctx.fillStyle = p.type === 'steam' ? 'rgba(255,255,255,0.8)' : (p.type === 'primary' ? 'rgba(255,100,100,0.9)' : 'rgba(100,255,100,0.8)');
+                        this.ctx.fill();
+                    } else {
+                        this.particles.splice(i, 1);
+                    }
+                }
+            }
+
+            draw() {
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                const ctx = this.ctx;
+
+                ctx.clearRect(0, 0, w, h);
+
+                // --- LAYOUT COORDINATES ---
+                const reactor = { x: w * 0.12, y: h * 0.4, w: 90, h: 140 };
+                const sg = { x: w * 0.38, y: h * 0.35, w: 70, h: 160 };
+                const turbine = { x: w * 0.62, y: h * 0.38, r: 40 };
+                const condenser = { x: w * 0.62, y: h * 0.7, w: 90, h: 60 };
+                const sea = { x: w * 0.9, y: h * 0.75 };
+
+                // --- PATH DEFINITIONS ---
+                const primaryPath = [
+                    {x: reactor.x + reactor.w, y: reactor.y + 30}, // Out Reactor
+                    {x: sg.x, y: sg.y + 40}, // In SG
+                    {x: sg.x, y: sg.y + 120}, // Out SG
+                    {x: reactor.x + reactor.w, y: reactor.y + 110}, // Back Reactor
+                    {x: reactor.x + reactor.w, y: reactor.y + 30} // Loop
+                ];
+
+                const steamPath = [
+                    {x: sg.x + sg.w/2, y: sg.y}, // Top of SG
+                    {x: sg.x + sg.w/2, y: sg.y - 20}, // Up
+                    {x: turbine.x, y: sg.y - 20}, // Over to Turbine
+                    {x: turbine.x, y: turbine.y}, // Into Turbine
+                    {x: turbine.x, y: condenser.y}, // Down to Condenser
+                    {x: sg.x + sg.w, y: condenser.y + condenser.h/2}, // Back
+                    {x: sg.x + sg.w, y: sg.y + 80} // Into SG side
+                ];
+
+                const coolingPath = [
+                    {x: w, y: sea.y}, // In from Sea
+                    {x: condenser.x + condenser.w, y: sea.y}, 
+                    {x: condenser.x, y: sea.y}, // Through condenser
+                    {x: condenser.x, y: sea.y + 30}, 
+                    {x: w, y: sea.y + 30} // Out to Sea
+                ];
+
+                // --- DRAW PIPES ---
+                // Draw cooling first (bottom layer)
+                this.drawPipe(coolingPath, '#059669', 10);
+                
+                // Draw Steam (middle layer)
+                // Color changes based on pressure: white -> blue
+                const steamColor = `rgb(${200 - this.pressure*2}, ${220 - this.pressure}, 255)`;
+                this.drawPipe(steamPath, steamColor, 10);
+
+                // Draw Primary (top layer)
+                // Color gets redder with temp
+                const reactorColor = `rgb(${Math.min(255, this.coreTemp)}, 50, 50)`;
+                this.drawPipe(primaryPath, reactorColor, 10);
+
+                // --- DRAW COMPONENTS ---
+
+                // 1. REACTOR VESSEL
+                this.drawComponent(reactor.x, reactor.y, reactor.w, reactor.h, '#334155');
+                // Fuel Rods (Fixed)
+                ctx.fillStyle = '#b91c1c'; // Deep Red
+                ctx.fillRect(reactor.x + 20, reactor.y + 40, 10, 80);
+                ctx.fillRect(reactor.x + 40, reactor.y + 40, 10, 80);
+                ctx.fillRect(reactor.x + 60, reactor.y + 40, 10, 80);
+                
+                // CONTROL RODS (Movable)
+                const rodY = reactor.y + 20 + (this.rodsLevel / 100 * 80); // Move down 80px max
+                ctx.fillStyle = '#94a3b8'; // Silver
+                // Draw rods entering from top
+                ctx.fillRect(reactor.x + 20, reactor.y + 10, 10, rodY - (reactor.y+10)); 
+                ctx.fillRect(reactor.x + 40, reactor.y + 10, 10, rodY - (reactor.y+10)); 
+                ctx.fillRect(reactor.x + 60, reactor.y + 10, 10, rodY - (reactor.y+10));
+                // Rod tips
+                ctx.fillStyle = '#475569';
+                ctx.fillRect(reactor.x + 18, rodY, 14, 5);
+                ctx.fillRect(reactor.x + 38, rodY, 14, 5);
+                ctx.fillRect(reactor.x + 58, rodY, 14, 5);
+
+                // 2. STEAM GENERATOR
+                this.drawComponent(sg.x, sg.y, sg.w, sg.h, '#475569');
+                // Water Level inside SG
+                const waterH = 100;
+                ctx.fillStyle = 'rgba(147, 197, 253, 0.3)'; // Light Blue
+                ctx.fillRect(sg.x+5, sg.y + sg.h - waterH - 5, sg.w-10, waterH);
+                // U-Tubes (Heat Exchanger) inside SG
+                ctx.beginPath();
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 4;
+                ctx.moveTo(sg.x + 10, sg.y + 50);
+                ctx.bezierCurveTo(sg.x + 10, sg.y - 20, sg.x + sg.w - 10, sg.y - 20, sg.x + sg.w - 10, sg.y + 50);
+                ctx.stroke();
+
+                // 3. TURBINE (Rotating)
+                ctx.save();
+                ctx.translate(turbine.x, turbine.y);
+                this.turbineAngle += this.turbineSpeed * 0.1; // Rotate based on speed
+                ctx.rotate(this.turbineAngle);
+                
+                // Turbine Blades
+                ctx.fillStyle = '#cbd5e1';
+                ctx.beginPath();
+                ctx.arc(0, 0, turbine.r, 0, Math.PI*2);
+                ctx.fill();
+                ctx.fillStyle = '#64748b';
+                for(let k=0; k<6; k++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.arc(0, 0, turbine.r, -0.2, 0.2);
+                    ctx.fill();
+                    ctx.rotate(Math.PI/3);
+                }
+                ctx.restore();
+                
+                // Generator box attached to Turbine
+                this.drawComponent(turbine.x + 50, turbine.y - 20, 40, 40, '#f59e0b');
+                
+                // 4. CONDENSER
+                this.drawComponent(condenser.x, condenser.y, condenser.w, condenser.h, '#3b82f6');
+                // Cooling coils inside
+                ctx.beginPath();
+                ctx.strokeStyle = '#22c55e';
+                ctx.lineWidth = 4;
+                ctx.moveTo(condenser.x, condenser.y + 20);
+                ctx.lineTo(condenser.x + condenser.w, condenser.y + 40);
+                ctx.stroke();
+
+                // 5. GRID LINES
+                if(this.powerOutput > 0) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#facc15'; // Yellow
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([5, 5]);
+                    ctx.lineDashOffset = -Date.now() / 5;
+                    ctx.moveTo(turbine.x + 90, turbine.y);
+                    ctx.lineTo(w, turbine.y);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // --- PARTICLES ---
+                this.manageParticles(primaryPath, 'primary', true);
+                this.manageParticles(steamPath, 'steam', this.pressure > 1);
+                this.manageParticles(coolingPath, 'cooling', true);
+
+                requestAnimationFrame(() => {
+                    this.updatePhysics();
+                    this.draw();
+                });
+            }
+
+            animate() {
+                this.draw();
+            }
+        }
+
+        // --- 4. FISSION SIMULATOR (CANVAS) ---
+        const canvas = document.getElementById('fissionCanvas');
+        const ctx = canvas.getContext('2d');
+        let atoms = [];
+        let neutrons = [];
+        let animationId;
+        const ATOM_RADIUS = 10;
+        const NEUTRON_RADIUS = 3;
+        const NEUTRON_SPEED = 4;
+
+        function resizeCanvas() {
+            const container = document.getElementById('canvas-container');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        class Atom {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.active = true;
+            }
+            draw() {
+                if (!this.active) return;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, ATOM_RADIUS, 0, Math.PI * 2);
+                ctx.fillStyle = '#22c55e'; // Green
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        class Neutron {
+            constructor(x, y, vx, vy) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.life = 100; // Dies after some time
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, NEUTRON_RADIUS, 0, Math.PI * 2);
+                ctx.fillStyle = '#ef4444'; // Red
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+
+        function initSimulation() {
+            resizeCanvas();
+            atoms = [];
+            neutrons = [];
+            
+            // Create a grid of atoms
+            const cols = Math.floor(canvas.width / 40);
+            const rows = Math.floor(canvas.height / 40);
+            
+            for(let i=1; i<cols; i++) {
+                for(let j=1; j<rows; j++) {
+                    // Add some randomness to position
+                    atoms.push(new Atom(i * 40 + Math.random()*10, j * 40 + Math.random()*10));
+                }
+            }
+            animate();
+        }
+
+        function resetSimulation() {
+            initSimulation();
+            document.getElementById('start-overlay').classList.remove('hidden');
+        }
+
+        function splitAtom(x, y) {
+            // Create 3 neutrons moving in random directions
+            for(let i=0; i<3; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const vx = Math.cos(angle) * NEUTRON_SPEED;
+                const vy = Math.sin(angle) * NEUTRON_SPEED;
+                neutrons.push(new Neutron(x, y, vx, vy));
+            }
+            
+            // Visual flash effect (optional simplification)
+            ctx.beginPath();
+            ctx.arc(x, y, ATOM_RADIUS * 2, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
+            ctx.fill();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw atoms
+            atoms.forEach(atom => atom.draw());
+
+            // Update and draw neutrons
+            for (let i = neutrons.length - 1; i >= 0; i--) {
+                const n = neutrons[i];
+                n.update();
+                n.draw();
+
+                // Boundary check
+                if (n.x < 0 || n.x > canvas.width || n.y < 0 || n.y > canvas.height || n.life <= 0) {
+                    neutrons.splice(i, 1);
+                    continue;
+                }
+
+                // Collision check with atoms
+                for (let j = atoms.length - 1; j >= 0; j--) {
+                    const atom = atoms[j];
+                    if (atom.active) {
+                        const dx = n.x - atom.x;
+                        const dy = n.y - atom.y;
+                        const distance = Math.sqrt(dx*dx + dy*dy);
+
+                        if (distance < ATOM_RADIUS + NEUTRON_RADIUS) {
+                            atom.active = false; // Atom splits
+                            neutrons.splice(i, 1); // Neutron is absorbed
+                            splitAtom(atom.x, atom.y); // Creates new neutrons
+                            break; // Neutron handled
+                        }
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Interaction
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            // Manual trigger (simulates the first neutron source)
+            document.getElementById('start-overlay').classList.add('hidden');
+            splitAtom(mouseX, mouseY);
+        });
+
+        window.addEventListener('resize', () => {
+            // Only resize, don't reset atoms to avoid jarring
+            const container = document.getElementById('canvas-container');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        });
+
+        // Start everything
+        initSimulation();
+        const plantSim = new PlantSimulation();
+
+    </script>
+</body>
+</html>

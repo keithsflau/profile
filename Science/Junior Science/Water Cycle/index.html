@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Water Cycle | Interactive Learning Module</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Custom Animations for the Diagram */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes vapor-rise {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-60px) scale(1.5); opacity: 0; }
+        }
+        @keyframes rain-fall {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(100px); opacity: 0; }
+        }
+        @keyframes flow-water {
+            0% { stroke-dashoffset: 20; }
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes sun-pulse {
+            0%, 100% { r: 35; opacity: 1; }
+            50% { r: 38; opacity: 0.8; }
+        }
+
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-vapor { animation: vapor-rise 3s infinite linear; }
+        .animate-rain { animation: rain-fall 1.5s infinite linear; }
+        .animate-pulse-sun { animation: sun-pulse 3s infinite ease-in-out; }
+        
+        /* Interactive Highlight Classes */
+        .highlight-active { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)); stroke: gold; stroke-width: 2px; }
+        .btn-active { @apply ring-2 ring-offset-2 ring-blue-500 bg-blue-600 text-white; }
+        
+        /* Transitions */
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-droplet text-blue-500 text-2xl"></i>
+                    <span class="font-bold text-xl tracking-tight text-slate-800">Hydro<span class="text-blue-600">Logic</span></span>
+                </div>
+                <div class="text-sm text-slate-500 hidden sm:block">Interactive Earth Science Module</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">The Water Cycle</h1>
+            <p class="text-slate-600 max-w-2xl mx-auto">Explore the continuous movement of water within the Earth and atmosphere. Click the stages below or interact with the diagram.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- LEFT COLUMN: Interactive Visualization -->
+            <div class="lg:col-span-7 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden relative group">
+                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold shadow-sm z-10">
+                    <i class="fa-solid fa-mouse-pointer mr-1"></i> Interactive Diagram
+                </div>
+                
+                <!-- SVG Illustration -->
+                <svg viewBox="0 0 800 500" class="w-full h-auto select-none" id="cycleSvg">
+                    <!-- Definitions for gradients -->
+                    <defs>
+                        <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#BAE6FD;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#E0F2FE;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#64748B;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+                        </linearGradient>
+                        
+                        <!-- Arrowhead Marker Definition -->
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#475569" />
+                        </marker>
+                    </defs>
+
+                    <!-- Background Sky -->
+                    <rect width="800" height="500" fill="url(#skyGradient)" />
+
+                    <!-- Sun (Evaporation Source) -->
+                    <g id="svg-sun" class="cursor-pointer hover:opacity-90 transition-opacity" onclick="selectStage('evaporation')">
+                        <circle cx="100" cy="80" r="35" fill="#FDB813" class="animate-pulse-sun" />
+                        <circle cx="100" cy="80" r="45" fill="none" stroke="#FDB813" stroke-width="2" opacity="0.5" />
+                    </g>
+
+                    <!-- Mountains -->
+                    <path d="M500,500 L650,200 L800,500 Z" fill="url(#mountainGradient)" />
+                    <path d="M350,500 L550,250 L700,500 Z" fill="#475569" />
+                    
+                    <!-- Snow Cap -->
+                    <path d="M650,200 L620,260 L650,250 L680,260 Z" fill="white" />
+
+                    <!-- Ground/Land -->
+                    <path d="M0,500 L800,500 L800,400 Q400,380 0,450 Z" fill="#22C55E" />
+
+                    <!-- Ocean/Water Body -->
+                    <path d="M0,450 Q200,440 400,450 L400,500 L0,500 Z" fill="url(#waterGradient)" id="svg-collection" class="cursor-pointer transition hover:brightness-110" onclick="selectStage('collection')"/>
+
+                    <!-- River flowing from mountain -->
+                    <path d="M550,500 C550,450 500,400 550,250" fill="none" stroke="#60A5FA" stroke-width="8" />
+
+                    <!-- Trees (Transpiration) -->
+                    <g id="svg-transpiration" class="cursor-pointer" onclick="selectStage('transpiration')">
+                        <path d="M150,440 L150,410" stroke="#78350F" stroke-width="4" />
+                        <circle cx="150" cy="400" r="15" fill="#166534" />
+                        <path d="M200,445 L200,415" stroke="#78350F" stroke-width="4" />
+                        <circle cx="200" cy="405" r="18" fill="#15803D" />
+                        
+                        <!-- Transpiration Vapors -->
+                        <g class="animate-vapor" style="transform-origin: 150px 400px; animation-delay: 1s;">
+                            <path d="M150,380 Q160,370 150,360" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+                        </g>
+                    </g>
+
+                    <!-- Evaporation Vapors (Ocean) -->
+                    <g id="svg-evaporation" onclick="selectStage('evaporation')">
+                        <g class="animate-vapor" style="transform-origin: 100px 450px;">
+                            <path d="M80,440 Q90,420 80,400" stroke="white" stroke-width="3" fill="none"/>
+                        </g>
+                        <g class="animate-vapor" style="transform-origin: 120px 450px; animation-delay: 1.5s;">
+                            <path d="M120,440 Q130,420 120,400" stroke="white" stroke-width="3" fill="none"/>
+                        </g>
+                        <g class="animate-vapor" style="transform-origin: 300px 450px; animation-delay: 0.5s;">
+                            <path d="M300,440 Q310,420 300,400" stroke="white" stroke-width="3" fill="none"/>
+                        </g>
+                    </g>
+
+                    <!-- Clouds (Condensation) -->
+                    <g id="svg-condensation" class="cursor-pointer animate-float" onclick="selectStage('condensation')">
+                        <path d="M100,150 Q120,120 150,150 T200,150 T250,150 T280,180 T250,210 T100,210 T70,180 Z" fill="white" opacity="0.9" />
+                        <path d="M300,120 Q320,90 350,120 T400,120 T450,120 T480,150 T450,180 T300,180 T270,150 Z" fill="white" opacity="0.9" />
+                    </g>
+
+                    <!-- Rain Cloud (Precipitation) -->
+                    <g id="svg-precipitation" class="cursor-pointer" onclick="selectStage('precipitation')" transform="translate(450, 0)">
+                        <!-- Darker Cloud -->
+                        <path d="M100,150 Q120,120 150,150 T200,150 T250,150 T280,180 T250,210 T100,210 T70,180 Z" fill="#94A3B8" />
+                        
+                        <!-- Rain Drops -->
+                        <g class="animate-rain">
+                            <line x1="120" y1="210" x2="115" y2="230" stroke="#3B82F6" stroke-width="2" />
+                            <line x1="150" y1="220" x2="145" y2="240" stroke="#3B82F6" stroke-width="2" />
+                            <line x1="180" y1="210" x2="175" y2="230" stroke="#3B82F6" stroke-width="2" />
+                        </g>
+                        <g class="animate-rain" style="animation-delay: 0.7s;">
+                            <line x1="135" y1="210" x2="130" y2="230" stroke="#3B82F6" stroke-width="2" />
+                            <line x1="165" y1="220" x2="160" y2="240" stroke="#3B82F6" stroke-width="2" />
+                            <line x1="195" y1="210" x2="190" y2="230" stroke="#3B82F6" stroke-width="2" />
+                        </g>
+                    </g>
+
+                    <!-- Process Flow Arrows -->
+                    <g id="cycle-arrows" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="8 4" opacity="0.7" style="pointer-events: none;">
+                        <!-- Evaporation Upward Flow -->
+                        <path d="M80,420 Q80,300 130,220">
+                            <animate attributeName="stroke-dashoffset" from="24" to="0" dur="3s" repeatCount="indefinite" />
+                        </path>
+                        <!-- Transpiration Upward Flow -->
+                        <path d="M220,380 Q250,300 300,220">
+                            <animate attributeName="stroke-dashoffset" from="24" to="0" dur="3s" repeatCount="indefinite" />
+                        </path>
+                        <!-- Condensation/Transport Flow (Left to Right) -->
+                        <path d="M320,150 Q400,120 480,150">
+                            <animate attributeName="stroke-dashoffset" from="24" to="0" dur="3s" repeatCount="indefinite" />
+                        </path>
+                        <!-- Precipitation Downward Flow -->
+                        <path d="M600,220 Q620,300 600,380">
+                            <animate attributeName="stroke-dashoffset" from="0" to="24" dur="3s" repeatCount="indefinite" />
+                        </path>
+                        <!-- Runoff/Collection Flow (Right to Left) -->
+                        <path d="M550,470 Q400,480 300,470">
+                            <animate attributeName="stroke-dashoffset" from="0" to="24" dur="3s" repeatCount="indefinite" />
+                        </path>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- RIGHT COLUMN: Information & Controls -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                
+                <!-- Controls -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Select a Stage</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="selectStage('evaporation')" id="btn-evaporation" class="stage-btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition duration-200">Evaporation</button>
+                        <button onclick="selectStage('condensation')" id="btn-condensation" class="stage-btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition duration-200">Condensation</button>
+                        <button onclick="selectStage('precipitation')" id="btn-precipitation" class="stage-btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition duration-200">Precipitation</button>
+                        <button onclick="selectStage('collection')" id="btn-collection" class="stage-btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition duration-200">Collection</button>
+                        <button onclick="selectStage('transpiration')" id="btn-transpiration" class="stage-btn px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium transition duration-200">Transpiration</button>
+                    </div>
+                </div>
+
+                <!-- Info Card -->
+                <div id="info-card" class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500 flex-grow fade-in">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div id="info-icon" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                            <i class="fa-solid fa-sun"></i>
+                        </div>
+                        <h2 id="info-title" class="text-2xl font-bold text-slate-800">Start the Cycle</h2>
+                    </div>
+                    <p id="info-desc" class="text-slate-600 leading-relaxed mb-4">
+                        Click on the diagram or the buttons above to learn about specific processes in the water cycle. Water is constantly moving and changing states between liquid, vapor, and ice.
+                    </p>
+                    
+                    <div class="bg-amber-50 rounded-lg p-4 border border-amber-100">
+                        <h4 class="text-sm font-bold text-amber-800 mb-1"><i class="fa-solid fa-lightbulb mr-2"></i>Did You Know?</h4>
+                        <p id="info-fact" class="text-sm text-amber-800">
+                            The water you drink today is the same water that dinosaurs drank millions of years ago!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <section class="mt-12 bg-white rounded-2xl shadow-xl border border-slate-200 p-8 max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Test Your Knowledge</h2>
+                <p class="text-slate-500">Can you identify the processes?</p>
+            </div>
+
+            <div id="quiz-container">
+                <!-- Question 1 -->
+                <div class="quiz-step mb-6" id="q1">
+                    <p class="font-semibold text-lg mb-3">1. Which process involves water turning from liquid to gas due to heat?</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="checkAnswer('q1', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Precipitation</button>
+                        <button onclick="checkAnswer('q1', true)" class="p-3 border rounded hover:bg-slate-50 text-left">Evaporation</button>
+                        <button onclick="checkAnswer('q1', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Collection</button>
+                        <button onclick="checkAnswer('q1', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Condensation</button>
+                    </div>
+                    <div class="feedback hidden mt-2 text-sm font-bold"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-step mb-6" id="q2">
+                    <p class="font-semibold text-lg mb-3">2. What forms when water vapor cools down in the atmosphere?</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="checkAnswer('q2', true)" class="p-3 border rounded hover:bg-slate-50 text-left">Clouds (Condensation)</button>
+                        <button onclick="checkAnswer('q2', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Rivers (Collection)</button>
+                        <button onclick="checkAnswer('q2', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Groundwater</button>
+                        <button onclick="checkAnswer('q2', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Steam</button>
+                    </div>
+                    <div class="feedback hidden mt-2 text-sm font-bold"></div>
+                </div>
+
+                 <!-- Question 3 -->
+                 <div class="quiz-step mb-6" id="q3">
+                    <p class="font-semibold text-lg mb-3">3. Plants release water vapor into the air. What is this called?</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button onclick="checkAnswer('q3', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Perspiration</button>
+                        <button onclick="checkAnswer('q3', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Precipitation</button>
+                        <button onclick="checkAnswer('q3', true)" class="p-3 border rounded hover:bg-slate-50 text-left">Transpiration</button>
+                        <button onclick="checkAnswer('q3', false)" class="p-3 border rounded hover:bg-slate-50 text-left">Sublimation</button>
+                    </div>
+                    <div class="feedback hidden mt-2 text-sm font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-300 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2023 Educational Engineering Demo. Built with Tailwind CSS & Vanilla JS.</p>
+        </div>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        // Data for each stage
+        const cycleData = {
+            evaporation: {
+                title: "Evaporation",
+                icon: "fa-temperature-arrow-up",
+                desc: "Evaporation is the process where energy from the sun heats up water in oceans, lakes, and rivers, turning it into water vapor (gas). This invisible vapor rises into the atmosphere.",
+                fact: "About 90% of the moisture in the atmosphere comes from evaporation from oceans, seas, lakes, and rivers."
+            },
+            condensation: {
+                title: "Condensation",
+                icon: "fa-cloud",
+                desc: "As water vapor rises, it cools down. When it cools, it turns back into tiny liquid water droplets or ice crystals. These droplets cluster together to form clouds.",
+                fact: "Clouds look fluffy and light, but a typical cumulus cloud can weigh more than 1 million pounds (approx. 450,000 kg)!"
+            },
+            precipitation: {
+                title: "Precipitation",
+                icon: "fa-cloud-showers-heavy",
+                desc: "When too much water has condensed, the clouds get heavy and the air cannot hold it anymore. The water falls back to Earth in the form of rain, snow, sleet, or hail.",
+                fact: "Raindrops aren't tear-shaped! They are actually shaped more like hamburger buns (flat bottom, curved top) due to air resistance."
+            },
+            collection: {
+                title: "Collection & Runoff",
+                icon: "fa-water",
+                desc: "Water that falls as precipitation gathers in bodies of water (oceans, lakes) or soaks into the ground (groundwater). Gravity helps water flow over land (runoff) back into the ocean.",
+                fact: "Less than 1% of the water on Earth is fresh water available for us to use. Most is saltwater or frozen."
+            },
+            transpiration: {
+                title: "Transpiration",
+                icon: "fa-leaf",
+                desc: "This is essentially evaporation from plants. Plants absorb water through their roots and release water vapor through small pores in their leaves called stomata.",
+                fact: "A single large oak tree can transpire up to 40,000 gallons (151,000 liters) of water per year."
+            }
+        };
+
+        let currentStage = null;
+
+        function selectStage(stageKey) {
+            currentStage = stageKey;
+            const data = cycleData[stageKey];
+
+            // Update UI Buttons
+            document.querySelectorAll('.stage-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'ring-2', 'ring-offset-2', 'ring-blue-500');
+                btn.classList.add('bg-slate-100', 'text-slate-700');
+            });
+            const activeBtn = document.getElementById(`btn-${stageKey}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+                activeBtn.classList.add('bg-blue-600', 'text-white', 'ring-2', 'ring-offset-2', 'ring-blue-500');
+            }
+
+            // Update Info Card
+            const card = document.getElementById('info-card');
+            
+            // Trigger animation restart
+            card.classList.remove('fade-in');
+            void card.offsetWidth; // trigger reflow
+            card.classList.add('fade-in');
+
+            document.getElementById('info-title').innerText = data.title;
+            document.getElementById('info-desc').innerText = data.desc;
+            document.getElementById('info-fact').innerText = data.fact;
+            
+            // Update Icon
+            const iconContainer = document.getElementById('info-icon');
+            iconContainer.innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
+
+            // Update SVG Highlights (Optional visual cues)
+            // Reset all opacity/filters if needed, or specific SVG logic
+        }
+
+        function checkAnswer(questionId, isCorrect) {
+            const container = document.getElementById(questionId);
+            const feedback = container.querySelector('.feedback');
+            const buttons = container.querySelectorAll('button');
+
+            // Disable buttons after selection
+            buttons.forEach(btn => btn.disabled = true);
+
+            feedback.classList.remove('hidden');
+            if (isCorrect) {
+                feedback.innerHTML = '<span class="text-green-600"><i class="fa-solid fa-check-circle"></i> Correct! Well done.</span>';
+                buttons.forEach(btn => {
+                    if(btn.onclick.toString().includes('true')) btn.classList.add('bg-green-100', 'border-green-500');
+                });
+            } else {
+                feedback.innerHTML = '<span class="text-red-500"><i class="fa-solid fa-times-circle"></i> Incorrect. Try refreshing to try again.</span>';
+                buttons.forEach(btn => {
+                    if(btn.onclick.toString().includes('false') && btn === event.target) btn.classList.add('bg-red-50', 'border-red-300');
+                    if(btn.onclick.toString().includes('true')) btn.classList.add('bg-green-50', 'border-green-300'); // show correct
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doppler Effect Lab (With Sound)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            margin-top: -6px; 
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #334155;
+            border-radius: 2px;
+        }
+        .canvas-container {
+            background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <header class="p-6 border-b border-slate-700 bg-slate-800/50 backdrop-blur-md sticky top-0 z-10">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                    Doppler Effect Lab
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">Interactive Physics Simulation with Audio</p>
+            </div>
+            <div class="flex gap-3">
+                <div class="flex items-center gap-2 px-3 py-1 bg-slate-700 rounded-full text-xs border border-slate-600">
+                    <div class="w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"></div>
+                    <span>Approaching (Blue Shift)</span>
+                </div>
+                <div class="flex items-center gap-2 px-3 py-1 bg-slate-700 rounded-full text-xs border border-slate-600">
+                    <div class="w-3 h-3 rounded-full bg-red-400 shadow-[0_0_10px_#f87171]"></div>
+                    <span>Receding (Red Shift)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col md:flex-row max-w-6xl mx-auto w-full p-4 gap-6">
+        
+        <aside class="w-full md:w-1/4 flex flex-col gap-6 order-2 md:order-1">
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    Controls
+                </h2>
+
+                <div class="mb-6 p-4 bg-slate-900 rounded-xl border border-slate-700">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-sm font-medium text-slate-300">Audio Simulation</label>
+                        <span id="audioStatus" class="text-xs font-bold text-slate-500">MUTED</span>
+                    </div>
+                    <button id="audioBtn" class="w-full py-2 rounded-lg text-sm font-bold bg-slate-700 text-slate-300 hover:bg-slate-600 transition-all">
+                        Turn Sound On
+                    </button>
+                    <p class="text-[10px] text-slate-500 mt-2 text-center">Click to enable Doppler Audio</p>
+                </div>
+
+                <div class="mb-6 group">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-medium text-slate-300">Source Speed ($v_s$)</label>
+                        <span id="speedVal" class="text-sm font-mono text-cyan-400">0.0</span>
+                    </div>
+                    <input type="range" id="speedSlider" min="0" max="2" step="0.1" value="0.8" class="w-full">
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-medium text-slate-300">Emission Frequency</label>
+                        <span id="freqVal" class="text-sm font-mono text-purple-400">Normal</span>
+                    </div>
+                    <input type="range" id="freqSlider" min="5" max="30" step="1" value="15" class="w-full">
+                </div>
+
+                <div class="flex gap-2 mt-4">
+                    <button id="toggleBtn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg font-medium transition-colors shadow-lg shadow-blue-900/50">
+                        Pause
+                    </button>
+                    <button id="resetBtn" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 px-4 rounded-lg font-medium transition-colors border border-slate-600">
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
+                <h3 class="font-semibold text-slate-200 mb-2">Observation</h3>
+                <ul class="text-sm text-slate-400 space-y-2 list-disc pl-4">
+                    <li>The observer is now in the <strong class="text-white">Center</strong>.</li>
+                    <li>As the source approaches, the sound is <strong class="text-cyan-400">High Pitched</strong>.</li>
+                    <li>As it passes, the sound drops to <strong class="text-red-400">Low Pitched</strong>.</li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="w-full md:w-3/4 order-1 md:order-2 flex flex-col">
+            <div class="relative w-full h-[500px] bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700 canvas-container">
+                <canvas id="dopplerCanvas" class="absolute top-0 left-0 w-full h-full block"></canvas>
+                
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center gap-2 z-10">
+                    <div class="w-4 h-4 rounded-full bg-yellow-400 shadow-[0_0_15px_#facc15] animate-pulse"></div>
+                    <div class="bg-slate-900/80 px-2 py-1 rounded text-[10px] text-yellow-400 border border-yellow-400/30">Observer</div>
+                </div>
+
+                <div class="absolute left-1/2 top-0 bottom-0 w-px bg-slate-700 border-l border-dashed border-slate-500 opacity-30"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Physics Constants
+        const WAVE_SPEED = 2; 
+        
+        // State
+        let sourceSpeed = 0.8; 
+        let emissionRate = 15; 
+        let isPaused = false;
+        
+        // Audio Context State
+        let audioCtx = null;
+        let oscillator = null;
+        let gainNode = null;
+        let isAudioOn = false;
+        const BASE_FREQ = 220; // Base note (A3)
+
+        // Entities
+        let source = { x: 0, y: 0, vx: 0 };
+        let waves = [];
+        let frameCount = 0;
+
+        // Canvas Setup
+        const canvas = document.getElementById('dopplerCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // UI Elements
+        const speedSlider = document.getElementById('speedSlider');
+        const speedVal = document.getElementById('speedVal');
+        const freqSlider = document.getElementById('freqSlider');
+        const freqVal = document.getElementById('freqVal');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const audioBtn = document.getElementById('audioBtn');
+        const audioStatus = document.getElementById('audioStatus');
+
+        // --- AUDIO ENGINE ---
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            
+            if (oscillator) {
+                oscillator.stop();
+                oscillator.disconnect();
+            }
+
+            oscillator = audioCtx.createOscillator();
+            gainNode = audioCtx.createGain();
+
+            oscillator.type = 'triangle'; // Sounds more like a siren/engine
+            oscillator.frequency.value = BASE_FREQ;
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            gainNode.gain.value = 0; // Start silent
+        }
+
+        function stopAudio() {
+            if (gainNode) {
+                gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+            }
+            setTimeout(() => {
+                if (oscillator) {
+                    oscillator.stop();
+                    oscillator = null;
+                }
+            }, 200);
+        }
+
+        function updateAudio() {
+            if (!isAudioOn || !audioCtx || !oscillator) return;
+
+            const centerX = canvas.width / 2;
+            const dist = Math.abs(source.x - centerX);
+            const maxDist = canvas.width / 1.5; // Distance where sound becomes inaudible
+
+            // 1. Calculate Volume (Gain)
+            // Volume drops off as it gets further from center
+            let volume = 1 - (dist / maxDist);
+            volume = Math.max(0, volume); 
+            // Clamp volume to avoid distortion
+            gainNode.gain.setTargetAtTime(volume * 0.15, audioCtx.currentTime, 0.05);
+
+            // 2. Calculate Pitch (Doppler Shift)
+            // Basic approximation logic:
+            // Moving towards center (Left side) -> Higher Pitch
+            // Moving away from center (Right side) -> Lower Pitch
+            
+            let pitchMultiplier = 1;
+            
+            // Doppler Formula Approximation: f = f0 * (v / (v - vs))
+            // We simplify for visual effect scaling
+            const shiftIntensity = sourceSpeed * 0.4;
+
+            if (source.x < centerX) {
+                // Approaching
+                pitchMultiplier = 1 + shiftIntensity;
+            } else {
+                // Receding
+                pitchMultiplier = 1 - (shiftIntensity * 0.8); // Receding often perceived lower
+            }
+
+            // Apply pitch
+            const newFreq = BASE_FREQ * pitchMultiplier;
+            oscillator.frequency.setTargetAtTime(newFreq, audioCtx.currentTime, 0.1);
+        }
+
+        // --- VISUAL ENGINE ---
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+            resetSimulation();
+        }
+
+        function resetSimulation() {
+            source.x = -50; // Start off screen left
+            source.y = canvas.height / 2;
+            source.vx = WAVE_SPEED * sourceSpeed;
+            waves = [];
+        }
+
+        function spawnWave() {
+            waves.push({
+                x: source.x,
+                y: source.y,
+                r: 0,
+                opacity: 1
+            });
+        }
+
+        function update() {
+            if (isPaused) {
+                // Mute if paused
+                if(gainNode) gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                return;
+            }
+
+            // Move Source
+            source.vx = WAVE_SPEED * sourceSpeed;
+            source.x += source.vx;
+
+            // Update Audio Physics
+            updateAudio();
+
+            // Loop source around
+            if (source.x > canvas.width + 100) {
+                source.x = -50;
+            }
+
+            // Spawn waves
+            if (frameCount % (35 - emissionRate) === 0) {
+                spawnWave();
+            }
+
+            // Update Waves
+            for (let i = waves.length - 1; i >= 0; i--) {
+                waves[i].r += WAVE_SPEED;
+                waves[i].opacity -= 0.003; 
+                if (waves[i].opacity <= 0) {
+                    waves.splice(i, 1);
+                }
+            }
+            frameCount++;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.4)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Waves
+            waves.forEach(wave => {
+                ctx.beginPath();
+                ctx.arc(wave.x, wave.y, wave.r, 0, Math.PI * 2);
+                
+                const leftX = wave.x - wave.r;
+                const rightX = wave.x + wave.r;
+                
+                const gradient = ctx.createLinearGradient(leftX, wave.y, rightX, wave.y);
+                gradient.addColorStop(0, `rgba(248, 113, 113, ${wave.opacity})`); // Red (Left)
+                gradient.addColorStop(0.5, `rgba(203, 213, 225, ${wave.opacity * 0.5})`);
+                gradient.addColorStop(1, `rgba(34, 211, 238, ${wave.opacity})`); // Blue (Right)
+                
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Draw Source
+            ctx.beginPath();
+            ctx.arc(source.x, source.y, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.shadowColor = '#22d3ee';
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0; 
+
+            // Draw Velocity Vector
+            if(sourceSpeed > 0) {
+                ctx.beginPath();
+                ctx.moveTo(source.x, source.y);
+                ctx.lineTo(source.x + (source.vx * 20), source.y);
+                ctx.strokeStyle = '#f472b6'; 
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        // --- EVENT LISTENERS ---
+        window.addEventListener('resize', resizeCanvas);
+
+        speedSlider.addEventListener('input', (e) => {
+            sourceSpeed = parseFloat(e.target.value);
+            speedVal.innerText = sourceSpeed.toFixed(1) + (sourceSpeed >= 1 ? ' Mach' : ' x');
+            source.vx = WAVE_SPEED * sourceSpeed;
+        });
+
+        freqSlider.addEventListener('input', (e) => {
+            emissionRate = parseInt(e.target.value);
+            freqVal.innerText = emissionRate > 20 ? "High" : (emissionRate < 10 ? "Low" : "Normal");
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            toggleBtn.innerText = isPaused ? "Resume" : "Pause";
+            toggleBtn.classList.toggle('bg-blue-600');
+            toggleBtn.classList.toggle('bg-green-600');
+        });
+
+        resetBtn.addEventListener('click', resetSimulation);
+
+        audioBtn.addEventListener('click', () => {
+            isAudioOn = !isAudioOn;
+            
+            if (isAudioOn) {
+                initAudio();
+                audioBtn.innerText = "Sound: ON";
+                audioBtn.classList.remove('bg-slate-700', 'text-slate-300');
+                audioBtn.classList.add('bg-green-600', 'text-white');
+                audioStatus.innerText = "ACTIVE";
+                audioStatus.classList.replace('text-slate-500', 'text-green-400');
+            } else {
+                stopAudio();
+                audioBtn.innerText = "Turn Sound On";
+                audioBtn.classList.add('bg-slate-700', 'text-slate-300');
+                audioBtn.classList.remove('bg-green-600', 'text-white');
+                audioStatus.innerText = "MUTED";
+                audioStatus.classList.replace('text-green-400', 'text-slate-500');
+            }
+        });
+
+        // Init
+        resizeCanvas();
+        loop();
+
+    </script>
+</body>
+</html>

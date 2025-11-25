@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Prism Optics Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        glass: 'rgba(255, 255, 255, 0.1)',
+                        glassBorder: 'rgba(255, 255, 255, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0;
+        }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #38bdf8;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .canvas-container {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+        /* Custom Checkbox Styling */
+        .color-checkbox:checked + div {
+            border-color: white;
+            opacity: 1;
+            box-shadow: 0 0 8px currentColor;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 p-4 shadow-lg">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold">P</div>
+                <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                    Prism Dispersion Simulator
+                </h1>
+            </div>
+            <div class="text-xs md:text-sm text-slate-400">Ray Tracing Engine</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Controls Panel -->
+        <aside class="lg:col-span-3 space-y-6 bg-slate-800/50 p-6 rounded-2xl border border-slate-700 backdrop-blur-sm overflow-y-auto max-h-[85vh]">
+            <h2 class="text-lg font-semibold text-blue-300 border-b border-slate-700 pb-2 mb-4">Controls</h2>
+            
+            <!-- Prism Shape Selection -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-white">Prism Geometry</label>
+                <select id="shapeInput" class="w-full bg-slate-900 border border-slate-600 text-white text-sm rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="equilateral">Equilateral (60°-60°-60°)</option>
+                    <option value="right">Right Angle (90°-45°-45°)</option>
+                </select>
+                <p class="text-[10px] text-slate-500">Use Right Angle for 90° TIR turns.</p>
+            </div>
+
+            <!-- Angle Control -->
+            <div class="space-y-2">
+                <label class="flex justify-between text-sm font-medium">
+                    <span>Incidence Angle</span>
+                    <span id="angleValue" class="text-blue-400">0°</span>
+                </label>
+                <input type="range" id="angleInput" min="-40" max="80" value="0" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer slider-thumb">
+            </div>
+
+            <!-- Refractive Index Control -->
+            <div class="space-y-2">
+                <label class="flex justify-between text-sm font-medium">
+                    <span>Refractive Index (n)</span>
+                    <span id="riValue" class="text-purple-400">1.50</span>
+                </label>
+                <input type="range" id="riInput" min="1.1" max="2.4" step="0.01" value="1.50" class="w-full h-2 bg-slate-600 rounded-lg appearance-none cursor-pointer slider-thumb">
+                <div class="flex justify-between text-xs text-slate-500">
+                    <span>Glass</span>
+                    <span>Diamond</span>
+                </div>
+            </div>
+
+            <!-- Spectrum Selection -->
+            <div class="space-y-3 pt-4 border-t border-slate-700">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-medium text-white">Color Channels</span>
+                    <div class="space-x-2">
+                        <button onclick="toggleAllColors(true)" class="text-xs text-blue-400 hover:text-blue-300 underline">All</button>
+                        <button onclick="toggleAllColors(false)" class="text-xs text-red-400 hover:text-red-300 underline">None</button>
+                    </div>
+                </div>
+                <div id="spectrumControls" class="grid grid-cols-7 gap-1">
+                    <!-- Checkboxes injected by JS -->
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div class="space-y-4 pt-4 border-t border-slate-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm">Show Normals</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="showNormal" class="sr-only peer">
+                        <div class="w-9 h-5 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500"></div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex flex-col">
+                        <span class="text-sm">Partial Reflection</span>
+                        <span class="text-[10px] text-slate-400">Show internal bounce</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="showPartialReflection" checked class="sr-only peer">
+                        <div class="w-9 h-5 bg-slate-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Status Box -->
+            <div id="statusBox" class="mt-4 p-3 rounded-lg bg-slate-900/80 border border-slate-700 text-xs font-mono text-green-400">
+                Status: System Ready
+            </div>
+        </aside>
+
+        <!-- Simulation Canvas -->
+        <div class="lg:col-span-9 flex flex-col gap-4">
+            <div class="canvas-container relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-slate-600">
+                <canvas id="simCanvas" class="w-full h-full block"></canvas>
+                
+                <!-- Overlay Labels -->
+                <div class="absolute top-4 right-4 pointer-events-none text-right">
+                    <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Medium</div>
+                    <div class="text-2xl font-bold text-white">Air</div>
+                </div>
+                
+                <div class="absolute bottom-4 left-4 pointer-events-none text-left opacity-70">
+                     <div class="text-[10px] text-slate-400">TIP:</div>
+                     <div class="text-xs text-slate-200 w-48">Select "Right Angle" geometry and n=1.50 to see 90° TIR reflection.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Inputs
+        const angleInput = document.getElementById('angleInput');
+        const riInput = document.getElementById('riInput');
+        const showNormalInput = document.getElementById('showNormal');
+        const showPartialInput = document.getElementById('showPartialReflection');
+        const shapeInput = document.getElementById('shapeInput');
+        const spectrumContainer = document.getElementById('spectrumControls');
+        
+        // Display values
+        const angleValue = document.getElementById('angleValue');
+        const riValue = document.getElementById('riValue');
+        const statusBox = document.getElementById('statusBox');
+
+        // Physics Constants
+        const PRISM_SIDE_EQ = 300;
+        const PRISM_SIDE_RA = 280;
+        const AIR_INDEX = 1.00;
+        
+        // Color Spectrum Data
+        const SPECTRA = [
+            { id: 'red', color: '#ff3333', label: 'R', n_offset: -0.02, active: true },
+            { id: 'orange', color: '#ffaa33', label: 'O', n_offset: -0.015, active: true },
+            { id: 'yellow', color: '#ffff33', label: 'Y', n_offset: -0.01, active: true },
+            { id: 'green', color: '#33ff33', label: 'G', n_offset: 0, active: true },
+            { id: 'blue', color: '#3399ff', label: 'B', n_offset: 0.01, active: true },
+            { id: 'indigo', color: '#6633ff', label: 'I', n_offset: 0.015, active: true },
+            { id: 'violet', color: '#cc33ff', label: 'V', n_offset: 0.02, active: true }
+        ];
+
+        // --- Init Spectrum Controls ---
+        function initSpectrumControls() {
+            spectrumContainer.innerHTML = '';
+            SPECTRA.forEach((spec, index) => {
+                const wrapper = document.createElement('label');
+                wrapper.className = 'cursor-pointer group relative';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'sr-only color-checkbox';
+                checkbox.checked = spec.active;
+                checkbox.onchange = (e) => {
+                    SPECTRA[index].active = e.target.checked;
+                    draw();
+                };
+
+                const display = document.createElement('div');
+                display.className = `h-8 w-full rounded border border-slate-600 bg-slate-800 flex items-center justify-center text-[10px] font-bold transition-all opacity-40 hover:opacity-70`;
+                display.style.color = spec.color;
+                display.innerText = spec.label;
+                
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(display);
+                spectrumContainer.appendChild(wrapper);
+            });
+        }
+
+        function toggleAllColors(state) {
+            SPECTRA.forEach(s => s.active = state);
+            initSpectrumControls(); 
+            draw();
+        }
+
+        let width, height;
+        let prismCenter = { x: 0, y: 0 };
+        let prismVertices = [];
+
+        function resize() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+            canvas.width = width * window.devicePixelRatio;
+            canvas.height = height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            
+            updatePrismGeometry();
+            draw();
+        }
+
+        function updatePrismGeometry() {
+            const shape = shapeInput.value;
+            prismCenter = { x: width / 2, y: height / 2 + 50 };
+
+            if (shape === 'right') {
+                // Right Angle Prism (90 at V1)
+                const size = PRISM_SIDE_RA;
+                prismVertices = [
+                    { x: prismCenter.x - size/2, y: prismCenter.y - size/2 }, // V0: Top Left
+                    { x: prismCenter.x - size/2, y: prismCenter.y + size/2 }, // V1: Bottom Left (90 deg)
+                    { x: prismCenter.x + size/2, y: prismCenter.y + size/2 }  // V2: Bottom Right
+                ];
+                // Shift slightly to center the light path better
+                const offsetX = -20; 
+                const offsetY = -20;
+                prismVertices = prismVertices.map(p => ({ x: p.x + offsetX, y: p.y + offsetY }));
+
+            } else {
+                // Equilateral Prism
+                const h = (Math.sqrt(3) / 2) * PRISM_SIDE_EQ;
+                prismVertices = [
+                    { x: prismCenter.x, y: prismCenter.y - (2/3)*h },       // V0: Top
+                    { x: prismCenter.x - PRISM_SIDE_EQ/2, y: prismCenter.y + (1/3)*h }, // V1: Bottom Left
+                    { x: prismCenter.x + PRISM_SIDE_EQ/2, y: prismCenter.y + (1/3)*h }  // V2: Bottom Right
+                ];
+            }
+        }
+
+        window.addEventListener('resize', resize);
+
+        // Vector Math
+        function sub(v1, v2) { return { x: v1.x - v2.x, y: v1.y - v2.y }; }
+        function dot(v1, v2) { return v1.x * v2.x + v1.y * v2.y; }
+        function normalize(v) {
+            const len = Math.sqrt(v.x * v.x + v.y * v.y);
+            return { x: v.x / len, y: v.y / len };
+        }
+        function rotate(v, angle) {
+            return {
+                x: v.x * Math.cos(angle) - v.y * Math.sin(angle),
+                y: v.x * Math.sin(angle) + v.y * Math.cos(angle)
+            };
+        }
+        
+        // Ray Logic
+        function getIntersection(rayOrigin, rayDir, p1, p2) {
+            const v1 = sub(rayOrigin, p1);
+            const v2 = sub(p2, p1);
+            const v3 = { x: -rayDir.y, y: rayDir.x };
+            const dotProduct = dot(v2, v3);
+            
+            if (Math.abs(dotProduct) < 0.0001) return null;
+            
+            const t1 = (v2.x * v1.y - v2.y * v1.x) / dotProduct;
+            const t2 = (rayDir.x * v1.y - rayDir.y * v1.x) / dotProduct;
+            
+            // t1 >= 0: intersection is in front of ray origin
+            // t2 between 0 and 1: intersection is on the segment
+            if (t1 >= 0 && (t2 >= -0.001 && t2 <= 1.001)) { 
+                return {
+                    x: rayOrigin.x + rayDir.x * t1,
+                    y: rayOrigin.y + rayDir.y * t1,
+                    dist: t1
+                };
+            }
+            return null;
+        }
+
+        function drawPrism() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            ctx.moveTo(prismVertices[0].x, prismVertices[0].y);
+            ctx.lineTo(prismVertices[1].x, prismVertices[1].y);
+            ctx.lineTo(prismVertices[2].x, prismVertices[2].y);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            // Corner marker for Right Angle
+            if(shapeInput.value === 'right') {
+                const p = prismVertices[1]; // V1: Bottom Left
+                const s = 15;
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.moveTo(p.x + s, p.y);
+                ctx.lineTo(p.x + s, p.y - s);
+                ctx.lineTo(p.x, p.y - s);
+                ctx.stroke();
+            }
+        }
+
+        function drawRaySegment(start, end, color, width = 2, opacity = 1.0) {
+            ctx.beginPath();
+            ctx.moveTo(start.x, start.y);
+            ctx.lineTo(end.x, end.y);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.globalAlpha = opacity;
+            ctx.globalCompositeOperation = 'screen'; 
+            ctx.stroke();
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1.0;
+        }
+
+        function drawNormal(point, wallVector) {
+            if (!showNormalInput.checked) return;
+            const normal = normalize({ x: -wallVector.y, y: wallVector.x });
+            const len = 30;
+            
+            ctx.beginPath();
+            ctx.setLineDash([2, 4]);
+            ctx.strokeStyle = 'rgba(150, 150, 150, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.moveTo(point.x - normal.x * len, point.y - normal.y * len);
+            ctx.lineTo(point.x + normal.x * len, point.y + normal.y * len);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // --- Core Refraction Calculation ---
+        function calculateRefractedDirection(incidentDir, normal, n1, n2) {
+            // normal must point AWAY from the light source (i.e., into the denser medium for n1<n2, or out for n1>n2)
+            // Flip normal if needed so dot(incidentDir, normal) is negative (ensures ray hits the "front" of the normal)
+            let n = { x: normal.x, y: normal.y };
+            if (dot(incidentDir, n) > 0) {
+                n.x *= -1;
+                n.y *= -1;
+            }
+            
+            // Cosine of angle of incidence
+            const cosTheta1 = -dot(incidentDir, n); 
+            
+            // Critical angle check for TIR
+            const ratio = n1 / n2;
+            const sinTheta2Sq = ratio * ratio * (1.0 - cosTheta1 * cosTheta1);
+
+            if (sinTheta2Sq > 1.0) {
+                // Total Internal Reflection (TIR)
+                return { isTIR: true, dir: null };
+            }
+
+            // Cosine of angle of refraction
+            const cosTheta2 = Math.sqrt(1.0 - sinTheta2Sq);
+
+            // Vector Refraction Formula: T = (n1/n2)*(I - (I.N)N) - sqrt(1 - (n1/n2)^2 * sin(theta1)^2) * N
+            // T = ratio * (I + cosTheta1*N) - cosTheta2*N
+            
+            const dirX = ratio * incidentDir.x + (ratio * cosTheta1 - cosTheta2) * n.x;
+            const dirY = ratio * incidentDir.y + (ratio * cosTheta1 - cosTheta2) * n.y;
+            
+            return { isTIR: false, dir: normalize({ x: dirX, y: dirY }) };
+        }
+
+
+        function calculateAndDraw() {
+            const angleDeg = parseFloat(angleInput.value);
+            const baseRI = parseFloat(riInput.value);
+            const showPartial = showPartialInput.checked;
+            
+            angleValue.textContent = `${angleDeg}°`;
+            riValue.textContent = baseRI.toFixed(2);
+
+            let hasTIR = false;
+
+            // --- Geometry Setup (Entry Face is V1->V0) ---
+            const entryV1 = prismVertices[1];
+            const entryV0 = prismVertices[0];
+
+            const leftFaceMid = {
+                x: (entryV0.x + entryV1.x) / 2,
+                y: (entryV0.y + entryV1.y) / 2
+            };
+            const leftFaceVec = sub(entryV0, entryV1);
+            // Normal direction for rotation reference (doesn't have to be outward yet)
+            const leftFaceNormalRef = normalize({ x: -leftFaceVec.y, y: leftFaceVec.x });
+            
+            const angleRad = angleDeg * (Math.PI / 180);
+            const incidentDir = rotate(leftFaceNormalRef, -angleRad); 
+            
+            const rayStart = {
+                x: leftFaceMid.x - incidentDir.x * 600,
+                y: leftFaceMid.y - incidentDir.y * 600
+            };
+
+            // 1. Trace Incident Ray (Air -> Glass)
+            const intersect1 = getIntersection(rayStart, incidentDir, entryV1, entryV0);
+            
+            if (!intersect1) return;
+
+            // Draw Source Ray (White)
+            drawRaySegment(rayStart, intersect1, '#ffffff', 3);
+            drawNormal(intersect1, leftFaceVec);
+
+            // Filter active colors
+            const activeColors = SPECTRA.filter(s => s.active);
+
+            activeColors.forEach(spec => {
+                const n2 = baseRI + spec.n_offset;
+                
+                // --- Interface 1: Air -> Glass (Refraction In) ---
+                const entryNormal = normalize({ x: -leftFaceVec.y, y: leftFaceVec.x });
+                const refractionIn = calculateRefractedDirection(incidentDir, entryNormal, AIR_INDEX, n2);
+
+                if (refractionIn.isTIR || !refractionIn.dir) {
+                    // This should not happen for Air->Glass unless n2 < n1 (which it shouldn't be) or parallel/grazing incidence.
+                    return; 
+                }
+                const dirInside = refractionIn.dir;
+
+                // --- Find Interface 2 (Exit Face) ---
+                // Faces are V0->V2 and V2->V1
+                let intersect2 = getIntersection(intersect1, dirInside, prismVertices[0], prismVertices[2]);
+                let wall2v1 = prismVertices[0];
+                let wall2v2 = prismVertices[2];
+
+                if (!intersect2) {
+                    intersect2 = getIntersection(intersect1, dirInside, prismVertices[2], prismVertices[1]);
+                    wall2v1 = prismVertices[2];
+                    wall2v2 = prismVertices[1];
+                }
+
+                if (intersect2) {
+                    drawRaySegment(intersect1, intersect2, spec.color, 2);
+                    const wallVec2 = sub(wall2v1, wall2v2);
+                    drawNormal(intersect2, wallVec2);
+
+                    // --- Interface 2: Glass -> Air (Refraction Out / TIR) ---
+                    const exitNormal = normalize({ x: -wallVec2.y, y: wallVec2.x });
+                    const refractionOut = calculateRefractedDirection(dirInside, exitNormal, n2, AIR_INDEX);
+                    
+                    const isTIR = refractionOut.isTIR;
+                    if(isTIR) hasTIR = true;
+
+                    // ----------------------------------------------------------------------
+                    // A) Reflection Path (TIR or Partial Reflection)
+                    // ----------------------------------------------------------------------
+                    const reflectOpacity = isTIR ? 1.0 : (showPartial ? 0.3 : 0.0);
+                    
+                    if (reflectOpacity > 0) {
+                        // Calculate Reflection Vector
+                        // Normal MUST point INTO the denser medium for reflection calculation
+                        let reflectionNormal = { x: exitNormal.x, y: exitNormal.y };
+                        if (dot(dirInside, reflectionNormal) < 0) {
+                            reflectionNormal.x *= -1;
+                            reflectionNormal.y *= -1;
+                        }
+
+                        const dotProd = dot(dirInside, reflectionNormal);
+                        const reflectDir = {
+                                x: dirInside.x - 2 * dotProd * reflectionNormal.x,
+                                y: dirInside.y - 2 * dotProd * reflectionNormal.y
+                        };
+
+                        // Find bounce intersection (Interface 3)
+                        let intersect3 = null;
+                        let wall3v1, wall3v2;
+                        
+                        // Check all other faces for bounce:
+                        const faces = [
+                            { v1: prismVertices[1], v2: prismVertices[2] }, // Bottom
+                            { v1: prismVertices[0], v2: prismVertices[1] }, // Left
+                            { v1: prismVertices[2], v2: prismVertices[0] }  // Right
+                        ];
+                        
+                        for (const face of faces) {
+                            if ((face.v1.x === wall2v1.x && face.v1.y === wall2v1.y && face.v2.x === wall2v2.x && face.v2.y === wall2v2.y) ||
+                                (face.v2.x === wall2v1.x && face.v2.y === wall2v1.y && face.v1.x === wall2v2.x && face.v1.y === wall2v2.y)) {
+                                continue; // Skip the face the light just hit
+                            }
+                            intersect3 = getIntersection(intersect2, reflectDir, face.v1, face.v2);
+                            if (intersect3) {
+                                wall3v1 = face.v1;
+                                wall3v2 = face.v2;
+                                break;
+                            }
+                        }
+
+                        if (intersect3) {
+                            drawRaySegment(intersect2, intersect3, spec.color, 2, reflectOpacity);
+                            
+                            // Exit from Bounce (Interface 3 Refraction)
+                            const wallVec3 = sub(wall3v1, wall3v2);
+                            const finalExitNormal = normalize({ x: -wallVec3.y, y: wallVec3.x });
+                            
+                            const finalRefraction = calculateRefractedDirection(reflectDir, finalExitNormal, n2, AIR_INDEX);
+
+                            if (!finalRefraction.isTIR && finalRefraction.dir) {
+                                // Refract out after bounce
+                                const exitDir = finalRefraction.dir;
+                                const exitEnd = { x: intersect3.x + exitDir.x * 600, y: intersect3.y + exitDir.y * 600 }; 
+                                
+                                // Draw the exit ray after the bounce
+                                drawRaySegment(intersect3, exitEnd, spec.color, 2, reflectOpacity); 
+                            }
+                        }
+                    }
+
+                    // ----------------------------------------------------------------------
+                    // B) Main Refraction Out (If NOT TIR)
+                    // ----------------------------------------------------------------------
+                    if (!isTIR) {
+                        const exitDir = refractionOut.dir;
+                        const exitEnd = { x: intersect2.x + exitDir.x * 600, y: intersect2.y + exitDir.y * 600 }; 
+                        
+                        // Draw the main exit ray
+                        drawRaySegment(intersect2, exitEnd, spec.color, 3, 1.0);
+                    }
+                }
+            });
+
+            if (hasTIR) {
+                statusBox.innerHTML = "<span class='text-red-300 font-bold'>Total Internal Reflection Active</span> - Ray bounces internally.";
+                statusBox.className = "mt-4 p-3 rounded-lg bg-red-900/50 border border-red-500 text-xs font-mono text-white shadow-[0_0_10px_rgba(220,38,38,0.3)]";
+            } else {
+                statusBox.innerHTML = "Status: Refraction Mode - Ray exits prism.";
+                statusBox.className = "mt-4 p-3 rounded-lg bg-slate-900/80 border border-slate-700 text-xs font-mono text-green-400";
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            drawPrism();
+            calculateAndDraw();
+        }
+
+        // Event Listeners
+        angleInput.addEventListener('input', draw);
+        riInput.addEventListener('input', draw);
+        showNormalInput.addEventListener('change', draw);
+        showPartialInput.addEventListener('change', draw);
+        shapeInput.addEventListener('change', () => { updatePrismGeometry(); draw(); });
+
+        // Initial Load
+        initSpectrumControls();
+        window.onload = resize;
+
+    </script>
+</body>
+</html>

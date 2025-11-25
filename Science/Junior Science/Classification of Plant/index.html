@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Science: Plant Classification</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Noto Sans for readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans HK', sans-serif;
+            background-color: #f0fdf4; /* Green-50 */
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .plant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .hide {
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-green-700 text-white sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-leaf text-yellow-300"></i>
+                <h1 class="font-bold text-lg md:text-xl">F1 Science: BioSphere</h1>
+            </div>
+            <div class="text-sm hidden md:block opacity-90">Mr. Engineer's Class</div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-green-800 text-white py-16 px-4 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
+        <div class="container mx-auto relative z-10 text-center">
+            <span class="bg-green-600 text-green-100 py-1 px-3 rounded-full text-xs font-bold tracking-wide uppercase mb-4 inline-block">Unit 2: Looking at Living Things</span>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Classification of Plants</h1>
+            <h2 class="text-xl md:text-2xl font-light text-green-100">植物分類法</h2>
+            <p class="mt-4 max-w-2xl mx-auto text-green-50 text-sm md:text-base">
+                Understanding how we group plants based on their physical features. From the moss on wet walls to the Bauhinia trees in our parks.
+            </p>
+            <div class="mt-8 flex justify-center gap-4">
+                <a href="#dichotomous-key" class="bg-white text-green-800 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition shadow-lg">Start Learning</a>
+                <a href="#quiz-section" class="border border-white text-white px-6 py-2 rounded-full font-bold hover:bg-white hover:text-green-800 transition">Take Quiz</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 space-y-16">
+
+        <!-- Core Concept: Vascular vs Non-Vascular -->
+        <section id="basics" class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="space-y-4">
+                <div class="flex items-center gap-2 text-green-700 font-bold text-xl">
+                    <i class="fa-solid fa-microscope"></i>
+                    <h3>Engineer's Note: The Main Logic</h3>
+                </div>
+                <p class="text-slate-600 leading-relaxed">
+                    Just like we organize files on a computer, scientists organize plants. The biggest "folder" split is based on <strong>Vascular Tissues (維管組織)</strong>.
+                </p>
+                <div class="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
+                    <h4 class="font-bold text-blue-800">Xylem & Phloem (木質部 & 韌皮部)</h4>
+                    <p class="text-sm text-slate-600 mt-1">Think of these as the "plumbing pipes" of the plant. They transport water and food. If a plant has them, it can grow tall. If not, it stays tiny.</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-slate-100">
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <div>
+                            <span class="font-bold block">Non-flowering Plants</span>
+                            <span class="text-xs text-slate-500">No flowers, reproduces by spores or naked seeds</span>
+                        </div>
+                        <i class="fa-solid fa-xmark text-red-400 text-xl"></i>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <i class="fa-solid fa-arrow-down text-slate-300"></i>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-pink-50 rounded-lg">
+                        <div>
+                            <span class="font-bold block">Flowering Plants</span>
+                            <span class="text-xs text-slate-500">Has flowers, seeds inside fruit</span>
+                        </div>
+                        <i class="fa-solid fa-check text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The 4 Main Groups (Cards) -->
+        <section id="groups">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-800">The 4 Major Groups</h2>
+                <div class="w-16 h-1 bg-green-500 mx-auto mt-2 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Mosses -->
+                <div class="plant-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
+                    <div class="h-32 bg-green-900 flex items-center justify-center relative">
+                        <i class="fa-solid fa-cloud text-green-200 text-4xl opacity-50"></i>
+                        <div class="absolute bottom-2 left-3 text-white font-bold text-lg">Mosses <span class="text-xs font-normal opacity-80">(苔蘚)</span></div>
+                    </div>
+                    <div class="p-5">
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-1"></i> No true roots, stems, leaves</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-1"></i> No vascular tissue</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-spaghetti-monster-flying text-green-500 mt-1"></i> Reproduce by <strong>Spores</strong></li>
+                            <li class="flex gap-2"><i class="fa-solid fa-droplet text-blue-400 mt-1"></i> Needs wet places</li>
+                        </ul>
+                        <div class="mt-4 pt-3 border-t text-xs text-slate-500">
+                            <strong>HK Location:</strong> Damp walls in wet markets, shady stream banks.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ferns -->
+                <div class="plant-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
+                    <div class="h-32 bg-green-700 flex items-center justify-center relative">
+                        <i class="fa-brands fa-envira text-green-200 text-4xl opacity-50"></i>
+                        <div class="absolute bottom-2 left-3 text-white font-bold text-lg">Ferns <span class="text-xs font-normal opacity-80">(蕨類)</span></div>
+                    </div>
+                    <div class="p-5">
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex gap-2"><i class="fa-solid fa-check-circle text-green-500 mt-1"></i> Has roots, stems, leaves</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-check-circle text-green-500 mt-1"></i> Has vascular tissue</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-spaghetti-monster-flying text-green-500 mt-1"></i> Reproduce by <strong>Spores</strong></li>
+                            <li class="flex gap-2"><i class="fa-solid fa-leaf text-green-600 mt-1"></i> Leaves rolled up when young</li>
+                        </ul>
+                        <div class="mt-4 pt-3 border-t text-xs text-slate-500">
+                            <strong>HK Location:</strong> Hiking trails (e.g., Sword Fern).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gymnosperms -->
+                <div class="plant-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
+                    <div class="h-32 bg-yellow-700 flex items-center justify-center relative">
+                        <i class="fa-solid fa-tree text-yellow-200 text-4xl opacity-50"></i>
+                        <div class="absolute bottom-2 left-3 text-white font-bold text-lg">Gymnosperms <span class="text-xs font-normal opacity-80">(裸子植物)</span></div>
+                    </div>
+                    <div class="p-5">
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex gap-2"><i class="fa-solid fa-check-circle text-green-500 mt-1"></i> Has roots, stems, needle leaves</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-1"></i> No flowers</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-dharmachakra text-amber-600 mt-1"></i> Seeds in <strong>Cones</strong> (Naked)</li>
+                        </ul>
+                        <div class="mt-4 pt-3 border-t text-xs text-slate-500">
+                            <strong>HK Location:</strong> Buddhist Pine (羅漢松) in gardens.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Angiosperms -->
+                <div class="plant-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100">
+                    <div class="h-32 bg-pink-600 flex items-center justify-center relative">
+                        <i class="fa-solid fa-fan text-pink-200 text-4xl opacity-50"></i>
+                        <div class="absolute bottom-2 left-3 text-white font-bold text-lg">Angiosperms <span class="text-xs font-normal opacity-80">(被子植物)</span></div>
+                    </div>
+                    <div class="p-5">
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex gap-2"><i class="fa-solid fa-check-circle text-green-500 mt-1"></i> Has roots, stems, leaves</li>
+                            <li class="flex gap-2"><i class="fa-solid fa-check-circle text-green-500 mt-1"></i> Has <strong>Flowers</strong></li>
+                            <li class="flex gap-2"><i class="fa-solid fa-apple-whole text-red-500 mt-1"></i> Seeds inside <strong>Fruits</strong></li>
+                        </ul>
+                        <div class="mt-4 pt-3 border-t text-xs text-slate-500">
+                            <strong>HK Location:</strong> Bauhinia (Golden Bauhinia Square).
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Interactive Dichotomous Key Simulator -->
+        <section id="dichotomous-key" class="bg-slate-800 rounded-2xl p-8 text-white shadow-2xl">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h2 class="text-2xl font-bold mb-4 text-green-400"><i class="fa-solid fa-sitemap mr-2"></i>Plant Identifier</h2>
+                    <p class="mb-6 text-slate-300">
+                        Imagine you are hiking in Tai Mo Shan and find a plant. Use this key to identify which group it belongs to. Answer the engineer's questions:
+                    </p>
+                    
+                    <!-- Dynamic Question Container -->
+                    <div id="key-container" class="bg-slate-700 p-6 rounded-xl border border-slate-600 min-h-[200px] flex flex-col justify-center">
+                        <!-- Content injected via JS -->
+                        <div id="key-content" class="fade-in">
+                            <h3 class="text-xl font-bold mb-6">Does the plant have seeds?</h3>
+                            <div class="flex gap-4">
+                                <button onclick="nextStep('seeds')" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-bold transition">Yes</button>
+                                <button onclick="nextStep('no_seeds')" class="flex-1 bg-slate-500 hover:bg-slate-400 py-3 rounded-lg font-bold transition">No</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="resetKey()" class="mt-4 text-sm text-slate-400 hover:text-white underline"><i class="fa-solid fa-rotate-left mr-1"></i> Reset Key</button>
+                </div>
+                
+                <div class="flex items-center justify-center bg-slate-900 rounded-xl p-4">
+                    <div class="text-center">
+                        <i id="key-icon" class="fa-solid fa-magnifying-glass text-6xl text-slate-600 mb-4 transition-all duration-500"></i>
+                        <p id="key-result-text" class="text-lg font-mono text-green-400">Waiting for data input...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz-section" class="max-w-2xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-800">Knowledge Check</h2>
+                <p class="text-slate-600">Test your understanding before the exam!</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
+                <div class="p-6">
+                    <div id="quiz-container">
+                        <div class="mb-4 flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Question <span id="q-number">1</span>/3</span>
+                            <span id="score-display" class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-bold">Score: 0</span>
+                        </div>
+                        <h3 id="question-text" class="text-lg font-bold mb-6 text-slate-800">Loading...</h3>
+                        <div id="options-container" class="space-y-3">
+                            <!-- Options injected via JS -->
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-result" class="hidden text-center py-8">
+                        <i id="result-icon" class="fa-solid fa-trophy text-5xl text-yellow-400 mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2">Quiz Complete!</h3>
+                        <p class="text-slate-600 mb-6">You scored <span id="final-score" class="font-bold text-green-600 text-xl">0</span> out of 3.</p>
+                        <button onclick="initQuiz()" class="bg-green-600 text-white px-6 py-2 rounded-full font-bold hover:bg-green-700 transition">Try Again</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-2">F1 Integrated Science | Hong Kong Curriculum</p>
+            <p class="text-xs opacity-50">&copy; 2023 Eng. Educator Tools. Don't forget to water your plants!</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Dichotomous Key Logic ---
+        const keyContainer = document.getElementById('key-content');
+        const keyIcon = document.getElementById('key-icon');
+        const keyResultText = document.getElementById('key-result-text');
+
+        function resetKey() {
+            keyIcon.className = "fa-solid fa-magnifying-glass text-6xl text-slate-600 mb-4 transition-all duration-500";
+            keyResultText.innerText = "Waiting for data input...";
+            keyContainer.innerHTML = `
+                <h3 class="text-xl font-bold mb-6">Does the plant have seeds?</h3>
+                <div class="flex gap-4">
+                    <button onclick="nextStep('seeds')" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-bold transition">Yes</button>
+                    <button onclick="nextStep('no_seeds')" class="flex-1 bg-slate-500 hover:bg-slate-400 py-3 rounded-lg font-bold transition">No</button>
+                </div>
+            `;
+        }
+
+        function nextStep(choice) {
+            // Add fade effect
+            keyContainer.classList.remove('fade-in');
+            void keyContainer.offsetWidth; // trigger reflow
+            keyContainer.classList.add('fade-in');
+
+            if (choice === 'no_seeds') {
+                keyContainer.innerHTML = `
+                    <h3 class="text-xl font-bold mb-6">Does it have true roots, stems, and leaves?</h3>
+                    <div class="flex gap-4">
+                        <button onclick="showResult('ferns')" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-bold transition">Yes</button>
+                        <button onclick="showResult('mosses')" class="flex-1 bg-slate-500 hover:bg-slate-400 py-3 rounded-lg font-bold transition">No</button>
+                    </div>
+                `;
+            } else if (choice === 'seeds') {
+                keyContainer.innerHTML = `
+                    <h3 class="text-xl font-bold mb-6">Does it have flowers?</h3>
+                    <div class="flex gap-4">
+                        <button onclick="showResult('angiosperms')" class="flex-1 bg-green-600 hover:bg-green-500 py-3 rounded-lg font-bold transition">Yes</button>
+                        <button onclick="showResult('gymnosperms')" class="flex-1 bg-slate-500 hover:bg-slate-400 py-3 rounded-lg font-bold transition">No</button>
+                    </div>
+                `;
+            }
+        }
+
+        function showResult(type) {
+            let resultHtml = '';
+            let iconClass = '';
+            let resultText = '';
+
+            switch(type) {
+                case 'mosses':
+                    resultHtml = `<div class="text-center"><h3 class="text-2xl font-bold text-green-400">It is a Moss!</h3><p class="text-sm mt-2">Non-vascular, spores, no roots.</p></div>`;
+                    iconClass = "fa-solid fa-cloud text-6xl text-green-400 mb-4 transition-all duration-500";
+                    resultText = "Identified: Moss (苔蘚)";
+                    break;
+                case 'ferns':
+                    resultHtml = `<div class="text-center"><h3 class="text-2xl font-bold text-green-400">It is a Fern!</h3><p class="text-sm mt-2">Vascular, spores, has roots.</p></div>`;
+                    iconClass = "fa-brands fa-envira text-6xl text-green-600 mb-4 transition-all duration-500";
+                    resultText = "Identified: Fern (蕨類)";
+                    break;
+                case 'gymnosperms':
+                    resultHtml = `<div class="text-center"><h3 class="text-2xl font-bold text-yellow-400">It is a Gymnosperm!</h3><p class="text-sm mt-2">Naked seeds in cones.</p></div>`;
+                    iconClass = "fa-solid fa-tree text-6xl text-yellow-600 mb-4 transition-all duration-500";
+                    resultText = "Identified: Gymnosperm (裸子植物)";
+                    break;
+                case 'angiosperms':
+                    resultHtml = `<div class="text-center"><h3 class="text-2xl font-bold text-pink-400">It is an Angiosperm!</h3><p class="text-sm mt-2">Flowering plant, seeds in fruit.</p></div>`;
+                    iconClass = "fa-solid fa-fan text-6xl text-pink-500 mb-4 transition-all duration-500";
+                    resultText = "Identified: Angiosperm (被子植物)";
+                    break;
+            }
+
+            keyContainer.innerHTML = resultHtml;
+            keyIcon.className = iconClass;
+            keyResultText.innerText = resultText;
+            keyResultText.classList.add('fade-in');
+        }
+
+        // --- Quiz Logic ---
+        const questions = [
+            {
+                q: "Which group of plants has NO vascular tissues (no water pipes)?",
+                options: ["Ferns", "Mosses", "Flowering Plants", "Gymnosperms"],
+                correct: 1 // Index of correct answer
+            },
+            {
+                q: "The Hong Kong Bauhinia tree produces flowers. Which group is it?",
+                options: ["Gymnosperms", "Mosses", "Angiosperms", "Ferns"],
+                correct: 2
+            },
+            {
+                q: "Gymnosperms (like Pine trees) hold their seeds in:",
+                options: ["Fruits", "Cones", "Flowers", "Spores"],
+                correct: 1
+            }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+
+        function initQuiz() {
+            currentQ = 0;
+            score = 0;
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('score-display').innerText = `Score: 0`;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQ >= questions.length) {
+                showQuizResult();
+                return;
+            }
+
+            const qData = questions[currentQ];
+            document.getElementById('q-number').innerText = currentQ + 1;
+            document.getElementById('question-text').innerText = qData.q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left px-4 py-3 rounded-lg border border-slate-200 hover:bg-green-50 hover:border-green-300 transition flex justify-between items-center group";
+                btn.onclick = () => checkAnswer(index, btn);
+                btn.innerHTML = `<span>${opt}</span> <i class="fa-regular fa-circle text-slate-300 group-hover:text-green-500"></i>`;
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const correctIndex = questions[currentQ].correct;
+            const buttons = document.getElementById('options-container').children;
+
+            // Disable all buttons
+            for (let btn of buttons) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+            }
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                document.getElementById('score-display').innerText = `Score: ${score}`;
+                btnElement.classList.remove('border-slate-200', 'hover:bg-green-50');
+                btnElement.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                btnElement.innerHTML = `<span>${questions[currentQ].options[selectedIndex]}</span> <i class="fa-solid fa-check text-green-600"></i>`;
+            } else {
+                btnElement.classList.remove('border-slate-200', 'hover:bg-green-50');
+                btnElement.classList.add('bg-red-50', 'border-red-500', 'text-red-800');
+                btnElement.innerHTML = `<span>${questions[currentQ].options[selectedIndex]}</span> <i class="fa-solid fa-xmark text-red-600"></i>`;
+                
+                // Highlight correct one
+                buttons[correctIndex].classList.add('bg-green-50', 'border-green-500');
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+
+            const icon = document.getElementById('result-icon');
+            if(score === 3) {
+                icon.className = "fa-solid fa-trophy text-5xl text-yellow-400 mb-4 fade-in";
+            } else {
+                icon.className = "fa-solid fa-book-open text-5xl text-blue-400 mb-4 fade-in";
+            }
+        }
+
+        // Initialize
+        initQuiz();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHS & NFPA Lab Label Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* NFPA Diamond Construction */
+        .nfpa-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+        .nfpa-box {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        /* Color Coding */
+        .nfpa-health { top: 25px; left: 0; background-color: #4B88E8; color: white; } /* Blue/Left */
+        .nfpa-fire { top: 0; left: 25px; background-color: #E83A3A; color: white; }   /* Red/Top */
+        .nfpa-react { top: 25px; left: 50px; background-color: #FACC15; color: black; } /* Yellow/Right */
+        .nfpa-special { top: 50px; left: 25px; background-color: white; color: black; } /* White/Bottom */
+
+        /* Print Settings */
+        @media print {
+            body { background: white; }
+            .no-print { display: none !important; }
+            #preview-container { 
+                border: none; 
+                box-shadow: none; 
+                margin: 0; 
+                padding: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            /* Force background colors to print */
+            .nfpa-health { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .nfpa-fire { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .nfpa-react { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+
+    <nav class="bg-slate-800 text-white p-4 shadow-md no-print flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+            <h1 class="text-xl font-bold">LabLabel <span class="text-slate-400 font-normal text-sm">Standard GHS/NFPA Generator</span></h1>
+        </div>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded text-sm font-semibold flex items-center gap-2 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            Print
+        </button>
+    </nav>
+
+    <div class="flex flex-1 md:flex-row flex-col overflow-hidden">
+        
+        <aside class="w-full md:w-1/3 bg-white border-r border-gray-200 p-6 overflow-y-auto no-print h-full shadow-xl z-10">
+            <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Label Configuration</h2>
+            
+            <div class="space-y-5">
+                <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                    <label class="block text-sm font-semibold mb-1">Chemical Name</label>
+                    <input type="text" id="inp-name" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. Acetone">
+                    
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Signal Word</label>
+                            <select id="inp-signal" class="w-full p-2 border rounded font-bold text-red-600 bg-white">
+                                <option value="DANGER">DANGER</option>
+                                <option value="WARNING">WARNING</option>
+                                <option value="">(None)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Date</label>
+                            <input type="date" id="inp-date" class="w-full p-2 border rounded text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-bold text-gray-700 mb-2">GHS Pictograms (Select all that apply)</h3>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div id="ghs-checks" class="col-span-3 grid grid-cols-3 gap-2"></div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded border border-slate-200">
+                    <h3 class="text-sm font-bold text-gray-700 mb-2">NFPA 704 Ratings</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs font-bold text-blue-600">Health (Blue)</label>
+                            <input type="number" id="nfpa-h" min="0" max="4" value="0" class="w-full p-1 border rounded">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-red-600">Flammability (Red)</label>
+                            <input type="number" id="nfpa-f" min="0" max="4" value="0" class="w-full p-1 border rounded">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-yellow-600">Instability (Yel)</label>
+                            <input type="number" id="nfpa-r" min="0" max="4" value="0" class="w-full p-1 border rounded">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-600">Special (White)</label>
+                            <select id="nfpa-s" class="w-full p-1 border rounded text-sm">
+                                <option value="">None</option>
+                                <option value="OX">OX</option>
+                                <option value="<s>W</s>"><s>W</s></option>
+                                <option value="SA">SA</option>
+                                <option value="COR">COR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Hazard Statements / Notes</label>
+                    <textarea id="inp-notes" rows="3" class="w-full p-2 border rounded text-sm" placeholder="e.g. Highly flammable liquid and vapor. Causes serious eye irritation."></textarea>
+                </div>
+            </div>
+        </aside>
+
+        <main class="flex-1 bg-gray-200 flex items-center justify-center p-8 relative">
+            
+            <div class="absolute top-4 right-4 text-gray-500 text-xs no-print">Preview (4in x 3in approx)</div>
+
+            <div id="preview-container" class="bg-white w-[600px] h-[400px] shadow-2xl overflow-hidden relative flex border-4 border-black">
+                
+                <div class="w-2/3 p-6 flex flex-col h-full border-r-2 border-black">
+                    <div id="out-signal-box" class="bg-red-600 text-white text-center py-2 mb-4 rounded-sm border-2 border-black">
+                        <h2 id="out-signal" class="text-4xl font-black uppercase tracking-tighter">DANGER</h2>
+                    </div>
+
+                    <div class="flex-1">
+                        <h1 id="out-name" class="text-4xl font-bold leading-tight break-words mb-2">ACETONE</h1>
+                        <p id="out-notes" class="text-sm font-medium text-gray-700 whitespace-pre-line leading-snug">Highly flammable liquid and vapor.</p>
+                    </div>
+
+                    <div class="mt-auto pt-4 border-t border-gray-300 text-xs text-gray-500 flex justify-between">
+                        <span>Prep: <span id="out-date" class="font-mono text-black font-bold">2023-10-25</span></span>
+                        <span>Lab Safety</span>
+                    </div>
+                </div>
+
+                <div class="w-1/3 flex flex-col items-center p-4 bg-slate-50">
+                    
+                    <div id="out-ghs-grid" class="flex flex-wrap justify-center gap-1 mb-6 w-full min-h-[100px]">
+                        </div>
+
+                    <div class="mt-auto">
+                        <div class="nfpa-container transform scale-90">
+                            <div class="nfpa-box nfpa-fire"><span id="out-nfpa-f">0</span></div>
+                            <div class="nfpa-box nfpa-health"><span id="out-nfpa-h">0</span></div>
+                            <div class="nfpa-box nfpa-react"><span id="out-nfpa-r">0</span></div>
+                            <div class="nfpa-box nfpa-special"><span id="out-nfpa-s"></span></div>
+                        </div>
+                        <div class="text-[10px] text-center mt-1 text-slate-400 font-sans">NFPA 704</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Official Wikimedia Commons URLs for GHS Pictograms
+        const ghsData = [
+            { id: 'explosive', label: 'Explosive', url: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/GHS-pictogram-explos.svg' },
+            { id: 'flammable', label: 'Flammable', url: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/GHS-pictogram-flamme.svg' },
+            { id: 'oxidizer', label: 'Oxidizer', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b7/GHS-pictogram-rondflam.svg' },
+            { id: 'gas', label: 'Comp. Gas', url: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/GHS-pictogram-bottle.svg' },
+            { id: 'corrosive', label: 'Corrosive', url: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/GHS-pictogram-acid.svg' },
+            { id: 'toxic', label: 'Toxic', url: 'https://upload.wikimedia.org/wikipedia/commons/3/31/GHS-pictogram-skull.svg' },
+            { id: 'irritant', label: 'Irritant', url: 'https://upload.wikimedia.org/wikipedia/commons/3/38/GHS-pictogram-exclam.svg' },
+            { id: 'health', label: 'Health Haz', url: 'https://upload.wikimedia.org/wikipedia/commons/9/93/GHS-pictogram-silhouette.svg' },
+            { id: 'env', label: 'Environment', url: 'https://upload.wikimedia.org/wikipedia/commons/0/07/GHS-pictogram-pollu.svg' }
+        ];
+
+        // Init UI
+        const checksContainer = document.getElementById('ghs-checks');
+        ghsData.forEach(item => {
+            const wrapper = document.createElement('label');
+            wrapper.className = "flex flex-col items-center justify-center p-2 border rounded cursor-pointer hover:bg-slate-100 bg-white text-center";
+            wrapper.innerHTML = `
+                <input type="checkbox" class="ghs-checkbox mb-1 accent-red-600" value="${item.url}">
+                <img src="${item.url}" class="w-8 h-8 opacity-70">
+                <span class="text-[10px] leading-none mt-1 font-medium text-slate-600">${item.label}</span>
+            `;
+            checksContainer.appendChild(wrapper);
+        });
+
+        function updateLabel() {
+            // Text Fields
+            document.getElementById('out-name').textContent = document.getElementById('inp-name').value || 'CHEMICAL NAME';
+            document.getElementById('out-date').textContent = document.getElementById('inp-date').value || 'YYYY-MM-DD';
+            document.getElementById('out-notes').textContent = document.getElementById('inp-notes').value || '';
+
+            // Signal Word Logic
+            const signal = document.getElementById('inp-signal').value;
+            const signalBox = document.getElementById('out-signal-box');
+            if (!signal) {
+                signalBox.style.display = 'none';
+            } else {
+                signalBox.style.display = 'block';
+                document.getElementById('out-signal').textContent = signal;
+                // Toggle Warning Orange vs Danger Red
+                if (signal === 'WARNING') {
+                    signalBox.className = "bg-orange-500 text-black text-center py-2 mb-4 rounded-sm border-2 border-black";
+                } else {
+                    signalBox.className = "bg-red-600 text-white text-center py-2 mb-4 rounded-sm border-2 border-black";
+                }
+            }
+
+            // NFPA
+            document.getElementById('out-nfpa-h').textContent = document.getElementById('nfpa-h').value;
+            document.getElementById('out-nfpa-f').textContent = document.getElementById('nfpa-f').value;
+            document.getElementById('out-nfpa-r').textContent = document.getElementById('nfpa-r').value;
+            document.getElementById('out-nfpa-s').innerHTML = document.getElementById('nfpa-s').value;
+
+            // GHS Icons
+            const grid = document.getElementById('out-ghs-grid');
+            grid.innerHTML = '';
+            const checked = document.querySelectorAll('.ghs-checkbox:checked');
+            
+            // Adjust size based on count to fit nicely
+            const sizeClass = checked.length > 4 ? "w-10 h-10" : "w-14 h-14";
+
+            checked.forEach(chk => {
+                const img = document.createElement('img');
+                img.src = chk.value;
+                img.className = `${sizeClass} object-contain`; 
+                grid.appendChild(img);
+            });
+        }
+
+        // Event Listeners
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('input', updateLabel);
+        });
+
+        // Set Default Date
+        document.getElementById('inp-date').valueAsDate = new Date();
+        updateLabel();
+    </script>
+</body>
+</html>

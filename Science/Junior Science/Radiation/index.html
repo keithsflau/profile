@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK F1 Science: Radiation Master</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Animation Classes */
+        .particle-base {
+            transition: all 0s; 
+            opacity: 0;
+            transform: translateX(0) scale(1);
+        }
+
+        .animate-shoot {
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s;
+            opacity: 1;
+            transform: translateX(280px); /* Distance to barrier */
+        }
+
+        .animate-pass-through {
+            transition: transform 1.5s linear;
+            transform: translateX(600px); /* Distance to detector */
+        }
+
+        .animate-blocked {
+            animation: blocked-effect 0.5s ease-out forwards;
+        }
+
+        @keyframes blocked-effect {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(2); opacity: 0.8; background-color: #ef4444; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .detector-alert {
+            animation: flash-red 0.5s infinite;
+        }
+
+        @keyframes flash-red {
+            0%, 100% { background-color: #fee2e2; }
+            50% { background-color: #ef4444; color: white; }
+        }
+
+        .wiggle { animation: wiggle 2s linear infinite; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-atom text-3xl animate-spin-slow"></i>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">F1 Integrated Science</h1>
+                    <p class="text-xs text-blue-200">Unit: Radiation & Safety</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex gap-6 text-sm font-semibold">
+                <a href="#learn" class="hover:text-yellow-300 transition">Learn</a>
+                <a href="#lab" class="hover:text-yellow-300 transition">Sim Lab</a>
+                <a href="#quiz" class="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full hover:bg-yellow-300 transition">Challenge Mode</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Content Wrapper -->
+    <main class="container mx-auto px-4 py-8 space-y-12">
+
+        <!-- Section 1: Quick Cards -->
+        <section id="learn" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Alpha -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-purple-500 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-black text-purple-700">Alpha α</h2>
+                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded font-bold">Particle</span>
+                </div>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><i class="fa-solid fa-weight-hanging w-6 text-center"></i> Heavy & Slow</li>
+                    <li><i class="fa-solid fa-ban w-6 text-center"></i> Stopped by <strong>Paper</strong></li>
+                    <li><i class="fa-solid fa-triangle-exclamation w-6 text-center"></i> High Ionizing Power</li>
+                </ul>
+            </div>
+
+            <!-- Beta -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-blue-500 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-black text-blue-700">Beta β</h2>
+                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded font-bold">Electron</span>
+                </div>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><i class="fa-solid fa-bolt w-6 text-center"></i> Fast Moving</li>
+                    <li><i class="fa-solid fa-ban w-6 text-center"></i> Stopped by <strong>Aluminium</strong></li>
+                    <li><i class="fa-solid fa-layer-group w-6 text-center"></i> Medium Ionizing</li>
+                </ul>
+            </div>
+
+            <!-- Gamma -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-yellow-500 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="flex justify-between items-start mb-4">
+                    <h2 class="text-2xl font-black text-yellow-600">Gamma γ</h2>
+                    <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded font-bold">Wave</span>
+                </div>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><i class="fa-solid fa-wave-square w-6 text-center"></i> Speed of Light</li>
+                    <li><i class="fa-solid fa-ban w-6 text-center"></i> Reduced by <strong>Lead</strong></li>
+                    <li><i class="fa-solid fa-skull-crossbones w-6 text-center"></i> Low Ionizing (but penetrates deep!)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Radiation Penetration Diagram -->
+        <div class="w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex justify-center">
+            <svg viewBox="0 0 800 300" class="w-full max-w-4xl" xmlns="http://www.w3.org/2000/svg">
+                <!-- Defs for arrowheads -->
+                <defs>
+                    <marker id="arrowhead-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#9333ea" />
+                    </marker>
+                    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb" />
+                    </marker>
+                    <marker id="arrowhead-yellow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" fill="#ca8a04" />
+                    </marker>
+                </defs>
+
+                <!-- Barriers -->
+                <!-- Paper -->
+                <rect x="300" y="20" width="10" height="260" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" />
+                <text x="305" y="295" font-family="sans-serif" font-size="12" fill="#64748b" text-anchor="middle" font-weight="bold">PAPER</text>
+                
+                <!-- Aluminum -->
+                <rect x="500" y="20" width="20" height="260" fill="#cbd5e1" stroke="#64748b" stroke-width="2" />
+                <text x="510" y="295" font-family="sans-serif" font-size="12" fill="#64748b" text-anchor="middle" font-weight="bold">ALUMINIUM</text>
+
+                <!-- Lead -->
+                <rect x="700" y="20" width="50" height="260" fill="#475569" stroke="#1e293b" stroke-width="2" />
+                <text x="725" y="295" font-family="sans-serif" font-size="12" fill="#64748b" text-anchor="middle" font-weight="bold">LEAD</text>
+
+                <!-- Radiation Paths -->
+                
+                <!-- Alpha -->
+                <text x="50" y="85" font-family="sans-serif" font-size="16" font-weight="bold" fill="#9333ea">Alpha (α)</text>
+                <line x1="150" y1="80" x2="295" y2="80" stroke="#9333ea" stroke-width="4" marker-end="url(#arrowhead-purple)" />
+                <!-- Alpha Block Effect -->
+                <path d="M290 70 L310 90 M310 70 L290 90" stroke="#ef4444" stroke-width="3" opacity="0.6"/>
+
+                <!-- Beta -->
+                <text x="50" y="155" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2563eb">Beta (β)</text>
+                <line x1="150" y1="150" x2="495" y2="150" stroke="#2563eb" stroke-width="4" stroke-dasharray="5,5" marker-end="url(#arrowhead-blue)" />
+                <!-- Beta Block Effect -->
+                <path d="M490 140 L510 160 M510 140 L490 160" stroke="#ef4444" stroke-width="3" opacity="0.6"/>
+
+                <!-- Gamma -->
+                <text x="50" y="225" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ca8a04">Gamma (γ)</text>
+                <path d="M150,220 Q175,200 200,220 T250,220 T300,220 T350,220 T400,220 T450,220 T500,220 T550,220 T600,220 T650,220 T695,220" fill="none" stroke="#ca8a04" stroke-width="3" marker-end="url(#arrowhead-yellow)" />
+                <!-- Gamma Block Effect -->
+                 <path d="M690 210 L710 230 M710 210 L690 230" stroke="#ef4444" stroke-width="3" opacity="0.6"/>
+            </svg>
+        </div>
+
+        <!-- Section 2: The Simulator -->
+        <section id="lab" class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+            <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+                <h2 class="text-lg font-bold"><i class="fa-solid fa-flask mr-2"></i>Penetration Test Lab</h2>
+                <div class="text-xs text-slate-400">Status: <span class="text-green-400">Ready</span></div>
+            </div>
+
+            <div class="p-8">
+                <!-- Controls Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    
+                    <!-- Source Selection -->
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">1. Select Source</h3>
+                        <div class="flex gap-2">
+                            <button onclick="updateLab('alpha', null)" id="btn-alpha" class="flex-1 py-3 rounded-lg font-bold text-sm transition bg-purple-600 text-white shadow-lg ring-2 ring-offset-2 ring-purple-500">α Alpha</button>
+                            <button onclick="updateLab('beta', null)" id="btn-beta" class="flex-1 py-3 rounded-lg font-bold text-sm transition bg-white text-slate-600 hover:bg-slate-200">β Beta</button>
+                            <button onclick="updateLab('gamma', null)" id="btn-gamma" class="flex-1 py-3 rounded-lg font-bold text-sm transition bg-white text-slate-600 hover:bg-slate-200">γ Gamma</button>
+                        </div>
+                    </div>
+
+                    <!-- Barrier Selection -->
+                    <div class="bg-slate-50 p-4 rounded-xl">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">2. Select Shield</h3>
+                        <div class="flex gap-2">
+                            <button onclick="updateLab(null, 'paper')" id="btn-paper" class="flex-1 py-3 rounded-lg font-bold text-sm transition bg-white text-slate-800 border-2 border-slate-300 ring-2 ring-offset-2 ring-slate-400">Paper</button>
+                            <button onclick="updateLab(null, 'alum')" id="btn-alum" class="flex-1 py-3 rounded-lg font-bold text-sm transition bg-slate-200 text-slate-600 hover:bg-slate-300">Aluminium</button>
+                            <button onclick="updateLab(null, 'lead')" id="btn-lead" class="flex-1 py-3 rounded-lg font-bold text-sm transition bg-slate-200 text-slate-600 hover:bg-slate-300">Lead</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Stage -->
+                <div class="relative h-64 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-300 flex items-center overflow-hidden">
+                    
+                    <!-- 1. The Gun (Left) -->
+                    <div class="absolute left-0 h-full w-24 bg-slate-800 flex items-center justify-center z-20">
+                        <div class="text-center">
+                            <i class="fa-solid fa-radiation text-4xl text-yellow-400 animate-spin-slow mb-2"></i>
+                            <div class="text-[10px] text-white uppercase tracking-widest font-bold">Emitter</div>
+                        </div>
+                        <!-- Nozzle -->
+                        <div class="absolute -right-4 w-4 h-8 bg-slate-600 rounded-r-lg"></div>
+                    </div>
+
+                    <!-- 2. The Particle -->
+                    <div id="particle" class="particle-base absolute left-24 w-8 h-8 rounded-full shadow-lg z-30 flex items-center justify-center text-white font-bold text-xs">
+                        α
+                    </div>
+
+                    <!-- 3. The Barrier (Middle) -->
+                    <div id="barrier-visual" class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 h-4/5 w-2 bg-white border border-slate-300 shadow-md flex flex-col justify-center items-center z-10 transition-all duration-300">
+                        <span class="transform -rotate-90 text-xs text-slate-400 font-bold tracking-widest whitespace-nowrap">PAPER SHEET</span>
+                    </div>
+
+                    <!-- 4. The Detector (Right) -->
+                    <div id="detector" class="absolute right-0 h-full w-32 bg-slate-200 border-l border-slate-300 flex flex-col items-center justify-center transition-colors duration-200">
+                        <div class="w-16 h-16 rounded-full border-4 border-slate-400 flex items-center justify-center bg-white mb-2">
+                            <i id="detector-icon" class="fa-solid fa-shield-cat text-2xl text-slate-400"></i>
+                        </div>
+                        <div id="detector-text" class="text-xs font-bold text-slate-500 uppercase">Safe</div>
+                    </div>
+                </div>
+
+                <!-- Fire Button -->
+                <div class="mt-8 text-center">
+                    <button onclick="fireSimulation()" class="bg-red-600 hover:bg-red-700 text-white text-lg font-bold py-4 px-12 rounded-full shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1 active:translate-y-0 flex items-center justify-center mx-auto gap-3">
+                        <i class="fa-solid fa-crosshairs"></i> FIRE RADIATION
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Quiz Mode -->
+        <section id="quiz" class="max-w-3xl mx-auto">
+            <div class="text-center mb-8">
+                <span class="text-indigo-600 font-bold tracking-widest text-xs uppercase">Assessment</span>
+                <h2 class="text-3xl font-bold text-slate-900">Hong Kong Science Challenge</h2>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-indigo-100 p-8 relative">
+                <!-- Scoreboard -->
+                <div class="absolute top-0 right-0 m-6 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg font-bold text-sm">
+                    Score: <span id="score-display">0</span>
+                </div>
+
+                <!-- Scenario Container -->
+                <div id="quiz-content">
+                    <!-- Dynamic Content Loaded Here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 py-12 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-4 text-sm">Designed for HK Form 1 Integrated Science Curriculum.</p>
+            <div class="flex justify-center gap-4 text-xs">
+                <span><i class="fa-solid fa-location-dot mr-1"></i> Context: Granite Radiation</span>
+                <span><i class="fa-solid fa-location-dot mr-1"></i> Context: Daya Bay</span>
+                <span><i class="fa-solid fa-location-dot mr-1"></i> Context: Medical Safety</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- APP STATE ---
+        let state = {
+            source: 'alpha', // alpha, beta, gamma
+            barrier: 'paper', // paper, alum, lead
+            isAnimating: false
+        };
+
+        // --- DOM ELEMENTS ---
+        const els = {
+            particle: document.getElementById('particle'),
+            barrier: document.getElementById('barrier-visual'),
+            detector: document.getElementById('detector'),
+            detectorIcon: document.getElementById('detector-icon'),
+            detectorText: document.getElementById('detector-text'),
+            btns: {
+                alpha: document.getElementById('btn-alpha'),
+                beta: document.getElementById('btn-beta'),
+                gamma: document.getElementById('btn-gamma'),
+                paper: document.getElementById('btn-paper'),
+                alum: document.getElementById('btn-alum'),
+                lead: document.getElementById('btn-lead'),
+            }
+        };
+
+        // --- SIMULATOR FUNCTIONS ---
+
+        function updateLab(newSource, newBarrier) {
+            if (state.isAnimating) return; // Lock during animation
+
+            if (newSource) state.source = newSource;
+            if (newBarrier) state.barrier = newBarrier;
+
+            updateUI();
+        }
+
+        function updateUI() {
+            // Reset Styles
+            const inactiveClass = "bg-white text-slate-600 hover:bg-slate-200";
+            
+            // Source Buttons
+            els.btns.alpha.className = `flex-1 py-3 rounded-lg font-bold text-sm transition ${state.source === 'alpha' ? 'bg-purple-600 text-white shadow-lg ring-2 ring-offset-2 ring-purple-500' : inactiveClass}`;
+            els.btns.beta.className = `flex-1 py-3 rounded-lg font-bold text-sm transition ${state.source === 'beta' ? 'bg-blue-600 text-white shadow-lg ring-2 ring-offset-2 ring-blue-500' : inactiveClass}`;
+            els.btns.gamma.className = `flex-1 py-3 rounded-lg font-bold text-sm transition ${state.source === 'gamma' ? 'bg-yellow-500 text-white shadow-lg ring-2 ring-offset-2 ring-yellow-500' : inactiveClass}`;
+
+            // Barrier Buttons
+            const barrierActiveBase = "bg-slate-800 text-white shadow-lg ring-2 ring-offset-2 ring-slate-600";
+            const barrierInactive = "bg-slate-200 text-slate-600 hover:bg-slate-300";
+            
+            els.btns.paper.className = `flex-1 py-3 rounded-lg font-bold text-sm transition ${state.barrier === 'paper' ? barrierActiveBase : barrierInactive}`;
+            els.btns.alum.className = `flex-1 py-3 rounded-lg font-bold text-sm transition ${state.barrier === 'alum' ? barrierActiveBase : barrierInactive}`;
+            els.btns.lead.className = `flex-1 py-3 rounded-lg font-bold text-sm transition ${state.barrier === 'lead' ? barrierActiveBase : barrierInactive}`;
+
+            // Visual Barrier Update
+            els.barrier.className = "absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center z-10 transition-all duration-300 shadow-md border border-slate-300";
+            
+            let barrierText = "";
+            if (state.barrier === 'paper') {
+                els.barrier.classList.add('bg-white', 'w-2', 'h-4/5');
+                barrierText = "PAPER";
+            } else if (state.barrier === 'alum') {
+                els.barrier.classList.add('bg-gray-300', 'w-4', 'h-4/5');
+                barrierText = "ALUMINIUM";
+            } else {
+                els.barrier.classList.add('bg-slate-700', 'w-12', 'h-full', 'text-white');
+                barrierText = "LEAD BLOCK";
+            }
+            els.barrier.innerHTML = `<span class="transform -rotate-90 text-[10px] font-bold tracking-widest whitespace-nowrap opacity-70">${barrierText}</span>`;
+
+            // Reset Particle Base
+            els.particle.style.opacity = 0;
+            els.particle.style.transform = "translateX(0)";
+            
+            // Set Particle Appearance
+            if (state.source === 'gamma') {
+                // Wave Form for Gamma (Icon, no circle background)
+                els.particle.className = "particle-base absolute left-24 w-12 h-8 z-30 flex items-center justify-center text-yellow-500 text-2xl";
+                els.particle.innerHTML = '<i class="fa-solid fa-wave-square"></i>';
+            } else {
+                // Particle Form for Alpha/Beta (Circle with background)
+                els.particle.className = "particle-base absolute left-24 w-8 h-8 rounded-full shadow-lg z-30 flex items-center justify-center text-white font-bold text-xs";
+                
+                if (state.source === 'alpha') {
+                    els.particle.classList.add('bg-purple-600');
+                    els.particle.innerText = "α";
+                } else {
+                    els.particle.classList.add('bg-blue-600');
+                    els.particle.innerText = "β";
+                }
+            }
+
+            // Reset Detector
+            els.detector.className = "absolute right-0 h-full w-32 bg-slate-200 border-l border-slate-300 flex flex-col items-center justify-center transition-colors duration-200";
+            els.detectorIcon.className = "fa-solid fa-shield-cat text-2xl text-slate-400";
+            els.detectorText.innerText = "Ready";
+            els.detectorText.className = "text-xs font-bold text-slate-500 uppercase";
+        }
+
+        function fireSimulation() {
+            if (state.isAnimating) return;
+            state.isAnimating = true;
+
+            // 1. Calculate Outcome
+            let passed = false;
+            // Logic:
+            // Paper stops Alpha.
+            // Alum stops Alpha, Beta.
+            // Lead stops All (Simpler F1 Model).
+            
+            if (state.source === 'alpha') {
+                passed = false; // Alpha stops at everything
+            } else if (state.source === 'beta') {
+                if (state.barrier === 'paper') passed = true;
+                else passed = false;
+            } else if (state.source === 'gamma') {
+                if (state.barrier === 'lead') passed = false; // Simplified: Lead reduces gamma enough to be "safe" for this sim
+                else passed = true;
+            }
+
+            // 2. Animate to Barrier
+            els.particle.style.opacity = 1;
+            els.particle.style.transform = "translateX(280px)"; // Move to middle
+            els.particle.style.transition = "transform 1s linear";
+
+            // 3. Handle Impact (after 1s)
+            setTimeout(() => {
+                if (!passed) {
+                    // BLOCK EFFECT
+                    els.particle.style.transition = "all 0.2s ease-out";
+                    els.particle.style.transform = "translateX(280px) scale(2)";
+                    els.particle.style.opacity = 0;
+                    
+                    // Barrier flash
+                    els.barrier.classList.add('wiggle');
+                    setTimeout(() => els.barrier.classList.remove('wiggle'), 500);
+
+                    // Detector Safe
+                    els.detectorIcon.className = "fa-solid fa-shield-check text-3xl text-green-500";
+                    els.detectorText.innerText = "BLOCKED";
+                    els.detectorText.className = "text-xs font-bold text-green-600 uppercase mt-2";
+                } else {
+                    // PASS EFFECT
+                    els.particle.style.transition = "transform 0.5s linear, opacity 0.5s ease-in";
+                    els.particle.style.transform = "translateX(600px)"; // Move to detector
+                    els.particle.style.opacity = 0;
+
+                    // Detector Alert
+                    setTimeout(() => {
+                        els.detector.classList.add('detector-alert');
+                        els.detectorIcon.className = "fa-solid fa-triangle-exclamation text-3xl text-red-600 animate-bounce";
+                        els.detectorText.innerText = "DANGER!";
+                        els.detectorText.className = "text-xs font-bold text-red-600 uppercase mt-2";
+                    }, 300);
+                }
+
+                // Reset logic
+                setTimeout(() => {
+                    state.isAnimating = false;
+                    els.detector.classList.remove('detector-alert');
+                    updateUI(); // Resets visuals
+                }, 2500);
+
+            }, 1000);
+        }
+
+        // --- QUIZ LOGIC ---
+        const quizData = [
+            {
+                q: "At HK Airport security, your bag goes through a machine. What radiation is used to see inside?",
+                options: ["Alpha Particles", "X-Rays (High Energy)", "Radio Waves", "Visible Light"],
+                correct: 1,
+                note: "X-rays are like Gamma rays. They penetrate the bag but are stopped by metal (guns/knives)."
+            },
+            {
+                q: "Hong Kong has a lot of granite rock (like Lion Rock). What gas does granite release naturally?",
+                options: ["Oxygen", "Radon", "Helium", "Carbon Dioxide"],
+                correct: 1,
+                note: "Granite contains tiny amounts of Uranium, which decays into Radon gas. Ventilation helps!"
+            },
+            {
+                q: "If a radioactive source is emitting Beta particles, which shield would keep you safe?",
+                options: ["A sheet of paper", "A thin plastic bag", "A sheet of Aluminium", "Nothing is needed"],
+                correct: 2,
+                note: "Beta particles pass through paper but are blocked by light metals like Aluminium."
+            },
+            {
+                q: "Why do dentists wear a heavy apron when taking an X-ray of your teeth?",
+                options: ["It keeps them warm", "It is made of Lead to stop radiation", "It is for fashion", "It is made of Paper"],
+                correct: 1,
+                note: "Lead is very dense and absorbs the scattered X-rays to protect the body."
+            }
+        ];
+
+        let quizIndex = 0;
+        let score = 0;
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-content');
+            
+            if (quizIndex >= quizData.length) {
+                // End Screen
+                container.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fa-solid fa-trophy text-6xl text-yellow-400 mb-4 animate-bounce"></i>
+                        <h3 class="text-2xl font-bold mb-2">Quiz Complete!</h3>
+                        <p class="text-slate-600 mb-6">You scored ${score} out of ${quizData.length}</p>
+                        <button onclick="restartQuiz()" class="bg-indigo-600 text-white px-8 py-3 rounded-full font-bold hover:bg-indigo-700">Try Again</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const item = quizData[quizIndex];
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <div class="text-sm text-slate-400 font-bold uppercase mb-2">Question ${quizIndex + 1} / ${quizData.length}</div>
+                    <h3 class="text-xl font-bold text-slate-800">${item.q}</h3>
+                </div>
+                <div class="grid grid-cols-1 gap-3">
+                    ${item.options.map((opt, i) => `
+                        <button onclick="handleAnswer(${i})" class="text-left p-4 rounded-xl border-2 border-slate-100 hover:border-indigo-300 hover:bg-indigo-50 transition font-medium text-slate-700">
+                            <span class="inline-block w-6 h-6 rounded-full bg-slate-200 text-slate-500 text-xs text-center leading-6 mr-3 font-bold">${String.fromCharCode(65+i)}</span>
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            document.getElementById('score-display').innerText = score;
+        }
+
+        function handleAnswer(selectedIndex) {
+            const item = quizData[quizIndex];
+            const container = document.getElementById('quiz-content');
+            const isCorrect = selectedIndex === item.correct;
+
+            if (isCorrect) score++;
+
+            // Show Feedback immediately
+            container.innerHTML = `
+                <div class="text-center py-8 animate-fade-in">
+                    <div class="text-5xl mb-4">${isCorrect ? '✅' : '❌'}</div>
+                    <h3 class="text-2xl font-bold ${isCorrect ? 'text-green-600' : 'text-red-600'} mb-2">
+                        ${isCorrect ? 'Correct!' : 'Not Quite...'}
+                    </h3>
+                    <p class="text-slate-600 mb-6 max-w-md mx-auto bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        ${item.note}
+                    </p>
+                    <button onclick="nextQuestion()" class="bg-slate-800 text-white px-8 py-3 rounded-lg font-bold hover:bg-slate-900">
+                        Next Question <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            quizIndex++;
+            renderQuiz();
+        }
+
+        function restartQuiz() {
+            quizIndex = 0;
+            score = 0;
+            renderQuiz();
+        }
+
+        // Initialize
+        updateLab();
+        renderQuiz();
+
+    </script>
+</body>
+</html>

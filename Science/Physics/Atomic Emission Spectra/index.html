@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic Emission Spectra Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        physics: {
+                            dark: '#1a202c',
+                            panel: '#2d3748',
+                            accent: '#4fd1c5'
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 10px currentColor;
+        }
+        .spectral-line {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            transform-origin: bottom;
+        }
+        .spectral-line:hover {
+            transform: scaleY(1.1) scaleX(1.5);
+            box-shadow: 0 0 20px currentColor;
+            z-index: 50;
+        }
+        
+        /* Spectrum Line Entrance Animation (Dynamic) */
+        @keyframes growUp {
+            from { transform: scaleY(0); opacity: 0; }
+            to { transform: scaleY(1); opacity: var(--target-opacity); }
+        }
+        .animate-grow {
+            animation: growUp 0.6s ease-out forwards;
+        }
+
+        /* Discharge Tube Animation (Flicker/Turbulence) */
+        @keyframes subtle-flicker {
+            0% { opacity: 0.85; }
+            50% { opacity: 0.95; }
+            100% { opacity: 0.88; }
+        }
+        .discharge-active {
+            animation: subtle-flicker 0.1s infinite;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096; 
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 h-screen flex flex-col overflow-hidden font-sans">
+
+    <header class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center shadow-md z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-purple-500/30">PHY</div>
+            <h1 class="text-xl font-bold tracking-wide text-white">Atomic Emission Spectra <span class="text-sm font-normal text-gray-400 ml-2">Physics Simulator</span></h1>
+        </div>
+        <div class="text-sm text-blue-200 bg-gray-700/50 border border-gray-600 px-4 py-1 rounded-full font-mono">
+            E = hf = hc/λ
+        </div>
+    </header>
+
+    <div class="flex flex-1 h-full">
+        
+        <aside class="w-64 bg-gray-850 border-r border-gray-700 flex flex-col flex-shrink-0 z-20">
+            <div class="p-5 border-b border-gray-700 bg-gray-800">
+                <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Select Gas Element (Total: 15)</h2>
+                <p class="text-xs text-gray-500 leading-relaxed">Click an element to activate the high-voltage discharge and observe the spectrum.</p>
+            </div>
+            <div class="overflow-y-auto flex-1 p-3 space-y-2 bg-gray-900" id="element-list">
+                </div>
+            <div class="p-3 bg-gray-900 text-[10px] text-gray-600 border-t border-gray-800 text-center">
+                Interactive Lab v2.0
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col relative overflow-hidden">
+            
+            <div class="h-[60%] bg-gray-900 relative border-b border-gray-700 flex flex-row">
+                
+                <div class="flex-1 relative flex flex-col border-r border-gray-700 bg-gray-900">
+                    <div class="absolute top-4 left-4 z-10">
+                        <div class="bg-gray-800/90 backdrop-blur px-3 py-1.5 rounded border border-gray-600 shadow-lg">
+                            <h3 class="text-xs font-bold text-blue-300 uppercase tracking-wide">Setup: HV Discharge Tube</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 flex items-center justify-center relative w-full h-full overflow-hidden" id="circuit-container">
+                        <canvas id="circuitCanvas" class="absolute inset-0 z-0"></canvas>
+                        
+                        <div id="tube-glow-container" class="absolute w-[340px] h-[70px] pointer-events-none transition-opacity duration-500 opacity-0" 
+                             style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            <div id="tube-core" class="w-full h-full rounded-lg blur-md opacity-90 transition-colors duration-300 bg-white discharge-active"></div>
+                            <div id="tube-halo" class="absolute inset-0 -m-8 rounded-[40px] blur-2xl opacity-60 transition-colors duration-300 bg-white mix-blend-screen"></div>
+                        </div>
+                    </div>
+
+                    <div class="absolute bottom-6 right-6 text-right pointer-events-none select-none">
+                        <div id="current-element-display" class="text-6xl font-black text-gray-800 transition-all duration-700 scale-90 opacity-50" style="text-shadow: 0 0 30px currentColor;">--</div>
+                        <div class="text-sm text-gray-400 font-medium mt-2">Atomic No. Z = <span id="atomic-number" class="text-lg font-bold text-white">--</span></div>
+                    </div>
+                </div>
+
+                <div class="w-80 bg-gray-800 p-6 overflow-y-auto shadow-[inset_10px_0_20px_-10px_rgba(0,0,0,0.5)] flex flex-col gap-5 z-10">
+                    <div>
+                        <h3 class="text-md font-bold text-purple-300 mb-3 flex items-center gap-2 border-b border-gray-700 pb-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Physics Principle
+                        </h3>
+                        <div class="text-sm text-gray-300 space-y-4 leading-relaxed">
+                            <p class="text-gray-400">
+                                When <span class="text-yellow-400 font-bold">High Voltage</span> is applied, electrons collide with gas atoms.
+                            </p>
+                            
+                            <div class="bg-gray-700/50 p-3 rounded-lg border border-gray-600 hover:border-blue-400 transition-colors">
+                                <h4 class="font-bold text-blue-400 mb-1 text-xs uppercase tracking-wide">1. Excitation</h4>
+                                <p class="text-xs text-gray-400">Electrons in the atom absorb energy and jump from the Ground State to a higher Excited State.</p>
+                            </div>
+
+                            <div class="bg-gray-700/50 p-3 rounded-lg border border-gray-600 hover:border-green-400 transition-colors">
+                                <h4 class="font-bold text-green-400 mb-1 text-xs uppercase tracking-wide">2. Emission</h4>
+                                <p class="text-xs text-gray-400">
+                                    The excited state is unstable. The electron falls back down, releasing the energy difference as a <span class="text-white font-bold">Photon</span>.
+                                </p>
+                            </div>
+
+                            <div class="mt-2 p-3 bg-black/30 rounded-lg text-center border border-gray-700">
+                                <p class="text-[10px] text-gray-500 uppercase mb-1">Planck's Relation</p>
+                                <p class="font-mono text-yellow-400 text-sm tracking-wider">E = hf = hc / λ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-[40%] bg-black relative flex flex-col p-6 border-t border-gray-700 shadow-2xl z-20">
+                <div class="flex justify-between items-end mb-3">
+                    <h3 class="text-sm font-bold text-gray-300 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        Emission Spectrum <span class="text-gray-600 font-normal ml-2">| Visible Range (Diffraction Grating View)</span>
+                    </h3>
+                    <span class="text-xs text-gray-500 bg-gray-900 px-2 py-1 rounded border border-gray-800">Spectrometer View</span>
+                </div>
+
+                <div class="relative flex-1 bg-gray-900/80 rounded-lg border border-gray-800 overflow-hidden select-none min-h-[80px]" id="spectrum-display">
+                    <div class="absolute inset-0 flex justify-between items-end px-4 pb-2 text-[10px] text-gray-600 font-mono z-0 pointer-events-none border-t border-gray-800 mt-10">
+                        <span>380nm (UV)</span>
+                        <span>450nm (Blue)</span>
+                        <span>500nm (Green)</span>
+                        <span>550nm (Yellow)</span>
+                        <span>600nm (Orange)</span>
+                        <span>650nm (Red)</span>
+                        <span>700nm (Deep Red)</span>
+                        <span>750nm (IR)</span>
+                    </div>
+                    
+                    <div id="spectrum-lines-container" class="absolute inset-0 mx-4 z-10"></div>
+                </div>
+
+                <div id="info-panel" class="mt-4 h-16 bg-gray-800/80 backdrop-blur rounded-lg border border-gray-700 flex items-center gap-6 px-4 opacity-0 transition-opacity duration-300 shadow-lg">
+                    <div class="w-10 h-10 rounded shadow-inner border border-gray-600 flex-shrink-0 transition-colors duration-200" id="info-color-preview"></div>
+                    <div class="flex-1 grid grid-cols-3 gap-6 items-center">
+                        <div class="border-l border-gray-700 pl-4">
+                            <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Wavelength (λ)</div>
+                            <div class="text-xl font-mono text-blue-300 leading-tight"><span id="info-lambda">---</span> <span class="text-sm text-gray-500">nm</span></div>
+                        </div>
+                        <div class="border-l border-gray-700 pl-4">
+                            <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Observed Color</div>
+                            <div class="text-lg font-medium text-gray-300 leading-tight truncate" id="info-color-name">---</div>
+                        </div>
+                        <div class="border-l border-gray-700 pl-4">
+                            <div class="text-[10px] text-gray-500 uppercase font-bold tracking-wider">Photon Energy</div>
+                            <div class="text-xl font-mono text-green-400 leading-tight"><span id="info-energy">---</span> <span class="text-sm text-gray-500">eV</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="initial-hint" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500 pointer-events-none flex flex-col items-center gap-2">
+                    <svg class="w-8 h-8 opacity-50 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <span class="text-sm tracking-wide uppercase">Select an element to begin the experiment</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- 1. Data Definition ---
+        const SPECTRUM_MIN = 380; // nm
+        const SPECTRUM_MAX = 750; // nm
+
+        const elements = [
+            // --- Group 1: Noble Gases and Simple Atoms ---
+            {
+                id: 'Hydrogen',
+                symbol: 'H',
+                atomicNumber: 1,
+                tubeColor: 'rgba(255, 100, 255, 1)', 
+                glowColor: '#ff64ff',
+                lines: [
+                    { wl: 656.3, intensity: 1.0, name: 'H-alpha' }, 
+                    { wl: 486.1, intensity: 0.6, name: 'H-beta' },  
+                    { wl: 434.0, intensity: 0.3, name: 'H-gamma' }, 
+                    { wl: 410.2, intensity: 0.15, name: 'H-delta' } 
+                ]
+            },
+            {
+                id: 'Helium',
+                symbol: 'He',
+                atomicNumber: 2,
+                tubeColor: 'rgba(255, 200, 150, 1)', 
+                glowColor: '#ffc896',
+                lines: [
+                    { wl: 706.5, intensity: 0.5 },
+                    { wl: 667.8, intensity: 0.8 }, 
+                    { wl: 587.6, intensity: 1.0, name: 'D3 Line (Yellow)' }, 
+                    { wl: 501.6, intensity: 0.4, name: 'Green Line' }, 
+                    { wl: 447.1, intensity: 0.5 } 
+                ]
+            },
+            {
+                id: 'Neon',
+                symbol: 'Ne',
+                atomicNumber: 10,
+                tubeColor: 'rgba(255, 50, 20, 1)', 
+                glowColor: '#ff3214',
+                lines: [
+                    { wl: 640.2, intensity: 1.0 },
+                    { wl: 633.4, intensity: 0.8 },
+                    { wl: 614.3, intensity: 0.7 },
+                    { wl: 585.2, intensity: 0.9 }, 
+                    { wl: 540.1, intensity: 0.2, name: 'Weak Green Line' } 
+                ]
+            },
+            {
+                id: 'Argon',
+                symbol: 'Ar',
+                atomicNumber: 18,
+                tubeColor: 'rgba(180, 100, 255, 1)', 
+                glowColor: '#b464ff',
+                lines: [
+                    { wl: 750.4, intensity: 0.7 },
+                    { wl: 696.5, intensity: 0.8 },
+                    { wl: 451.1, intensity: 0.9, name: 'Blue Line' },
+                    { wl: 433.4, intensity: 0.6 },
+                    { wl: 415.9, intensity: 0.5 }
+                ]
+            },
+            {
+                id: 'Krypton',
+                symbol: 'Kr',
+                atomicNumber: 36,
+                tubeColor: 'rgba(255, 255, 255, 1)', 
+                glowColor: '#ffffff',
+                lines: [
+                    { wl: 587.1, intensity: 0.8, name: 'Yellow Line' },
+                    { wl: 557.0, intensity: 1.0, name: 'Strong Green Line' }, 
+                    { wl: 427.4, intensity: 0.6 }
+                ]
+            },
+            {
+                id: 'Xenon',
+                symbol: 'Xe',
+                atomicNumber: 54,
+                tubeColor: 'rgba(100, 150, 255, 1)', 
+                glowColor: '#6496ff',
+                lines: [
+                    { wl: 738.6, intensity: 0.8, name: 'Deep Red Line' },
+                    { wl: 559.8, intensity: 0.3, name: 'Weak Green Line' }, 
+                    { wl: 462.4, intensity: 0.6, name: 'Blue Line' }, 
+                    { wl: 450.1, intensity: 0.4 }
+                ]
+            },
+            
+            // --- Group 2: Alkali Metals and Vapors ---
+            {
+                id: 'Lithium',
+                symbol: 'Li',
+                atomicNumber: 3,
+                tubeColor: 'rgba(255, 0, 100, 1)', 
+                glowColor: '#ff0064',
+                lines: [
+                    { wl: 670.8, intensity: 1.0, name: 'Red Line' },
+                    { wl: 610.4, intensity: 0.4, name: 'Orange Line' },
+                    { wl: 497.2, intensity: 0.1, name: 'Weak Blue-Green' }, 
+                    { wl: 460.3, intensity: 0.2 }
+                ]
+            },
+            {
+                id: 'Sodium',
+                symbol: 'Na',
+                atomicNumber: 11,
+                tubeColor: 'rgba(255, 200, 0, 1)', 
+                glowColor: '#ffc800',
+                lines: [
+                    { wl: 589.0, intensity: 1.0, name: 'D2 Line (Yellow)' },
+                    { wl: 589.6, intensity: 0.9, name: 'D1 Line (Yellow)' },
+                    { wl: 568.8, intensity: 0.1, name: 'Weak Yellow-Green' }, 
+                    { wl: 615.4, intensity: 0.1 }
+                ]
+            },
+            {
+                id: 'Potassium',
+                symbol: 'K',
+                atomicNumber: 19,
+                tubeColor: 'rgba(200, 100, 255, 1)', 
+                glowColor: '#c864ff',
+                lines: [
+                    { wl: 766.5, intensity: 1.0, name: 'Infrared Doublet 1' },
+                    { wl: 769.9, intensity: 0.9, name: 'Infrared Doublet 2' },
+                    { wl: 583.1, intensity: 0.1, name: 'Weak Yellow-Green' }, 
+                    { wl: 404.4, intensity: 0.8, name: 'Violet Line' }
+                ]
+            },
+            {
+                id: 'Mercury',
+                symbol: 'Hg',
+                atomicNumber: 80,
+                tubeColor: 'rgba(0, 200, 255, 1)', 
+                glowColor: '#00c8ff',
+                lines: [
+                    { wl: 579.1, intensity: 0.6, name: 'Yellow Doublet 1' },
+                    { wl: 546.1, intensity: 1.0, name: 'Strong Green Line' }, 
+                    { wl: 435.8, intensity: 0.9, name: 'Blue Line' }, 
+                    { wl: 404.7, intensity: 0.5, name: 'Violet Line' } 
+                ]
+            },
+            
+            // --- Group 3: New Elements Added ---
+            {
+                id: 'Calcium',
+                symbol: 'Ca',
+                atomicNumber: 20,
+                tubeColor: 'rgba(255, 100, 50, 1)', 
+                glowColor: '#ff6432',
+                lines: [
+                    { wl: 649.9, intensity: 0.8, name: 'Red Line 1' },
+                    { wl: 646.2, intensity: 0.7, name: 'Red Line 2' },
+                    { wl: 558.2, intensity: 0.2, name: 'Weak Yellow-Green' },
+                    { wl: 422.7, intensity: 1.0, name: 'Strong Violet Line' }
+                ]
+            },
+            {
+                id: 'Barium',
+                symbol: 'Ba',
+                atomicNumber: 56,
+                tubeColor: 'rgba(80, 255, 80, 1)', 
+                glowColor: '#50ff50',
+                lines: [
+                    { wl: 614.2, intensity: 0.4, name: 'Orange Line' },
+                    { wl: 553.6, intensity: 1.0, name: 'Strong Green Line' }, // GREEN
+                    { wl: 513.7, intensity: 0.5, name: 'Green-Blue Line' }, // GREEN
+                    { wl: 455.4, intensity: 0.8, name: 'Blue Line' }
+                ]
+            },
+            {
+                id: 'Chlorine',
+                symbol: 'Cl',
+                atomicNumber: 17,
+                tubeColor: 'rgba(200, 255, 255, 1)', 
+                glowColor: '#c8ffff',
+                lines: [
+                    { wl: 754.7, intensity: 0.9, name: 'Deep Red Line 1' },
+                    { wl: 725.6, intensity: 0.8, name: 'Deep Red Line 2' },
+                    { wl: 542.2, intensity: 0.5, name: 'Green Line' }, // GREEN
+                    { wl: 481.0, intensity: 0.7, name: 'Blue-Green Line' },
+                    { wl: 452.6, intensity: 0.6 }
+                ]
+            },
+            {
+                id: 'Nitrogen',
+                symbol: 'N',
+                atomicNumber: 7,
+                tubeColor: 'rgba(150, 150, 255, 1)', 
+                glowColor: '#9696ff',
+                lines: [
+                    { wl: 746.8, intensity: 0.7, name: 'Red Line 1' },
+                    { wl: 661.1, intensity: 0.9, name: 'Red Line 2' },
+                    { wl: 500.2, intensity: 0.5, name: 'Green-Blue Line' }, // GREEN BOUNDARY
+                    { wl: 463.1, intensity: 0.8, name: 'Blue Line' },
+                    { wl: 410.0, intensity: 0.4 }
+                ]
+            },
+            {
+                id: 'Oxygen',
+                symbol: 'O',
+                atomicNumber: 8,
+                tubeColor: 'rgba(255, 150, 150, 1)', 
+                glowColor: '#ff9696',
+                lines: [
+                    { wl: 777.4, intensity: 1.0, name: 'Infrared Line' },
+                    { wl: 615.8, intensity: 0.6, name: 'Orange Line' },
+                    { wl: 533.1, intensity: 0.2, name: 'Weak Green Line' }, // GREEN
+                    { wl: 436.8, intensity: 0.9, name: 'Blue Line' },
+                    { wl: 394.7, intensity: 0.5 }
+                ]
+            }
+        ];
+
+        // --- 2. Utility Functions ---
+
+        function wavelengthToColor(wavelength, opacity = 1) {
+            let r, g, b, alpha;
+            const wl = wavelength;
+
+            if (wl >= 380 && wl < 440) {
+                r = -1 * (wl - 440) / (440 - 380); g = 0; b = 1;
+            } else if (wl >= 440 && wl < 490) {
+                r = 0; g = (wl - 440) / (490 - 440); b = 1;
+            } else if (wl >= 490 && wl < 510) {
+                r = 0; g = 1; b = -1 * (wl - 510) / (510 - 490);
+            } else if (wl >= 510 && wl < 580) {
+                r = (wl - 510) / (580 - 510); g = 1; b = 0;
+            } else if (wl >= 580 && wl < 645) {
+                r = 1; g = -1 * (wl - 645) / (645 - 580); b = 0;
+            } else if (wl >= 645 && wl <= 750) {
+                r = 1; g = 0; b = 0;
+            } else {
+                r = 0; g = 0; b = 0;
+            }
+
+            let factor;
+            if (wl >= 380 && wl < 420) factor = 0.3 + 0.7 * (wl - 380) / (420 - 380);
+            else if (wl >= 420 && wl < 700) factor = 1;
+            else if (wl >= 700 && wl <= 750) factor = 0.3 + 0.7 * (750 - wl) / (750 - 700);
+            else factor = 0;
+
+            const R = Math.round(r * factor * 255);
+            const G = Math.round(g * factor * 255);
+            const B = Math.round(b * factor * 255);
+            
+            return `rgba(${R}, ${G}, ${B}, ${opacity})`;
+        }
+
+        function getColorName(wl) {
+            if(wl < 400) return "UV / Deep Violet";
+            if(wl < 450) return "Violet";
+            if(wl < 495) return "Blue";
+            if(wl < 530) return "Blue-Green";
+            if(wl < 570) return "Green";
+            if(wl < 590) return "Yellow";
+            if(wl < 620) return "Orange";
+            return "Red / Near-IR";
+        }
+
+        function calculateEnergy(wavelengthNm) {
+            return (1239.8 / wavelengthNm).toFixed(3);
+        }
+
+        // --- 3. Animation Classes ---
+        
+        const canvas = document.getElementById('circuitCanvas');
+        const ctx = canvas.getContext('2d');
+        let activeElement = null;
+        let animationId = null;
+        
+        // Particles for electrons and photons
+        let electrons = [];
+        let photons = [];
+
+        class Electron {
+            constructor(path) {
+                this.path = path;
+                this.speed = 2 + Math.random() * 2;
+                this.progress = 0; 
+                this.totalDist = this.calculateTotalDist();
+            }
+
+            calculateTotalDist() {
+                let d = 0;
+                for(let i=0; i<this.path.length-1; i++) {
+                    const dx = this.path[i+1].x - this.path[i].x;
+                    const dy = this.path[i+1].y - this.path[i].y;
+                    d += Math.sqrt(dx*dx + dy*dy);
+                }
+                return d;
+            }
+
+            update() {
+                this.progress += this.speed;
+                if(this.progress >= this.totalDist) this.progress = 0;
+            }
+
+            draw(ctx) {
+                let remaining = this.progress;
+                let currentPos = {x:0, y:0};
+
+                for(let i=0; i<this.path.length-1; i++) {
+                    const p1 = this.path[i];
+                    const p2 = this.path[i+1];
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+
+                    if(remaining <= dist) {
+                        const ratio = remaining / dist;
+                        currentPos.x = p1.x + dx * ratio;
+                        currentPos.y = p1.y + dy * ratio;
+                        break;
+                    } else {
+                        remaining -= dist;
+                    }
+                }
+
+                ctx.beginPath();
+                ctx.arc(currentPos.x, currentPos.y, 2, 0, Math.PI*2);
+                ctx.fillStyle = '#fbbf24'; 
+                ctx.fill();
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = '#fbbf24';
+            }
+        }
+
+        class Photon {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 0.5 + Math.random() * 1.5;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.life = 1.0;
+                this.decay = 0.01 + Math.random() * 0.02;
+                this.size = 1 + Math.random() * 3;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+            }
+
+            draw(ctx) {
+                if(this.life <= 0) return;
+                ctx.globalAlpha = this.life * 0.8;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // --- 4. Main Logic ---
+
+        function init() {
+            renderSidebar();
+            resizeCanvas();
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                drawCircuitBase(); 
+            });
+            drawCircuitBase(); 
+            animate(); 
+        }
+
+        function resizeCanvas() {
+            const container = document.getElementById('circuit-container');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        function renderSidebar() {
+            const container = document.getElementById('element-list');
+            elements.forEach(el => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-4 py-3 rounded-lg mb-2 transition-all duration-200 flex items-center justify-between group
+                                bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-blue-500 focus:outline-none`;
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-300 group-hover:bg-blue-600 group-hover:text-white transition-colors">${el.symbol}</span>
+                        <span class="font-medium text-gray-300 group-hover:text-white">${el.id}</span>
+                    </div>
+                    <span class="text-[10px] font-mono text-gray-500 bg-gray-900 px-2 py-0.5 rounded">Z=${el.atomicNumber}</span>
+                `;
+                btn.onclick = () => selectElement(el, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectElement(element, btnElement) {
+            activeElement = element;
+            
+            // UI Active State
+            document.querySelectorAll('#element-list button').forEach(b => {
+                b.classList.remove('bg-blue-900/40', 'border-blue-500', 'ring-1', 'ring-blue-500');
+                b.classList.add('bg-gray-800', 'border-gray-700');
+            });
+            btnElement.classList.remove('bg-gray-800', 'border-gray-700');
+            btnElement.classList.add('bg-blue-900/40', 'border-blue-500', 'ring-1', 'ring-blue-500');
+
+            // Update Displays
+            document.getElementById('current-element-display').innerText = element.symbol;
+            document.getElementById('current-element-display').style.color = element.glowColor;
+            document.getElementById('current-element-display').style.opacity = '1';
+            document.getElementById('current-element-display').style.transform = 'scale(1)';
+            
+            document.getElementById('atomic-number').innerText = element.atomicNumber;
+            document.getElementById('initial-hint').style.display = 'none';
+            document.getElementById('info-panel').style.opacity = '0'; 
+
+            activateDischargeTube(element.glowColor);
+            renderSpectrum(element.lines);
+            
+            // Initialize particles for animation
+            initElectrons();
+        }
+
+        function initElectrons() {
+            electrons = [];
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const tubeW = 340;
+
+            // Path 1: Incoming (Left)
+            const p1 = [
+                {x: cx - 40, y: cy + 100}, 
+                {x: cx - tubeW/2 - 40, y: cy + 100},
+                {x: cx - tubeW/2 - 40, y: cy},
+                {x: cx - tubeW/2 + 15, y: cy} 
+            ];
+
+            // Path 2: Outgoing (Right)
+            const p2 = [
+                {x: cx + tubeW/2 - 15, y: cy}, 
+                {x: cx + tubeW/2 + 40, y: cy},
+                {x: cx + tubeW/2 + 40, y: cy + 100},
+                {x: cx + 40, y: cy + 100} 
+            ];
+
+            for(let i=0; i<15; i++) {
+                electrons.push(new Electron(p1));
+                electrons.push(new Electron(p2));
+            }
+            // Stagger them
+            electrons.forEach(e => e.progress = Math.random() * e.totalDist);
+        }
+
+        function drawCircuitBase() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const tubeW = 340;
+            const tubeH = 70;
+            
+            ctx.clearRect(0, 0, w, h);
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.shadowBlur = 0;
+
+            // -- Wires --
+            ctx.strokeStyle = '#2b6cb0'; // Blue-700
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            
+            // Left wire path
+            ctx.moveTo(cx - tubeW/2 + 15, cy); 
+            ctx.lineTo(cx - tubeW/2 - 40, cy); 
+            ctx.lineTo(cx - tubeW/2 - 40, cy + 100); 
+            ctx.lineTo(cx - 40, cy + 100); 
+
+            // Right wire path
+            ctx.moveTo(cx + tubeW/2 - 15, cy);
+            ctx.lineTo(cx + tubeW/2 + 40, cy);
+            ctx.lineTo(cx + tubeW/2 + 40, cy + 100);
+            ctx.lineTo(cx + 40, cy + 100);
+            ctx.stroke();
+
+            // -- High Voltage Box --
+            const boxW = 100;
+            const boxH = 60;
+            const boxY = cy + 70;
+
+            // Box Body
+            ctx.fillStyle = '#2d3748';
+            ctx.fillRect(cx - boxW/2, boxY, boxW, boxH);
+            ctx.strokeStyle = '#4a5568';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(cx - boxW/2, boxY, boxW, boxH);
+
+            // HV Label
+            ctx.fillStyle = activeElement ? '#fbbf24' : '#718096'; 
+            ctx.font = "bold 18px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("H.V.", cx, boxY + boxH/2);
+            
+            // -- Glass Tube (Outline) --
+            // Tube Border
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.roundRect(cx - tubeW/2, cy - tubeH/2, tubeW, tubeH, 20);
+            ctx.stroke();
+            
+            // Electrodes
+            ctx.fillStyle = '#718096';
+            ctx.fillRect(cx - tubeW/2 + 10, cy - (tubeH/2 - 15), 10, tubeH - 30); 
+            ctx.fillRect(cx + tubeW/2 - 20, cy - (tubeH/2 - 15), 10, tubeH - 30); 
+        }
+
+        function activateDischargeTube(color) {
+            const container = document.getElementById('tube-glow-container');
+            const core = document.getElementById('tube-core');
+            const halo = document.getElementById('tube-halo');
+
+            container.style.opacity = '1';
+            core.style.backgroundColor = color;
+            halo.style.backgroundColor = color;
+            
+            photons = [];
+        }
+
+        function animate() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const tubeW = 340;
+            
+            ctx.clearRect(0, 0, w, h);
+            drawCircuitBase(ctx, cx, cy); 
+
+            if(activeElement) {
+                // Electrons in wires
+                electrons.forEach(e => {
+                    e.update();
+                    e.draw(ctx);
+                });
+                
+                // Generate Photons randomly inside the tube
+                if(Math.random() > 0.8) {
+                    const rangeX = tubeW * 0.8;
+                    const rangeY = 40;
+                    const px = cx + (Math.random() - 0.5) * rangeX;
+                    const py = cy + (Math.random() - 0.5) * rangeY;
+                    photons.push(new Photon(px, py, activeElement.glowColor));
+                }
+
+                // Update and draw photons
+                photons.forEach((p, index) => {
+                    p.update();
+                    p.draw(ctx);
+                    if(p.life <= 0) photons.splice(index, 1);
+                });
+            }
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function renderSpectrum(lines) {
+            const container = document.getElementById('spectrum-lines-container');
+            container.innerHTML = '';
+
+            lines.forEach((line, index) => {
+                const range = SPECTRUM_MAX - SPECTRUM_MIN;
+                const pos = ((line.wl - SPECTRUM_MIN) / range) * 100;
+
+                if(pos < 0 || pos > 100) return;
+
+                const lineDiv = document.createElement('div');
+                const color = wavelengthToColor(line.wl);
+                
+                lineDiv.className = 'spectral-line absolute top-0 bottom-0 w-1.5 rounded-full animate-grow';
+                lineDiv.style.left = `${pos}%`;
+                lineDiv.style.backgroundColor = color;
+                
+                const glowSize = 5 + line.intensity * 25;
+                lineDiv.style.boxShadow = `0 0 ${glowSize}px ${color}`;
+                
+                lineDiv.style.animationDelay = `${index * 0.08}s`;
+                lineDiv.style.setProperty('--target-opacity', 0.8 + (line.intensity * 0.2));
+                
+                lineDiv.onclick = () => showLineDetails(line, color);
+                lineDiv.title = `${line.wl} nm (${line.name || 'Spectral Line'})`;
+
+                container.appendChild(lineDiv);
+            });
+        }
+
+        function showLineDetails(line, colorCss) {
+            const panel = document.getElementById('info-panel');
+            panel.style.opacity = '1';
+            
+            document.getElementById('info-color-preview').style.backgroundColor = colorCss;
+            document.getElementById('info-color-preview').style.boxShadow = `0 0 20px ${colorCss}`;
+            
+            document.getElementById('info-lambda').innerText = line.wl;
+            document.getElementById('info-color-name').innerText = getColorName(line.wl);
+            document.getElementById('info-energy').innerText = calculateEnergy(line.wl);
+        }
+
+        // Start
+        init();
+
+    </script>
+</body>
+</html>

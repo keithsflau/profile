@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standard Sankey Diagram Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- MathJax for Formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sankey-container {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* Smooth transition for the path coordinates */
+        path { transition: d 0.3s cubic-bezier(0.4, 0, 0.2, 1), stroke-width 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        text { transition: y 0.3s cubic-bezier(0.4, 0, 0.2, 1), x 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-indigo-900 text-white p-4 shadow-lg">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <span class="text-yellow-400">⚡</span> F1 Science: Energy Efficiency
+            </h1>
+            <div class="text-xs bg-indigo-800 px-3 py-1 rounded-full border border-indigo-600">
+                Standard Convention
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full p-4 md:p-8 space-y-6">
+
+        <!-- Simulator Card -->
+        <section class="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
+            
+            <!-- Controls Area -->
+            <div class="p-6 bg-slate-50 border-b border-slate-200 grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-700 mb-2">Adjust Efficiency</h2>
+                    <input type="range" id="efficiencySlider" min="0" max="100" value="30" 
+                           class="w-full h-3 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                    
+                    <div class="flex justify-between mt-2 font-mono text-sm text-slate-500">
+                        <span>0%</span>
+                        <span id="effDisplay" class="text-indigo-600 font-bold text-lg">30%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-100 p-3 rounded-lg border border-green-200 text-center">
+                        <div class="text-xs uppercase tracking-wider text-green-800 font-bold">Useful (Straight)</div>
+                        <div id="usefulValue" class="text-2xl font-bold text-green-700">30 J</div>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-lg border border-red-200 text-center">
+                        <div class="text-xs uppercase tracking-wider text-red-800 font-bold">Wasted (Down)</div>
+                        <div id="wasteValue" class="text-2xl font-bold text-red-700">70 J</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Visualizer -->
+            <div class="relative w-full h-[500px] sankey-container flex items-center justify-center overflow-hidden">
+                <svg id="sankeySvg" width="800" height="500" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                        <!-- Arrow markers -->
+                        <marker id="arrowUseful" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+                            <polygon points="0,0 4,2 0,4" fill="#16a34a" />
+                        </marker>
+                        <marker id="arrowWaste" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+                            <polygon points="0,0 4,2 0,4" fill="#dc2626" />
+                        </marker>
+                    </defs>
+
+                    <!-- Labels -->
+                    <text x="50" y="190" class="text-sm font-bold fill-indigo-900">Total Input (100J)</text>
+
+                    <!-- 1. Input Path (Fixed Width) -->
+                    <!-- Stays constant on the left side -->
+                    <path d="M 50 200 L 250 200" stroke="#334155" stroke-width="100" fill="none" />
+
+                    <!-- 2. Useful Path (Green) - GOES STRAIGHT -->
+                    <path id="pathUseful" fill="none" stroke="#16a34a" opacity="0.9" marker-end="url(#arrowUseful)"/>
+                    <text id="labelUseful" x="700" class="text-lg font-bold fill-green-700 text-right">Light</text>
+
+                    <!-- 3. Waste Path (Red) - CURVES DOWN -->
+                    <path id="pathWaste" fill="none" stroke="#dc2626" opacity="0.9" marker-end="url(#arrowWaste)"/>
+                    <text id="labelWaste" x="400" class="text-lg font-bold fill-red-700 text-middle">Heat</text>
+                    
+                    <!-- Dotted Line at Split Point -->
+                    <line x1="250" y1="150" x2="250" y2="250" stroke="white" stroke-width="2" stroke-dasharray="4" opacity="0.5"/>
+
+                </svg>
+            </div>
+        </section>
+
+        <!-- Educational Context -->
+        <section class="grid md:grid-cols-2 gap-6">
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                <h3 class="font-bold text-blue-900 text-lg mb-2">Standard Diagram Rules</h3>
+                <ul class="list-disc list-inside text-sm text-blue-800 space-y-2">
+                    <li><strong>Useful Energy:</strong> Always continues straight horizontally. This represents the intended purpose (e.g., Light).</li>
+                    <li><strong>Wasted Energy:</strong> Always curves downwards. This represents energy lost (e.g., Heat).</li>
+                    <li><strong>Width:</strong> The thickness of the arrows is proportional to the energy amount.</li>
+                </ul>
+            </div>
+
+            <div class="bg-yellow-50 p-6 rounded-xl border border-yellow-200">
+                <h3 class="font-bold text-yellow-900 text-lg mb-2">Example: Light Bulb</h3>
+                <p class="text-sm text-yellow-800 mb-2">
+                    In a filament lamp, only a thin green arrow goes straight. A huge red arrow drops down.
+                </p>
+                <div class="font-mono text-center bg-white p-2 rounded border border-yellow-100 mt-2">
+                     Width(Input) = Width(Useful) + Width(Waste)
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- CONSTANTS ---
+        const TOTAL_WIDTH_PX = 100; 
+        
+        // Coordinates
+        const START_X = 50;
+        const SPLIT_X = 250;
+        const END_X_USEFUL = 700;
+        const END_Y_WASTE = 450;
+        
+        const CENTER_Y = 200; 
+        // Top edge of the bar: 200 - 50 = 150
+        const BAR_TOP_Y = CENTER_Y - (TOTAL_WIDTH_PX / 2);
+
+        // --- DOM ELEMENTS ---
+        const slider = document.getElementById('efficiencySlider');
+        const effDisplay = document.getElementById('effDisplay');
+        const usefulValue = document.getElementById('usefulValue');
+        const wasteValue = document.getElementById('wasteValue');
+        
+        const pathUseful = document.getElementById('pathUseful');
+        const pathWaste = document.getElementById('pathWaste');
+        const labelUseful = document.getElementById('labelUseful');
+        const labelWaste = document.getElementById('labelWaste');
+
+        // --- UPDATE FUNCTION ---
+        function updateSankey() {
+            // 1. Get Values
+            const eff = parseInt(slider.value); // 0 to 100
+            const waste = 100 - eff;
+
+            // 2. Update Text
+            effDisplay.textContent = eff + "%";
+            usefulValue.textContent = eff + " J";
+            wasteValue.textContent = waste + " J";
+
+            // 3. Calculate Geometry 
+            const wUseful = Math.max(eff, 0.5) * (TOTAL_WIDTH_PX / 100); 
+            const wWaste = Math.max(waste, 0.5) * (TOTAL_WIDTH_PX / 100);
+
+            // -- CALCULATING START POINTS --
+            // Important: "Useful" is usually on top in these diagrams if it goes straight
+            
+            // Useful Center Y
+            const startY_Useful = BAR_TOP_Y + (wUseful / 2);
+            
+            // Waste Center Y
+            const startY_Waste = BAR_TOP_Y + wUseful + (wWaste / 2);
+
+            // -- PATH 1: USEFUL (STRAIGHT) --
+            pathUseful.setAttribute('stroke-width', wUseful);
+            // Simple straight line from split to end
+            pathUseful.setAttribute('d', `M ${SPLIT_X} ${startY_Useful} L ${END_X_USEFUL} ${startY_Useful}`);
+            
+            // Align Label with the straight path
+            labelUseful.setAttribute('y', startY_Useful + 5); 
+
+            // -- PATH 2: WASTE (CURVES DOWN) --
+            pathWaste.setAttribute('stroke-width', wWaste);
+            
+            // We want it to curve down to point vertically
+            // Start: (250, startY) -> End: (400, 450)
+            // Control point needs to create a 90 degree turn feel
+            const endX_Waste = SPLIT_X + 150; // How far right the waste curve goes before dropping
+            
+            pathWaste.setAttribute('d', 
+                `M ${SPLIT_X} ${startY_Waste} 
+                 Q ${endX_Waste} ${startY_Waste} ${endX_Waste} ${END_Y_WASTE}`
+            );
+
+            // Align Label below the drop
+            labelWaste.setAttribute('x', endX_Waste);
+            labelWaste.setAttribute('y', END_Y_WASTE + 20);
+        }
+
+        // Initialize
+        slider.addEventListener('input', updateSankey);
+        updateSankey(); 
+
+    </script>
+</body>
+</html>

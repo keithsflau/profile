@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Lens Lab | Physics 101</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom range slider styling for cross-browser consistency */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #4F46E5;
+            cursor: pointer;
+            margin-top: -8px; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border: 2px solid white;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #CBD5E1;
+            border-radius: 2px;
+        }
+        /* Canvas grid background */
+        .grid-bg {
+            background-image: 
+                linear-gradient(to right, #f1f5f9 1px, transparent 1px),
+                linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <nav class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🔭</span>
+                <div>
+                    <h1 class="font-bold text-xl leading-none">Lens Ray Lab</h1>
+                    <p class="text-indigo-200 text-xs">Interactive Physics Simulation</p>
+                </div>
+            </div>
+            <div class="text-sm font-medium bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                Standard: Light & Optics
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full p-4 lg:p-8 flex flex-col lg:flex-row gap-8">
+        
+        <aside class="w-full lg:w-1/3 space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100">
+                <h2 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                    <span>⚙️</span> Configuration
+                </h2>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wide">Lens Type</label>
+                    <div class="flex bg-slate-100 p-1 rounded-xl">
+                        <button id="btnConvex" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all shadow-sm bg-white text-indigo-600 ring-1 ring-slate-200">
+                            Convex (Converging)
+                        </button>
+                        <button id="btnConcave" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-indigo-600">
+                            Concave (Diverging)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-semibold text-slate-700">Focal Length (<span class="italic">f</span>)</label>
+                        <span id="displayF" class="text-sm font-mono font-bold text-indigo-600 bg-indigo-50 px-2 rounded">100 mm</span>
+                    </div>
+                    <input type="range" id="sliderF" min="50" max="250" value="100" class="w-full">
+                </div>
+
+                <div class="mb-2">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-semibold text-slate-700">Object Distance (<span class="italic">do</span>)</label>
+                        <span id="displayDo" class="text-sm font-mono font-bold text-indigo-600 bg-indigo-50 px-2 rounded">200 mm</span>
+                    </div>
+                    <input type="range" id="sliderDo" min="50" max="500" value="200" class="w-full">
+                </div>
+            </div>
+
+            <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg border border-slate-700">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-indigo-400">
+                    <span>📊</span> Live Analysis
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                        <span class="text-slate-400 text-sm">Image Distance (<span class="italic">di</span>)</span>
+                        <span id="valDi" class="font-mono text-lg font-bold text-emerald-400">0 mm</span>
+                    </div>
+
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                        <span class="text-slate-400 text-sm">Magnification (<span class="italic">M</span>)</span>
+                        <span id="valMag" class="font-mono text-lg font-bold text-yellow-400">0.00x</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div class="bg-white/10 p-3 rounded-lg text-center">
+                            <span class="block text-xs text-slate-400 uppercase">Nature</span>
+                            <span id="valNature" class="font-bold text-blue-300">Real</span>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-lg text-center">
+                            <span class="block text-xs text-slate-400 uppercase">Orientation</span>
+                            <span id="valOrient" class="font-bold text-purple-300">Inverted</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-xs text-slate-400 text-center">
+                Formula: 1/f = 1/do + 1/di
+            </div>
+        </aside>
+
+        <section class="flex-grow bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden flex flex-col relative h-[500px] lg:h-auto">
+            <div class="absolute top-4 left-4 flex gap-4 bg-white/90 backdrop-blur px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold shadow-sm z-10">
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-blue-600"></span> Object</div>
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> Image</div>
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-orange-400"></span> Rays</div>
+            </div>
+
+            <canvas id="opticsCanvas" class="w-full h-full grid-bg cursor-crosshair"></canvas>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Configuration & State ---
+        const state = {
+            lensType: 'convex', // 'convex' or 'concave'
+            f: 100,             // Focal length (pixels/mm)
+            do: 200,            // Object distance (pixels/mm)
+            ho: 60,             // Object height (fixed for simplicity)
+            di: 0,
+            hi: 0,
+            m: 0
+        };
+
+        // --- DOM Elements ---
+        const canvas = document.getElementById('opticsCanvas');
+        const ctx = canvas.getContext('2d');
+        const btnConvex = document.getElementById('btnConvex');
+        const btnConcave = document.getElementById('btnConcave');
+        const sliderF = document.getElementById('sliderF');
+        const sliderDo = document.getElementById('sliderDo');
+        
+        // Display Elements
+        const displayF = document.getElementById('displayF');
+        const displayDo = document.getElementById('displayDo');
+        const valDi = document.getElementById('valDi');
+        const valMag = document.getElementById('valMag');
+        const valNature = document.getElementById('valNature');
+        const valOrient = document.getElementById('valOrient');
+
+        // --- Physics Engine ---
+        function calculatePhysics() {
+            // Lens Equation: 1/f = 1/do + 1/di
+            // Solving for di: 1/di = 1/f - 1/do  ->  di = (f * do) / (do - f)
+            
+            // Cartesian Sign Convention for Calculation:
+            // Light travels Left to Right.
+            // Lens center is (0,0).
+            // Object is on the left, so object x = -do. 
+            // However, standard formula uses positive distance 'u' (do) and 'v' (di).
+            
+            let f_calc = state.lensType === 'convex' ? state.f : -state.f;
+            
+            // Using standard formula: 1/f = 1/do + 1/di
+            // 1/di = 1/f - 1/do
+            // di = (f * do) / (do - f)
+            
+            // Note: If do = f, di is infinity.
+            if (state.do === state.f && state.lensType === 'convex') {
+                state.di = Infinity;
+                state.m = Infinity;
+                state.hi = Infinity;
+                return;
+            }
+
+            // Calculate Image Distance (v)
+            // For Concave: f is negative.
+            let v = (f_calc * state.do) / (state.do - f_calc);
+            state.di = v;
+
+            // Magnification M = -di / do (Standard formula)
+            // Negative M means inverted.
+            state.m = - state.di / state.do;
+            
+            // Image Height
+            state.hi = state.m * state.ho;
+        }
+
+        function updateUI() {
+            displayF.textContent = state.f + " mm";
+            displayDo.textContent = state.do + " mm";
+
+            // Update Results
+            if (state.di === Infinity) {
+                valDi.textContent = "Infinity";
+                valMag.textContent = "Undefined";
+                valNature.textContent = "---";
+                valOrient.textContent = "---";
+            } else {
+                valDi.textContent = Math.abs(state.di).toFixed(1) + " mm";
+                valMag.textContent = Math.abs(state.m).toFixed(2) + "x";
+
+                // Determine Nature and Orientation
+                // Real images have positive di (on the right side) in this formula setup?
+                // Actually, let's look at the result:
+                // If di > 0, image is on the right (Real for single lens).
+                // If di < 0, image is on the left (Virtual).
+                
+                if (state.di > 0) {
+                    valNature.textContent = "Real";
+                    valNature.className = "font-bold text-emerald-400";
+                } else {
+                    valNature.textContent = "Virtual";
+                    valNature.className = "font-bold text-blue-300";
+                }
+
+                if (state.hi < 0) { // Height is negative (inverted)
+                    valOrient.textContent = "Inverted";
+                    valOrient.className = "font-bold text-purple-300";
+                } else {
+                    valOrient.textContent = "Upright";
+                    valOrient.className = "font-bold text-yellow-300";
+                }
+            }
+        }
+
+        // --- Drawing Engine ---
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+            draw();
+        }
+
+        function drawLens(cx, cy) {
+            ctx.fillStyle = "rgba(199, 210, 254, 0.2)"; // faint indigo
+            ctx.strokeStyle = "#4F46E5"; // indigo-600
+            ctx.lineWidth = 2;
+            const h = 250; // lens height
+            const w = 40;  // lens width
+
+            ctx.beginPath();
+            if (state.lensType === 'convex') {
+                // Ellipse for convex
+                ctx.ellipse(cx, cy, w/2, h/2, 0, 0, 2 * Math.PI);
+            } else {
+                // Hourglass for concave
+                ctx.moveTo(cx - w/2, cy - h/2);
+                ctx.quadraticCurveTo(cx + 10, cy, cx - w/2, cy + h/2);
+                ctx.lineTo(cx + w/2, cy + h/2);
+                ctx.quadraticCurveTo(cx - 10, cy, cx + w/2, cy - h/2);
+                ctx.closePath();
+            }
+            ctx.fill();
+            ctx.stroke();
+            
+            // Optical Center Dot
+            ctx.beginPath();
+            ctx.arc(cx, cy, 3, 0, 2*Math.PI);
+            ctx.fillStyle = "#4F46E5";
+            ctx.fill();
+        }
+
+        function drawArrow(x, y, height, color, label) {
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 3;
+
+            // Shaft
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y - height);
+            ctx.stroke();
+
+            // Head
+            ctx.beginPath();
+            const headSize = 10;
+            const tipY = y - height;
+            // Direction check: if height is positive, arrow points UP (smaller Y).
+            // If height is negative, arrow points DOWN (larger Y).
+            const dir = height >= 0 ? 1 : -1;
+
+            ctx.moveTo(x, tipY);
+            ctx.lineTo(x - 6, tipY + (8 * dir));
+            ctx.lineTo(x + 6, tipY + (8 * dir));
+            ctx.fill();
+
+            // Label
+            ctx.fillStyle = "#475569";
+            ctx.font = "bold 12px sans-serif";
+            ctx.textAlign = "center";
+            ctx.fillText(label, x, y + 20);
+        }
+
+        function drawRay(x1, y1, x2, y2, color, isDashed = false) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            if (isDashed) ctx.setLineDash([6, 6]);
+            else ctx.setLineDash([]);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function drawFocusPoints(cx, cy) {
+            const fDist = state.f;
+            ctx.fillStyle = "#DC2626"; // red-600
+            
+            // F1 (Left)
+            ctx.beginPath();
+            ctx.arc(cx - fDist, cy, 3, 0, 2*Math.PI);
+            ctx.fill();
+            ctx.fillText("F", cx - fDist - 5, cy + 15);
+
+            // F2 (Right)
+            ctx.beginPath();
+            ctx.arc(cx + fDist, cy, 3, 0, 2*Math.PI);
+            ctx.fill();
+            ctx.fillText("F'", cx + fDist - 5, cy + 15);
+        }
+
+        function draw() {
+            // 1. Clear & Setup
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            // 2. Optical Axis
+            ctx.beginPath();
+            ctx.strokeStyle = "#94a3b8"; // slate-400
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, cy);
+            ctx.lineTo(canvas.width, cy);
+            ctx.stroke();
+
+            // 3. Lens
+            drawLens(cx, cy);
+            drawFocusPoints(cx, cy);
+
+            // 4. Object
+            // Object is always to the left, so x = cx - state.do
+            const objX = cx - state.do;
+            // Height is positive (up), but canvas Y goes down. So y = cy - height
+            drawArrow(objX, cy, state.ho, "#2563eb", "Object");
+
+            // 5. Image
+            if (state.di !== Infinity) {
+                const imgX = cx + state.di; // di can be negative (left) or positive (right)
+                const imgColor = (state.di > 0) ? "#10b981" : "#8b5cf6"; // Emerald (Real) vs Violet (Virtual)
+                const label = (state.di > 0) ? "Real Img" : "Virtual Img";
+                
+                // Limit drawing if image shoots way off screen
+                if (Math.abs(state.di) < 2000) {
+                    drawArrow(imgX, cy, state.hi, imgColor, label);
+                }
+            }
+
+            // 6. Ray Tracing
+            const objTopX = objX;
+            const objTopY = cy - state.ho;
+            const imgTopX = (state.di !== Infinity) ? cx + state.di : null;
+            const imgTopY = (state.di !== Infinity) ? cy - state.hi : null;
+            const rayColor = "#fb923c"; // orange-400
+
+            // --- Ray 1: Parallel to Axis -> Refracts through Focus ---
+            // Segment A: Object tip to Lens Axis (Parallel)
+            drawRay(objTopX, objTopY, cx, objTopY, rayColor);
+
+            if (state.lensType === 'convex') {
+                // Convex: Refracts through F' (Right side)
+                // Draw line from (cx, objTopY) through (cx+f, cy)
+                // We want to draw it long enough. 
+                // Slope m = (y2-y1)/(x2-x1) = (cy - objTopY) / (f)
+                const slope1 = (cy - objTopY) / state.f;
+                const endX1 = cx + 500;
+                const endY1 = objTopY + slope1 * 500;
+                drawRay(cx, objTopY, endX1, endY1, rayColor);
+
+                // If Virtual (Image on left), trace back dashed
+                if (state.di < 0 && imgTopX !== null) {
+                    drawRay(cx, objTopY, imgTopX, imgTopY, rayColor, true);
+                }
+
+            } else {
+                // Concave: Diverges as if coming from F (Left side)
+                // Slope calculated from F (left) to contact point on lens
+                // P1: (cx - f, cy), P2: (cx, objTopY)
+                const slope1 = (objTopY - cy) / (state.f); // dx is state.f
+                
+                // Draw diverging ray to the right
+                const endX1 = cx + 500;
+                const endY1 = objTopY + slope1 * 500;
+                drawRay(cx, objTopY, endX1, endY1, rayColor);
+
+                // Draw dashed trace back to F (Left)
+                drawRay(cx, objTopY, cx - state.f, cy, rayColor, true);
+            }
+
+            // --- Ray 2: Through Optical Center (Undeviated) ---
+            // Just a straight line from Object Tip through (cx, cy)
+            // Slope m = (cy - objTopY) / (cx - objTopX) => (cy - objTopY) / state.do
+            
+            // Draw forward part
+            const slope2 = (cy - objTopY) / state.do; // This is positive slope visually (downwards)
+            const endX2 = cx + 500;
+            const endY2 = cy + slope2 * 500;
+            drawRay(objTopX, objTopY, endX2, endY2, rayColor);
+
+            // For Concave or Virtual Convex, the image is formed "behind" (left side) along this line
+            // But since the line is straight, the ray IS the trace back. We don't need a separate dashed line
+            // unless we want to emphasize the "virtual" part of the ray segment. 
+            // Typically, the ray to the left of the lens is real light coming from object. 
+            // The ray passes through. For a virtual image, the image lies on this line.
+
+            // --- Ray 3: Through Focus -> Refracts Parallel ---
+            // (Optional, but adds completeness. Can be messy for Concave. Let's stick to 2 rays for cleaner UI or simplified 3rd)
+            
+        }
+
+        // --- Interaction Logic ---
+        function handleInput() {
+            state.f = parseInt(sliderF.value);
+            state.do = parseInt(sliderDo.value);
+            
+            calculatePhysics();
+            updateUI();
+            draw();
+        }
+
+        function toggleLens(type) {
+            state.lensType = type;
+            const activeClass = "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200";
+            const inactiveClass = "text-slate-500 hover:text-indigo-600";
+
+            if (type === 'convex') {
+                btnConvex.className = `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${activeClass}`;
+                btnConcave.className = `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${inactiveClass}`;
+            } else {
+                btnConcave.className = `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${activeClass}`;
+                btnConvex.className = `flex-1 py-2 rounded-lg text-sm font-bold transition-all ${inactiveClass}`;
+            }
+            handleInput();
+        }
+
+        // Listeners
+        sliderF.addEventListener('input', handleInput);
+        sliderDo.addEventListener('input', handleInput);
+        btnConvex.addEventListener('click', () => toggleLens('convex'));
+        btnConcave.addEventListener('click', () => toggleLens('concave'));
+        window.addEventListener('resize', resizeCanvas);
+
+        // Init
+        calculatePhysics();
+        resizeCanvas();
+        updateUI();
+
+    </script>
+</body>
+</html>

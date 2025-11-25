@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Mechanics: A Primer</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom gradient animation for the hero section */
+        .quantum-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+    <nav class="fixed w-full z-50 glass-card border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-atom text-indigo-400 text-2xl mr-3"></i>
+                    <span class="font-bold text-xl tracking-tight text-white">Quantum<span class="text-indigo-400">Edu</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#basics" class="hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition">Basics</a>
+                        <a href="#principles" class="hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition">Principles</a>
+                        <a href="#math" class="hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition">The Math</a>
+                        <a href="#simulation" class="bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm font-medium transition">Try Sim</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative quantum-bg pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-400 mb-6">
+                The Universe at <br /> the Smallest Scale
+            </h1>
+            <p class="mt-4 text-xl text-slate-300 max-w-2xl mx-auto">
+                Explore the counter-intuitive world of wave-particle duality, superposition, and entanglement. Welcome to the quantum realm.
+            </p>
+            <div class="mt-10">
+                <a href="#basics" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:text-lg md:px-10 transition duration-150 ease-in-out shadow-lg shadow-indigo-500/30">
+                    Start Learning
+                </a>
+            </div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop" alt="Abstract Physics" class="absolute top-0 left-0 w-full h-full object-cover opacity-10 mix-blend-overlay pointer-events-none">
+    </header>
+
+    <section id="basics" class="py-20 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-base text-indigo-400 font-semibold tracking-wide uppercase">Fundamentals</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">What is Quantum Mechanics?</p>
+                <p class="mt-4 max-w-2xl text-xl text-slate-400 mx-auto">
+                    Classical physics explains the motion of planets and baseballs. Quantum mechanics explains the bizarre behavior of subatomic particles like electrons and photons.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="rounded-2xl overflow-hidden shadow-2xl shadow-indigo-900/20 border border-slate-700">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=2070&auto=format&fit=crop" alt="Laboratory Equipment" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                </div>
+                <div class="space-y-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                <i class="fa-solid fa-wave-square"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg leading-6 font-medium text-white">Wave-Particle Duality</h3>
+                            <p class="mt-2 text-base text-slate-400">
+                                Matter and light exhibit the behaviors of both waves and particles. An electron can diffract like a wave but hit a detector like a particle.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                <i class="fa-solid fa-stairs"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg leading-6 font-medium text-white">Quantization</h3>
+                            <p class="mt-2 text-base text-slate-400">
+                                Energy comes in discrete packets called "quanta." An electron in an atom can only exist at specific energy levels, never in between.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="principles" class="py-20 bg-slate-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-white mb-12 text-center">Core Principles</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="glass-card p-8 rounded-xl hover:bg-slate-700 transition duration-300 group">
+                    <div class="h-40 w-full mb-6 overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=2080&auto=format&fit=crop" alt="Light and Shadow" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-400 mb-3">Superposition</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        A system exists in all possible states simultaneously until it is measured. Think of Schrödinger's famous cat: both dead and alive until the box is opened.
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-xl hover:bg-slate-700 transition duration-300 group">
+                    <div class="h-40 w-full mb-6 overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=2070&auto=format&fit=crop" alt="Connection" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-400 mb-3">Entanglement</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        "Spooky action at a distance." Two particles become linked such that the state of one instantly influences the state of the other, regardless of distance.
+                    </p>
+                </div>
+
+                <div class="glass-card p-8 rounded-xl hover:bg-slate-700 transition duration-300 group">
+                    <div class="h-40 w-full mb-6 overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1534312527009-56c7016453e6?q=80&w=2070&auto=format&fit=crop" alt="Blurry Particles" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    </div>
+                    <h3 class="text-xl font-bold text-indigo-400 mb-3">Uncertainty Principle</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Formulated by Heisenberg, it states that you cannot know both the position and momentum of a particle with perfect precision. The more you know one, the less you know the other.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="math" class="py-20 bg-slate-900">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-white mb-8">The Language of Quantum Mechanics</h2>
+            <p class="text-slate-400 mb-10">
+                The state of a quantum system is described by a wavefunction, represented by the Greek letter Psi ($\Psi$). Its evolution over time is governed by the Schrödinger Equation.
+            </p>
+            
+            <div class="bg-slate-800 border border-slate-600 p-8 rounded-lg shadow-inner mx-auto inline-block">
+                <p class="text-2xl md:text-4xl text-indigo-300 font-serif overflow-x-auto">
+                    $$ i\hbar \frac{\partial}{\partial t} \Psi(\mathbf{r},t) = \hat{H} \Psi(\mathbf{r},t) $$
+                </p>
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-500">
+                <div>
+                    <span class="font-bold text-indigo-400">$$i$$</span> : Imaginary unit
+                </div>
+                <div>
+                    <span class="font-bold text-indigo-400">$$\hbar$$</span> : Reduced Planck constant
+                </div>
+                <div>
+                    <span class="font-bold text-indigo-400">$$\hat{H}$$</span> : Hamiltonian (Total Energy)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="simulation" class="py-20 bg-indigo-900 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+
+        <div class="max-w-3xl mx-auto px-4 relative z-10 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Interactive: Wavefunction Collapse</h2>
+            <p class="text-indigo-200 mb-8">
+                A "Qubit" exists in a superposition of State 0 and State 1. It is a probability cloud. Click the button below to "measure" the system and force it to choose a state.
+            </p>
+
+            <div class="bg-slate-900/80 backdrop-blur-md rounded-2xl p-8 border border-indigo-500/30 shadow-2xl">
+                <div id="qubit-display" class="h-48 w-48 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-8 transition-all duration-500 animate-pulse shadow-[0_0_50px_rgba(79,70,229,0.5)]">
+                    <span id="qubit-text" class="text-6xl font-bold text-white opacity-80">?</span>
+                </div>
+
+                <div class="flex flex-col items-center gap-4">
+                    <button onclick="measureQubit()" class="px-8 py-4 bg-indigo-500 hover:bg-indigo-400 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-indigo-500/50 transition-all transform active:scale-95">
+                        <i class="fa-solid fa-eye mr-2"></i> Measure Qubit
+                    </button>
+                    <div id="result-log" class="h-8 text-indigo-300 font-mono">
+                        System in superposition...
+                    </div>
+                </div>
+
+                <div class="mt-8 grid grid-cols-2 gap-4 border-t border-slate-700 pt-6">
+                    <div>
+                        <span class="block text-xs text-slate-400 uppercase">State |0⟩</span>
+                        <span id="count-0" class="text-2xl font-bold text-white">0</span>
+                    </div>
+                    <div>
+                        <span class="block text-xs text-slate-400 uppercase">State |1⟩</span>
+                        <span id="count-1" class="text-2xl font-bold text-white">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <span class="font-bold text-xl text-white">Quantum<span class="text-indigo-400">Edu</span></span>
+                <p class="text-sm text-slate-500 mt-1">Engineering the Future of Education.</p>
+            </div>
+            <div class="flex space-x-6 text-slate-400">
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-twitter text-xl"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fa-brands fa-linkedin text-xl"></i></a>
+            </div>
+        </div>
+        <div class="text-center text-slate-600 text-xs mt-8">
+            &copy; 2023 QuantumEdu Demo. Images via Unsplash.
+        </div>
+    </footer>
+
+    <script>
+        // Simple state tracking
+        let count0 = 0;
+        let count1 = 0;
+
+        function measureQubit() {
+            const qubitDisplay = document.getElementById('qubit-display');
+            const qubitText = document.getElementById('qubit-text');
+            const resultLog = document.getElementById('result-log');
+
+            // 1. Simulate calculation delay/measurement
+            resultLog.textContent = "Collapsing wavefunction...";
+            qubitDisplay.className = "h-48 w-48 mx-auto rounded-full bg-slate-700 flex items-center justify-center mb-8 transition-all duration-100";
+            qubitText.textContent = "...";
+            
+            setTimeout(() => {
+                // 2. Random determination (50/50 chance)
+                const result = Math.random() > 0.5 ? 1 : 0;
+                
+                // 3. Update Visuals based on result
+                if(result === 1) {
+                    qubitDisplay.className = "h-48 w-48 mx-auto rounded-full bg-purple-600 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(147,51,234,0.6)] transform scale-110 transition-all duration-300";
+                    qubitText.textContent = "|1⟩";
+                    resultLog.textContent = "Measured State: One";
+                    count1++;
+                    document.getElementById('count-1').textContent = count1;
+                } else {
+                    qubitDisplay.className = "h-48 w-48 mx-auto rounded-full bg-blue-600 flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(37,99,235,0.6)] transform scale-110 transition-all duration-300";
+                    qubitText.textContent = "|0⟩";
+                    resultLog.textContent = "Measured State: Zero";
+                    count0++;
+                    document.getElementById('count-0').textContent = count0;
+                }
+            }, 300); // 300ms delay for effect
+        }
+    </script>
+</body>
+</html>

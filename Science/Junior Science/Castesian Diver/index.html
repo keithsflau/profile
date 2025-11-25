@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Science: The Cartesian Diver</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Diver Animation */
+        .diver-container {
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Bottle Squeeze Animation */
+        #bottle-visual {
+            transition: transform 0.1s ease-out;
+            transform-origin: center center;
+        }
+        
+        /* Hands Animation */
+        .hand-left, .hand-right {
+            transition: transform 0.1s ease-out;
+        }
+        
+        /* Bubble animation */
+        @keyframes rise {
+            0% { bottom: 0; opacity: 0; }
+            50% { opacity: 1; }
+            100% { bottom: 100%; opacity: 0; }
+        }
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: rise 4s infinite ease-in;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-blue-700 text-white p-4 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <h1 class="text-2xl font-bold tracking-tight">HK F1 Science Lab</h1>
+            </div>
+            <span class="text-sm font-light opacity-90">Unit: Matter & Density</span>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <section class="bg-white rounded-xl shadow-lg p-6 border border-slate-200">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">🧪 Virtual Experiment</h2>
+            <p class="text-slate-600 mb-8 text-center">Use the slider to squeeze the bottle!</p>
+            
+            <div class="flex flex-col items-center">
+                
+                <div class="relative flex items-center justify-center w-full max-w-md h-96">
+                    
+                    <div id="hand-left" class="hand-left absolute left-0 text-slate-400 z-20 hidden sm:block">
+                        <svg class="w-12 h-12 transform rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <div class="text-xs text-center font-bold mt-1">PUSH</div>
+                    </div>
+
+                    <div id="bottle-visual" class="relative w-48 h-full border-4 border-slate-300 rounded-3xl overflow-hidden bg-blue-50 shadow-inner transition-transform duration-75">
+                        <div class="absolute top-0 w-full h-8 bg-white opacity-80 z-10 border-b border-blue-200"></div>
+                        
+                        <div class="absolute inset-0 bg-blue-400 opacity-30"></div>
+                        
+                        <div class="bubble w-2 h-2 left-10" style="animation-delay: 0s;"></div>
+                        <div class="bubble w-3 h-3 left-24" style="animation-delay: 1.5s;"></div>
+                        <div class="bubble w-2 h-2 left-32" style="animation-delay: 2.5s;"></div>
+
+                        <div id="diver" class="diver-container absolute left-1/2 transform -translate-x-1/2 top-10 flex flex-col items-center">
+                            <div id="diver-air" class="w-8 h-8 bg-white border-2 border-blue-600 rounded-t-full overflow-hidden relative">
+                               <div class="absolute bottom-0 w-full bg-blue-500 transition-all duration-100" id="water-level-inside" style="height: 10%;"></div>
+                            </div>
+                            <div class="w-2 h-4 bg-orange-500 rounded-b-md"></div>
+                        </div>
+                    </div>
+
+                    <div id="hand-right" class="hand-right absolute right-0 text-slate-400 z-20 hidden sm:block">
+                        <svg class="w-12 h-12 transform -rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                        <div class="text-xs text-center font-bold mt-1">PUSH</div>
+                    </div>
+
+                </div>
+
+                <div class="w-full mt-10 max-w-xs bg-slate-100 p-4 rounded-xl border border-slate-200">
+                    <label for="pressure" class="block text-sm font-bold text-slate-700 mb-2">Applied Pressure (Hand Force)</label>
+                    <input type="range" id="pressure" min="0" max="100" value="0" 
+                        class="w-full h-2 bg-slate-300 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    <div class="flex justify-between text-xs text-slate-500 mt-2">
+                        <span>No Force</span>
+                        <span>Max Force</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-2 gap-4 w-full text-center">
+                    <div class="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider">Diver Density</div>
+                        <div id="density-readout" class="font-mono font-bold text-blue-700">Low</div>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider">Status</div>
+                        <div id="buoyancy-readout" class="font-mono font-bold text-green-600">Floating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="space-y-6">
+            
+            <section class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+                <h2 class="text-xl font-bold text-slate-800 mb-3">📖 The Science Behind It</h2>
+                <div class="text-sm text-slate-600 leading-relaxed space-y-3">
+                    <p>
+                        Notice how the bottle <strong>changes shape</strong> when you use the slider.
+                    </p>
+                    <ul class="list-disc list-inside space-y-2 ml-2">
+                        <li><strong>Action:</strong> Your hand squeezes the bottle.</li>
+                        <li><strong>Result:</strong> The volume of the bottle decreases, which increases the <strong>water pressure</strong> everywhere inside.</li>
+                        <li><strong>Effect:</strong> Water is pushed <em>into</em> the diver, compressing the air bubble. The diver becomes heavier (denser) and sinks.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="bg-orange-50 rounded-xl shadow-md p-6 border border-orange-100">
+                <h2 class="text-xl font-bold text-orange-800 mb-3">🛠️ Do It Yourself (DIY)</h2>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <div class="bg-orange-200 text-orange-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3 shrink-0 mt-0.5">1</div>
+                        <p class="text-sm text-slate-700">Fill a plastic bottle with water.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-orange-200 text-orange-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3 shrink-0 mt-0.5">2</div>
+                        <p class="text-sm text-slate-700">Make a diver using a pen cap + blu-tack.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="bg-orange-200 text-orange-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold mr-3 shrink-0 mt-0.5">3</div>
+                        <p class="text-sm text-slate-700">Screw the cap tight and <strong>squeeze the bottle hard!</strong></p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-indigo-900 text-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">🧠 Quick Quiz</h2>
+                <div id="quiz-container">
+                    <p class="mb-4 text-indigo-100">Why does the diver sink when you squeeze?</p>
+                    <div class="grid grid-cols-1 gap-3">
+                        <button onclick="checkAnswer(false)" class="quiz-btn w-full text-left px-4 py-3 bg-indigo-800 hover:bg-indigo-700 rounded border border-indigo-600 transition text-sm">
+                            A. The water becomes less dense.
+                        </button>
+                        <button onclick="checkAnswer(true)" class="quiz-btn w-full text-left px-4 py-3 bg-indigo-800 hover:bg-indigo-700 rounded border border-indigo-600 transition text-sm">
+                            B. Water enters the diver, making it heavier.
+                        </button>
+                        <button onclick="checkAnswer(false)" class="quiz-btn w-full text-left px-4 py-3 bg-indigo-800 hover:bg-indigo-700 rounded border border-indigo-600 transition text-sm">
+                            C. The gravity becomes stronger.
+                        </button>
+                    </div>
+                    <p id="quiz-result" class="mt-4 font-bold text-center hidden"></p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-slate-400 text-sm">
+        Created for HK Form 1 Integrated Science
+    </footer>
+
+    <script>
+        // Simulation Logic Elements
+        const slider = document.getElementById('pressure');
+        const diver = document.getElementById('diver');
+        const bottle = document.getElementById('bottle-visual');
+        const waterInside = document.getElementById('water-level-inside');
+        const densityText = document.getElementById('density-readout');
+        const buoyancyText = document.getElementById('buoyancy-readout');
+        
+        // Hand Elements
+        const handLeft = document.getElementById('hand-left');
+        const handRight = document.getElementById('hand-right');
+
+        slider.addEventListener('input', function() {
+            const pressure = parseInt(this.value);
+            const percent = pressure / 100;
+            
+            // 1. SQUEEZE THE BOTTLE (Visual Deformation)
+            // Scale X from 1.0 down to 0.85 (15% squeeze)
+            const squeezeFactor = 1 - (percent * 0.15); 
+            bottle.style.transform = `scaleX(${squeezeFactor})`;
+
+            // 2. MOVE HANDS CLOSER
+            // Move hands inward as bottle squeezes
+            handLeft.style.transform = `translateX(${pressure * 0.6}px)`;
+            handRight.style.transform = `translateX(-${pressure * 0.6}px)`;
+            
+            // 3. SINK THE DIVER
+            // Max depth is roughly 280px down
+            const depth = percent * 280;
+            diver.style.transform = `translate(-50%, ${depth}px)`;
+
+            // 4. COMPRESS AIR (Water level inside diver rises)
+            const waterHeight = 10 + (pressure * 0.8); // starts at 10%, goes to 90%
+            waterInside.style.height = `${waterHeight}%`;
+
+            // 5. Update Text Readouts
+            updateReadouts(pressure);
+        });
+
+        function updateReadouts(pressure) {
+            if (pressure < 30) {
+                densityText.textContent = "Low";
+                densityText.className = "font-mono font-bold text-blue-500";
+                buoyancyText.textContent = "Floating";
+                buoyancyText.className = "font-mono font-bold text-green-600";
+            } else if (pressure >= 30 && pressure < 60) {
+                densityText.textContent = "Increasing";
+                densityText.className = "font-mono font-bold text-orange-500";
+                buoyancyText.textContent = "Neutral";
+                buoyancyText.className = "font-mono font-bold text-yellow-600";
+            } else {
+                densityText.textContent = "High";
+                densityText.className = "font-mono font-bold text-red-600";
+                buoyancyText.textContent = "Sinking";
+                buoyancyText.className = "font-mono font-bold text-red-800";
+            }
+        }
+
+        // Quiz Logic
+        function checkAnswer(isCorrect) {
+            const resultText = document.getElementById('quiz-result');
+            
+            resultText.classList.remove('hidden');
+            
+            if(isCorrect) {
+                resultText.textContent = "✅ Correct! Mass increases, Volume stays same = Density increases.";
+                resultText.classList.add('text-green-300');
+                resultText.classList.remove('text-red-300');
+            } else {
+                resultText.textContent = "❌ Try again. Remember D = m/V";
+                resultText.classList.add('text-red-300');
+                resultText.classList.remove('text-green-300');
+            }
+        }
+    </script>
+</body>
+</html>
