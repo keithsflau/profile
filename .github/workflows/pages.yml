@@ -43,6 +43,17 @@ jobs:
             cp -r dist/assets .
           fi
 
+      - name: Build Language Monopoly
+        run: |
+          cd "Pri-Chi/portal/language_monopoly/webapp"
+          npm ci
+          npm run build
+          # Copy built files to replace source files
+          cp dist/index.html index.html
+          if [ -d "dist/assets" ]; then
+            cp -r dist/assets .
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
