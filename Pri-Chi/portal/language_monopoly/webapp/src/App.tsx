@@ -62,8 +62,6 @@ function App() {
           propertyStates={propertyStates}
           selectedSpace={selectedSpace}
           onSelectSpace={setSelectedSpace}
-          lastDice={lastDice}
-          currentPlayerIndex={currentPlayerIndex}
         />
       </div>
       <div className="sidebar">

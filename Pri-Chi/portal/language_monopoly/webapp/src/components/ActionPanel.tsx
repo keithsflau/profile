@@ -80,15 +80,7 @@ export const ActionPanel = ({
       </header>
 
       <div className="action-buttons">
-        <button 
-          type="button" 
-          onClick={() => {
-            import("../utils/sound").then(({ playDiceSound }) => {
-              playDiceSound();
-            });
-            onRollDice();
-          }}
-        >
+        <button type="button" onClick={onRollDice}>
           擲骰前進
         </button>
         <button type="button" onClick={onEndTurn}>

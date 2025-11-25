@@ -1,11 +1,11 @@
-# Primarychi - 小學語文學習平台
+# Pri-Chi 小學語文學習平台
 
-Primarychi 是一個整合多個語文學習套件的平台，提供互動式的語文學習體驗。
+Pri-Chi 是一個整合多個語文學習套件的平台，提供互動式的語文學習體驗。
 
 ## 📁 專案結構
 
 ```
-primarychi/
+Pri-Chi/
 ├── docs/                          # GitHub Pages 部署資料夾
 │   ├── index.html                # Portal 入口頁面
 │   └── assets/                   # 靜態資源
