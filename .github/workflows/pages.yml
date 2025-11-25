@@ -27,6 +27,22 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Hong Kong Tycoon Dream
+        run: |
+          cd Hong_Kong_Tycoon_Dream
+          npm ci
+          npm run build
+          # Copy built files to replace source files
+          cp dist/index.html index.html
+          if [ -d "dist/assets" ]; then
+            cp -r dist/assets .
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
