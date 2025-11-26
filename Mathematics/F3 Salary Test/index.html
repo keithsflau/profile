@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Percentages (II) - Salary Tax</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+HK:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans HK', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #4f46e5, #9333ea);
+        }
+        .card-hover {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 tracking-tight">Chapter 4: Percentages (II)</h1>
+            <h2 class="text-2xl md:text-3xl font-light opacity-90">Salary Tax (薪俸稅)</h2>
+            <div class="mt-4 inline-block px-4 py-1 bg-white/20 rounded-full backdrop-blur-sm text-sm font-medium">
+                Hong Kong Secondary Mathematics Series
+            </div>
+        </div>
+        <div class="w-full overflow-hidden leading-[0]">
+            <svg class="relative block w-full h-[50px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="fill-gray-100"></path>
+            </svg>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-6 py-8 max-w-5xl space-y-12">
+
+        <section class="bg-amber-50 border border-amber-200 rounded-2xl p-6 md:p-8 shadow-sm relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 opacity-10 text-amber-900">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-48 w-48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-amber-500 text-white p-2 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                    <h3 class="text-2xl font-bold text-amber-900">Math History Corner: The Wisdom of Fair Levies</h3>
+                </div>
+                
+                <p class="text-amber-800 mb-4 leading-relaxed">
+                    Long before modern tax systems, ancient China developed sophisticated methods for fair taxation. The classic text <strong>"The Nine Chapters on the Mathematical Art" (九章算術)</strong>, compiled around the 1st century AD, dedicates Chapter 6 to <strong>"Fair Levies" (Jun Shu - 均輸)</strong>.
+                </p>
+                
+                <div class="bg-white/60 p-4 rounded-xl border border-amber-200">
+                    <p class="text-gray-700 text-sm md:text-base">
+                        <em>Jun Shu</em> dealt with the problem of collecting grain taxes from different counties. The mathematicians realized that a flat tax wasn't fair. Instead, they used <strong>ratio and proportion</strong> to calculate tax based on two factors: the population of the county and its distance from the capital. 
+                    </p>
+                </div>
+
+                <p class="text-amber-800 mt-4 text-sm">
+                    <strong>Connection to today:</strong> Just as <em>Jun Shu</em> sought to distribute the burden fairly based on circumstances, our modern <strong>Progressive Tax (累進稅)</strong> system charges higher rates only to those who earn more, ensuring the contribution is proportional to one's financial ability.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <div class="flex items-center gap-2 mb-6">
+                <div class="h-8 w-1 bg-indigo-600 rounded-full"></div>
+                <h3 class="text-2xl font-bold text-gray-800">Key Concepts</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500 card-hover">
+                    <div class="text-blue-500 font-bold uppercase text-xs tracking-wider mb-2">Basic</div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Annual Income <span class="text-gray-400 font-normal text-base">(全年入息)</span></h4>
+                    <p class="text-gray-600">The total amount of money earned from employment, including salary, bonuses, commissions, and allowances, before any deductions.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500 card-hover">
+                    <div class="text-green-500 font-bold uppercase text-xs tracking-wider mb-2">Deduction</div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Allowances <span class="text-gray-400 font-normal text-base">(免稅額)</span></h4>
+                    <p class="text-gray-600">A tax-free threshold. You only pay tax on earnings <em>above</em> this amount. Examples include Basic Allowance and Married Person's Allowance.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500 card-hover">
+                    <div class="text-purple-500 font-bold uppercase text-xs tracking-wider mb-2">Calculation Base</div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Net Chargeable Income <span class="text-gray-400 font-normal text-base">(應課稅入息實額)</span></h4>
+                    <p class="text-gray-600 font-medium">Annual Income - Deductions (MPF) - Allowances</p>
+                    <p class="text-gray-500 text-sm mt-1">This is the actual amount used to calculate the tax payable.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-pink-500 card-hover">
+                    <div class="text-pink-500 font-bold uppercase text-xs tracking-wider mb-2">Mechanism</div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">Progressive Tax Rate <span class="text-gray-400 font-normal text-base">(累進稅率)</span></h4>
+                    <p class="text-gray-600">The tax rate increases as income increases. Income is divided into "bands" (e.g., first $50k, next $50k), each taxed at a higher percentage.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="bg-gray-900 p-6 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-2xl font-bold">HK Salary Tax Simulator</h3>
+                    <p class="text-gray-400 text-sm">Based on simplified HK tax bands</p>
+                </div>
+                <div class="bg-indigo-500 p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Annual Income (HK$)</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="number" id="incomeInput" placeholder="e.g. 300000" 
+                                class="block w-full rounded-lg border-gray-300 pl-7 pr-12 py-3 focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50 border shadow-inner text-lg">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Marital Status</label>
+                        <select id="statusInput" class="block w-full rounded-lg border-gray-300 py-3 px-4 bg-white border shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="single">Single (Allowance: $132,000)</option>
+                            <option value="married">Married (Allowance: $264,000)</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <input id="mpfInput" type="checkbox" checked class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <div class="ml-3 text-sm">
+                            <label for="mpfInput" class="font-medium text-gray-900">Deduct MPF Mandatory Contribution?</label>
+                            <p class="text-gray-500">5% of income, capped at $18,000.</p>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateTax()" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition hover:scale-[1.02]">
+                        Calculate Tax Payable
+                    </button>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 flex flex-col justify-center">
+                    <div id="initialState" class="text-center text-gray-400 py-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <p>Enter details and click Calculate to see the breakdown.</p>
+                    </div>
+
+                    <div id="resultState" class="hidden space-y-4">
+                        <h4 class="text-lg font-bold text-gray-800 border-b pb-2">Calculation Details</h4>
+                        
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Net Chargeable Income:</span>
+                            <span class="font-mono font-medium" id="displayNCI">$0</span>
+                        </div>
+
+                        <div id="stepsContainer" class="bg-white p-4 rounded border border-gray-200 text-sm font-mono space-y-1 text-gray-600 h-40 overflow-y-auto">
+                            </div>
+
+                        <div class="border-t pt-4 mt-4">
+                            <div class="text-center">
+                                <span class="block text-gray-500 text-sm uppercase tracking-wide font-bold">Total Tax Payable</span>
+                                <span class="block text-4xl font-extrabold gradient-text mt-1" id="displayTax">$0</span>
+                                <span class="block text-xs text-gray-400 mt-2" id="methodBadge">Calculated via Progressive Rates</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+            he founded the world by his wisdom<br>
+            and stretched out the heavens by his understanding.</p>
+            <p class="text-sm mb-2">Jeremiah 10:12</p>
+            <p class="text-xs mb-2 mt-4 text-gray-400">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+            <p class="text-xs mb-4 text-gray-400">耶利米書 10:12</p>
+            <p class="text-xs mt-4 pt-4 border-t border-gray-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </div>
+    </footer>
+
+    <script>
+        function formatCurrency(num) {
+            return "$" + num.toLocaleString('en-HK', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        function calculateTax() {
+            // 1. Get Inputs
+            const incomeInput = document.getElementById('incomeInput').value;
+            const income = parseFloat(incomeInput);
+            const status = document.getElementById('statusInput').value;
+            const deductMPF = document.getElementById('mpfInput').checked;
+
+            // Validation
+            if (isNaN(income) || income < 0) {
+                alert("Please enter a valid positive income amount.");
+                return;
+            }
+
+            // 2. Constants (Simplified HK Model)
+            const SINGLE_ALLOWANCE = 132000;
+            const MARRIED_ALLOWANCE = 264000;
+            const allowance = (status === 'married') ? MARRIED_ALLOWANCE : SINGLE_ALLOWANCE;
+            
+            // MPF Calculation (Cap at 18,000 or 5%)
+            let mpf = 0;
+            if (deductMPF) {
+                mpf = Math.min(income * 0.05, 18000);
+            }
+
+            // 3. Net Chargeable Income Calculation
+            // For Standard Rate: Net Income = Income - MPF (No allowance deduction)
+            const netIncomeForStandard = Math.max(0, income - mpf);
+            
+            // For Progressive Rate: Net Chargeable = Income - MPF - Allowance
+            const netChargeableIncome = Math.max(0, income - mpf - allowance);
+
+            // 4. Progressive Tax Calculation
+            let progressiveTax = 0;
+            let remainingIncome = netChargeableIncome;
+            let stepsHTML = "";
+
+            // Bands
+            const bands = [
+                { limit: 50000, rate: 0.02 },
+                { limit: 50000, rate: 0.06 },
+                { limit: 50000, rate: 0.10 },
+                { limit: 50000, rate: 0.14 },
+                { limit: Infinity, rate: 0.17 } // Remainder
+            ];
+
+            if (netChargeableIncome <= 0) {
+                stepsHTML = "<p>Net Chargeable Income is zero or negative. No tax required.</p>";
+            } else {
+                stepsHTML += `<p class='text-xs text-gray-400 mb-2'>Calculation: (${formatCurrency(income)} - MPF ${formatCurrency(mpf)} - Allowance ${formatCurrency(allowance)})</p>`;
+                
+                for (let i = 0; i < bands.length; i++) {
+                    if (remainingIncome <= 0) break;
+
+                    let taxableAmount = 0;
+                    if (bands[i].limit === Infinity) {
+                        taxableAmount = remainingIncome;
+                    } else {
+                        taxableAmount = Math.min(remainingIncome, bands[i].limit);
+                    }
+
+                    const taxForBand = taxableAmount * bands[i].rate;
+                    progressiveTax += taxForBand;
+                    remainingIncome -= taxableAmount;
+
+                    // Add step to visual output
+                    const percentage = (bands[i].rate * 100).toFixed(0) + "%";
+                    stepsHTML += `<div class="flex justify-between">
+                        <span>On ${i === bands.length -1 ? 'Remainder' : 'Next ' + formatCurrency(taxableAmount)} @ ${percentage}</span>
+                        <span>= ${formatCurrency(taxForBand)}</span>
+                    </div>`;
+                }
+                stepsHTML += `<div class="border-t border-gray-200 mt-2 pt-1 font-bold flex justify-between">
+                    <span>Progressive Total:</span>
+                    <span>${formatCurrency(progressiveTax)}</span>
+                </div>`;
+            }
+
+            // 5. Standard Rate Check (15% on Net Income without allowances)
+            const standardTax = netIncomeForStandard * 0.15;
+            
+            // 6. Final Decision (User pays the LOWER amount)
+            let finalTax = 0;
+            let methodUsed = "";
+
+            if (standardTax < progressiveTax && netChargeableIncome > 0) {
+                finalTax = standardTax;
+                methodUsed = `Standard Rate Charged (Lower than Progressive). <br>15% of (${formatCurrency(income)} - MPF)`;
+                stepsHTML += `<div class="mt-4 pt-2 border-t border-dashed border-gray-300 text-indigo-600">
+                    <p><strong>Standard Rate Check:</strong></p>
+                    <p>15% of Net Income (${formatCurrency(netIncomeForStandard)}) = ${formatCurrency(standardTax)}</p>
+                    <p>Since Standard < Progressive, you pay Standard Rate.</p>
+                </div>`;
+            } else {
+                finalTax = progressiveTax;
+                methodUsed = "Calculated via Progressive Rates";
+            }
+
+            // 7. Render Output
+            document.getElementById('initialState').classList.add('hidden');
+            document.getElementById('resultState').classList.remove('hidden');
+            
+            document.getElementById('displayNCI').textContent = formatCurrency(netChargeableIncome);
+            document.getElementById('stepsContainer').innerHTML = stepsHTML;
+            document.getElementById('displayTax').textContent = formatCurrency(finalTax);
+            document.getElementById('methodBadge').innerHTML = methodUsed;
+        }
+    </script>
+</body>
+</html>

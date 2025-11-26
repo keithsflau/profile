@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>F.2 Interactive Pythagoras Lab</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["system-ui", "Segoe UI", "PingFang TC", "sans-serif"],
+            },
+            colors: {
+              lagoon: "#00b8d9",
+              plum: "#8c4fff",
+              coral: "#ff5f6d",
+              sunshine: "#ffe66d",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-orange-50 text-slate-800"
+  >
+    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <!-- HERO + Learning Objectives -->
+      <header
+        class="rounded-3xl bg-gradient-to-r from-sky-500 via-lagoon to-plum px-6 py-8 sm:px-10 sm:py-12 text-white shadow-xl"
+      >
+        <div class="flex flex-col gap-8 lg:flex-row lg:items-center">
+          <div class="space-y-4 lg:w-2/3">
+            <p class="text-xs font-semibold tracking-[0.3em] uppercase">
+              Hong Kong F.2 Mathematics
+            </p>
+            <h1
+              class="text-3xl font-extrabold leading-tight sm:text-4xl md:text-5xl"
+            >
+              Interactive Pythagoras Theorem Lab
+            </h1>
+            <p class="max-w-xl text-sm sm:text-base text-sky-50/90">
+              Use a <span class="font-semibold">dynamic triangle, calculator and quiz</span>
+              plus a short <span class="font-semibold">Chinese maths history</span>
+              to understand step by step why a right triangle satisfies
+              <span class="font-mono">a² + b² = c²</span>.
+            </p>
+            <div
+              class="grid gap-2 rounded-2xl bg-white/10 p-4 text-xs sm:text-sm"
+            >
+              <p class="font-semibold tracking-wide">
+                Learning Objectives
+              </p>
+              <ul class="grid gap-1 list-disc pl-5 text-sky-50/90">
+                <li>
+                  Clearly state the Pythagoras theorem in words and with
+                  the formula a² + b² = c².
+                </li>
+                <li>
+                  Identify and name the
+                  <span class="font-semibold">hypotenuse and two legs</span>
+                  of a right triangle.
+                </li>
+                <li>
+                  Apply the theorem to real-life problems (ladder, ramp, TV
+                  size, etc.).
+                </li>
+                <li>
+                  Describe how ancient Chinese mathematics and
+                  <span class="font-semibold">Zhoubi Suanjing</span>
+                  relate to Pythagoras’ theorem.
+                </li>
+              </ul>
+            </div>
+            <div class="flex flex-wrap gap-3 pt-1">
+              <a
+                href="#calculator"
+                class="rounded-full bg-white px-5 py-2.5 text-xs sm:text-sm font-semibold text-sky-700 shadow hover:bg-sunshine hover:text-slate-900 transition"
+                >Try the calculator</a
+              >
+              <a
+                href="#history"
+                class="rounded-full border border-white/70 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-white/10 transition"
+                >See the history</a
+              >
+            </div>
+          </div>
+          <!-- Right: dynamic triangle preview -->
+          <div
+            class="lg:w-1/3 rounded-2xl bg-white/10 p-4 sm:p-5 backdrop-blur shadow-inner"
+          >
+            <p class="text-[0.65rem] sm:text-xs tracking-[0.25em] uppercase">
+              Dynamic Right Triangle
+            </p>
+            <svg
+              id="previewTriangle"
+              viewBox="0 0 220 180"
+              class="mt-3 w-full drop-shadow-lg"
+            >
+              <defs>
+                <linearGradient id="legA" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#ffe66d" />
+                  <stop offset="100%" stop-color="#ff9f1c" />
+                </linearGradient>
+                <linearGradient id="legB" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#7ae582" />
+                  <stop offset="100%" stop-color="#06d6a0" />
+                </linearGradient>
+                <linearGradient id="hyp" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#4cc9f0" />
+                  <stop offset="100%" stop-color="#7209b7" />
+                </linearGradient>
+              </defs>
+              <!-- Triangle -->
+              <polygon
+                id="previewTri"
+                points="30,140 170,140 30,40"
+                fill="url(#hyp)"
+                opacity="0.28"
+              ></polygon>
+              <!-- Leg a (horizontal) -->
+              <line
+                id="previewLegA"
+                x1="30"
+                y1="140"
+                x2="170"
+                y2="140"
+                stroke="url(#legA)"
+                stroke-width="10"
+                stroke-linecap="round"
+              ></line>
+              <!-- Leg b (vertical) -->
+              <line
+                id="previewLegB"
+                x1="30"
+                y1="140"
+                x2="30"
+                y2="40"
+                stroke="url(#legB)"
+                stroke-width="10"
+                stroke-linecap="round"
+              ></line>
+              <!-- Hypotenuse c -->
+              <line
+                id="previewHyp"
+                x1="30"
+                y1="40"
+                x2="170"
+                y2="140"
+                stroke="url(#hyp)"
+                stroke-width="10"
+                stroke-linecap="round"
+              ></line>
+              <!-- Labels -->
+              <text x="100" y="155" class="fill-white text-xs">a (leg)</text>
+              <text
+                x="18"
+                y="90"
+                class="fill-white text-xs"
+                transform="rotate(-90 18 90)"
+              >b (leg)</text>
+              <text x="130" y="70" class="fill-white text-xs">
+                c (hypotenuse)
+              </text>
+              <!-- Right-angle mark: small square at the right angle -->
+              <rect
+                x="30"
+                y="126"
+                width="12"
+                height="12"
+                fill="none"
+                stroke="white"
+                stroke-width="3"
+              ></rect>
+            </svg>
+            <p class="mt-2 text-[0.7rem] sm:text-xs text-sky-50/90">
+              In a <span class="font-semibold">right triangle</span>,
+              knowing any two sides fixes the third through
+              <span class="font-mono">a² + b² = c²</span>.
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Pythagoras introduction -->
+      <section
+        class="mt-10 grid gap-6 rounded-3xl bg-white/90 p-6 shadow-lg lg:grid-cols-[3fr,2fr]"
+      >
+        <div class="space-y-3 text-sm sm:text-base">
+          <h2 class="text-xl font-semibold text-sky-800">
+            1. What is the Pythagoras Theorem?
+          </h2>
+          <p>
+            In a <span class="font-semibold text-rose-500">right triangle</span
+            >, the legs have lengths a and b, and the hypotenuse has length c.
+            Then:
+          </p>
+          <p
+            class="inline-block rounded-xl bg-sky-50 px-4 py-2 font-mono text-lg text-sky-900 shadow"
+          >
+            a² + b² = c²
+          </p>
+          <p>
+            In words: <span class="font-semibold"
+              >the sum of the squares of the two legs is equal to the square of
+              the hypotenuse</span
+            >.
+          </p>
+          <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+            <li>
+              <span class="font-semibold">Legs</span>: the two sides which meet
+              at the right angle (a and b).
+            </li>
+            <li>
+              <span class="font-semibold">Hypotenuse</span>: the side opposite
+              the right angle; it is always the longest side (c).
+            </li>
+          </ul>
+          <p class="pt-1 text-sm text-slate-700">
+            Common <span class="font-semibold text-emerald-600"
+              >Pythagorean triples</span
+            >
+            (whole-number solutions) include: (3, 4, 5), (5, 12, 13),
+            (8, 15, 17), and more.
+          </p>
+        </div>
+        <!-- Text diagram: use borders as squares -->
+        <div
+          class="flex items-center justify-center rounded-2xl bg-gradient-to-br from-sunshine/80 via-white to-sky-100 p-5"
+        >
+          <div class="space-y-3 text-center text-xs sm:text-sm text-slate-700">
+            <p class="font-semibold text-sky-800">
+              Comparing the areas a², b² and c²
+            </p>
+            <div class="mx-auto grid max-w-xs grid-cols-3 gap-2">
+              <div class="space-y-1">
+                <div
+                  class="h-16 rounded-lg border-4 border-amber-400"
+                ></div>
+                <p>a²: square drawn on side a</p>
+              </div>
+              <div class="space-y-1">
+                <div
+                  class="h-16 rounded-lg border-4 border-emerald-400"
+                ></div>
+                <p>b²: square drawn on side b</p>
+              </div>
+              <div class="space-y-1">
+                <div class="h-16 rounded-lg border-4 border-purple-500"></div>
+                <p>c²: square drawn on the hypotenuse c</p>
+              </div>
+            </div>
+            <p>
+              No matter how the shape of the right triangle changes (as long as
+              it is still right-angled), the
+              <span class="font-semibold">total area</span> of the yellow and
+              green squares always equals the area of the purple square.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hong Kong real-life examples -->
+      <section
+        class="mt-10 rounded-3xl bg-white/90 p-6 shadow-lg text-sm sm:text-base"
+      >
+        <h2 class="text-xl font-semibold text-sky-800">
+          2. Pythagoras in Hong Kong life
+        </h2>
+        <div class="mt-3 grid gap-4 md:grid-cols-3">
+          <div class="rounded-2xl bg-gradient-to-br from-sky-50 to-sky-100 p-4">
+            <p class="text-sm font-semibold text-sky-700">
+              Example 1: Ladder against a wall
+            </p>
+            <p class="mt-1 text-xs sm:text-sm text-slate-700">
+              On a construction site or near a village house, a 4 m ladder
+              leans against a wall. The bottom is 1.5 m from the wall. To find
+              how high the top reaches, we use
+              <span class="font-mono">1.5² + b² = 4²</span>.
+            </p>
+          </div>
+          <div class="rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100 p-4">
+            <p class="text-sm font-semibold text-emerald-700">
+              Example 2: Ramps and slopes
+            </p>
+            <p class="mt-1 text-xs sm:text-sm text-slate-700">
+              When designing an accessible ramp, we need to control the slope.
+              If the horizontal distance is 6 m and the height difference is
+              1 m, the ramp length c can be found using
+              <span class="font-mono">6² + 1² = c²</span>.
+            </p>
+          </div>
+          <div class="rounded-2xl bg-gradient-to-br from-violet-50 to-violet-100 p-4">
+            <p class="text-sm font-semibold text-violet-700">
+              Example 3: TV screen diagonal
+            </p>
+            <p class="mt-1 text-xs sm:text-sm text-slate-700">
+              The “inch” size of a TV is the length of its diagonal. If a TV is
+              48 cm wide and 27 cm high, the diagonal d is found from
+              <span class="font-mono">48² + 27² = d²</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Activity 1: Pythagoras calculator -->
+      <section
+        id="calculator"
+        class="mt-10 grid gap-6 rounded-3xl bg-white p-6 shadow-lg lg:grid-cols-[3fr,2fr]"
+      >
+        <div class="space-y-3 text-sm sm:text-base">
+          <h2 class="text-xl font-semibold text-sky-800">
+            3. Pythagoras Calculator (Right Triangle)
+          </h2>
+          <p class="text-slate-700">
+            Enter <span class="font-semibold">any two sides</span> of the
+            triangle. The app uses
+            <span class="font-mono">a² + b² = c²</span> to calculate the
+            remaining one.
+          </p>
+          <form id="pythCalc" class="mt-2 grid gap-3 sm:grid-cols-2">
+            <div>
+              <label
+                class="block text-xs sm:text-sm font-medium text-slate-700"
+              >
+                Leg a (units)
+                <input
+                  id="inputA"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:border-sky-500 focus:ring-sky-400"
+                  placeholder="e.g. 3"
+                />
+              </label>
+            </div>
+            <div>
+              <label
+                class="block text-xs sm:text-sm font-medium text-slate-700"
+              >
+                Leg b (units)
+                <input
+                  id="inputB"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:border-sky-500 focus:ring-sky-400"
+                  placeholder="e.g. 4"
+                />
+              </label>
+            </div>
+            <div>
+              <label
+                class="block text-xs sm:text-sm font-medium text-slate-700"
+              >
+                Hypotenuse c (units)
+                <input
+                  id="inputC"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-1.5 text-sm focus:border-sky-500 focus:ring-sky-400"
+                  placeholder="e.g. 5"
+                />
+              </label>
+            </div>
+            <div class="flex items-end gap-3">
+              <button
+                type="submit"
+                class="rounded-full bg-sky-500 px-5 py-2 text-xs sm:text-sm font-semibold text-white shadow hover:bg-sky-600"
+              >
+                Calculate missing side
+              </button>
+              <button
+                type="button"
+                id="resetCalc"
+                class="rounded-full border border-slate-300 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50"
+              >
+                Clear
+              </button>
+            </div>
+          </form>
+          <p
+            id="calcMessage"
+            class="mt-2 text-xs sm:text-sm text-slate-700 font-semibold"
+          >
+            Tip: please enter <span class="underline">exactly two sides</span>,
+            e.g. a = 3, b = 4.
+          </p>
+          <p
+            id="calcExplanation"
+            class="mt-1 text-xs sm:text-sm text-slate-700"
+          ></p>
+        </div>
+        <!-- Simple diagram linked to calculator -->
+        <div
+          class="flex items-center justify-center rounded-2xl bg-gradient-to-br from-sky-50 via-white to-emerald-50 p-4"
+        >
+          <svg
+            id="calcTriangle"
+            viewBox="0 0 220 180"
+            class="w-full max-w-xs drop-shadow-md"
+          >
+            <defs>
+              <linearGradient id="calcA" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffd166" />
+                <stop offset="100%" stop-color="#feca57" />
+              </linearGradient>
+              <linearGradient id="calcB" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#9bf6ff" />
+                <stop offset="100%" stop-color="#00bbf9" />
+              </linearGradient>
+              <linearGradient id="calcC" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a78bfa" />
+                <stop offset="100%" stop-color="#7c3aed" />
+              </linearGradient>
+            </defs>
+            <polygon
+              id="calcTriPoly"
+              points="30,140 170,140 30,40"
+              fill="url(#calcC)"
+              opacity="0.25"
+            ></polygon>
+            <line
+              id="calcLegA"
+              x1="30"
+              y1="140"
+              x2="170"
+              y2="140"
+              stroke="url(#calcA)"
+              stroke-width="10"
+              stroke-linecap="round"
+            ></line>
+            <line
+              id="calcLegB"
+              x1="30"
+              y1="140"
+              x2="30"
+              y2="40"
+              stroke="url(#calcB)"
+              stroke-width="10"
+              stroke-linecap="round"
+            ></line>
+            <line
+              id="calcHyp"
+              x1="30"
+              y1="40"
+              x2="170"
+              y2="140"
+              stroke="url(#calcC)"
+              stroke-width="10"
+              stroke-linecap="round"
+            ></line>
+            <rect
+              x="30"
+              y="126"
+              width="12"
+              height="12"
+              fill="none"
+              stroke="#0f172a"
+              stroke-width="3"
+            ></rect>
+            <text id="labelCalcA" x="100" y="155" class="fill-slate-700 text-xs">
+              a
+            </text>
+            <text
+              id="labelCalcB"
+              x="18"
+              y="90"
+              class="fill-slate-700 text-xs"
+              transform="rotate(-90 18 90)"
+            >
+              b
+            </text>
+            <text id="labelCalcC" x="130" y="70" class="fill-slate-700 text-xs">
+              c
+            </text>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Activity 2: Pythagoras quiz -->
+      <section
+        id="quiz"
+        class="mt-10 rounded-3xl bg-white p-6 shadow-lg text-sm sm:text-base"
+      >
+        <h2 class="text-xl font-semibold text-sky-800">
+          4. Pythagoras Quiz
+        </h2>
+        <p class="mt-1 text-sm text-slate-700">
+          See if you can recognise Pythagorean triples and decide when to use
+          Pythagoras’ theorem.
+        </p>
+        <form id="quizForm" class="mt-4 space-y-3">
+          <!-- Q1 -->
+          <div
+            class="rounded-2xl border border-sky-100 bg-sky-50/70 p-3 sm:p-4 space-y-1"
+          >
+            <p class="font-semibold text-sky-800">
+              Q1. Is (3, 4, 5) a Pythagorean triple?
+            </p>
+            <div class="flex flex-wrap gap-3 text-xs sm:text-sm">
+              <label class="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="q1"
+                  value="T"
+                  class="h-3 w-3 text-sky-500"
+                />
+                True (yes)
+              </label>
+              <label class="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="q1"
+                  value="F"
+                  class="h-3 w-3 text-sky-500"
+                />
+                False (no)
+              </label>
+            </div>
+            <p id="q1Feedback" class="text-xs text-slate-700"></p>
+          </div>
+          <!-- Q2 -->
+          <div
+            class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-3 sm:p-4 space-y-1"
+          >
+            <p class="font-semibold text-emerald-800">
+              Q2. Is (6, 8, 11) a Pythagorean triple?
+            </p>
+            <div class="flex flex-wrap gap-3 text-xs sm:text-sm">
+              <label class="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="q2"
+                  value="T"
+                  class="h-3 w-3 text-emerald-500"
+                />
+                True (yes)
+              </label>
+              <label class="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="q2"
+                  value="F"
+                  class="h-3 w-3 text-emerald-500"
+                />
+                False (no)
+              </label>
+            </div>
+            <p id="q2Feedback" class="text-xs text-slate-700"></p>
+          </div>
+          <!-- Q3 應用題 -->
+          <div
+            class="rounded-2xl border border-amber-100 bg-amber-50/70 p-3 sm:p-4 space-y-1"
+          >
+            <p class="font-semibold text-amber-800">
+              Q3. A right triangle has legs 5 cm and 12 cm. What is the
+              approximate length of the hypotenuse?
+            </p>
+            <div class="grid gap-2 text-xs sm:text-sm md:grid-cols-2">
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q3" value="A" class="h-3 w-3" />
+                A. 10 cm
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q3" value="B" class="h-3 w-3" />
+                B. 11 cm
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q3" value="C" class="h-3 w-3" />
+                C. 12 cm
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q3" value="D" class="h-3 w-3" />
+                D. 13 cm
+              </label>
+            </div>
+            <p id="q3Feedback" class="text-xs text-slate-700"></p>
+          </div>
+          <!-- Q4 -->
+          <div
+            class="rounded-2xl border border-violet-100 bg-violet-50/70 p-3 sm:p-4 space-y-1"
+          >
+            <p class="font-semibold text-violet-800">
+              Q4. A school ramp has a horizontal distance of 9 m and a height
+              of 3 m. The ramp length should be about:
+            </p>
+            <div class="grid gap-2 text-xs sm:text-sm md:grid-cols-2">
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q4" value="A" class="h-3 w-3" />
+                A. 9 m
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q4" value="B" class="h-3 w-3" />
+                B. 9.5 m
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q4" value="C" class="h-3 w-3" />
+                C. \(\sqrt{90}\) m ≈ 9.5 m
+              </label>
+              <label class="flex items-center gap-1">
+                <input type="radio" name="q4" value="D" class="h-3 w-3" />
+                D. \(\sqrt{81}\) m = 9 m
+              </label>
+            </div>
+            <p id="q4Feedback" class="text-xs text-slate-700"></p>
+          </div>
+          <!-- Q5 真／假 -->
+          <div
+            class="rounded-2xl border border-rose-100 bg-rose-50/70 p-3 sm:p-4 space-y-1"
+          >
+            <p class="font-semibold text-rose-800">
+              Q5. If a triangle has three sides that satisfy a² + b² = c², then
+              it must be a right triangle.
+            </p>
+            <div class="flex flex-wrap gap-3 text-xs sm:text-sm">
+              <label class="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="q5"
+                  value="T"
+                  class="h-3 w-3 text-rose-500"
+                />
+                True
+              </label>
+              <label class="flex items-center gap-1">
+                <input
+                  type="radio"
+                  name="q5"
+                  value="F"
+                  class="h-3 w-3 text-rose-500"
+                />
+                False
+              </label>
+            </div>
+            <p id="q5Feedback" class="text-xs text-slate-700"></p>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button
+              type="submit"
+              class="rounded-full bg-sky-500 px-6 py-2 text-xs sm:text-sm font-semibold text-white shadow hover:bg-sky-600"
+            >
+              Submit and see answers
+            </button>
+            <button
+              type="button"
+              id="resetQuiz"
+              class="rounded-full border border-slate-300 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              Reset answers
+            </button>
+          </div>
+          <p id="quizSummary" class="text-xs sm:text-sm text-slate-700"></p>
+        </form>
+      </section>
+
+      <!-- Activity 3: Drag-and-drop classification -->
+      <section
+        id="dragdrop"
+        class="mt-10 rounded-3xl bg-white p-6 shadow-lg text-sm sm:text-base"
+      >
+        <h2 class="text-xl font-semibold text-sky-800">
+          5. Drag-and-drop: Which are Pythagorean triples?
+        </h2>
+        <p class="mt-1 text-sm text-slate-700">
+          Drag each triple to the correct box:
+          <span class="font-semibold text-emerald-700">“Is a triple”</span> or
+          <span class="font-semibold text-rose-700">“Not a triple”</span>.
+        </p>
+        <div class="mt-4 grid gap-4 md:grid-cols-[1.3fr,2fr]">
+          <!-- 可拖動選項 -->
+          <div>
+            <p class="text-xs font-semibold text-slate-600">
+              Triples to sort (drag me)
+            </p>
+            <div
+              id="pool"
+              class="mt-2 flex flex-wrap gap-2 rounded-2xl border border-dashed border-slate-300 bg-slate-50/80 p-3 min-h-[3rem]"
+            >
+              <!-- JS 會填入 -->
+            </div>
+          </div>
+          <!-- 兩個投放區 -->
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <p class="text-xs font-semibold text-emerald-700">
+                  Box A: is a Pythagorean triple
+              </p>
+              <div
+                id="drop-yes"
+                class="mt-2 min-h-[4rem] rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50/70 p-3"
+              ></div>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-rose-700">
+                  Box B: not a Pythagorean triple
+              </p>
+              <div
+                id="drop-no"
+                class="mt-2 min-h-[4rem] rounded-2xl border-2 border-dashed border-rose-300 bg-rose-50/70 p-3"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 flex flex-wrap gap-3">
+          <button
+            id="checkDragdrop"
+            type="button"
+            class="rounded-full bg-sky-500 px-5 py-2 text-xs sm:text-sm font-semibold text-white shadow hover:bg-sky-600"
+          >
+              Check result
+          </button>
+          <button
+            id="resetDragdrop"
+            type="button"
+            class="rounded-full border border-slate-300 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+              Start again
+          </button>
+        </div>
+        <p id="dragdropFeedback" class="mt-2 text-xs sm:text-sm text-slate-700"></p>
+      </section>
+
+      <!-- Activity 4: visual slider exploration -->
+      <section
+        id="explore"
+        class="mt-10 grid gap-6 rounded-3xl bg-white/90 p-6 shadow-lg lg:grid-cols-[2fr,3fr]"
+      >
+        <div class="space-y-3 text-sm sm:text-base">
+          <h2 class="text-xl font-semibold text-sky-800">
+            6. Slider exploration: a² + b² and c²
+          </h2>
+          <p class="text-slate-700">
+            Move the sliders to change the legs a and b. Observe how the
+            hypotenuse c and the values
+            <span class="font-mono">a² + b²</span> and
+            <span class="font-mono">c²</span> are related.
+          </p>
+          <label class="block text-xs sm:text-sm font-medium text-slate-700">
+            Leg a (horizontal)
+            <input
+              id="sliderA"
+              type="range"
+              min="3"
+              max="10"
+              value="6"
+              class="mt-1 w-full accent-amber-400"
+            />
+            <span id="displayA" class="text-xs text-slate-600">a = 6</span>
+          </label>
+          <label class="block text-xs sm:text-sm font-medium text-slate-700">
+            Leg b (vertical)
+            <input
+              id="sliderB"
+              type="range"
+              min="3"
+              max="10"
+              value="8"
+              class="mt-1 w-full accent-emerald-500"
+            />
+            <span id="displayB" class="text-xs text-slate-600">b = 8</span>
+          </label>
+          <div
+            class="rounded-2xl bg-gradient-to-br from-sunshine/80 via-white to-sky-100 p-4 text-xs sm:text-sm text-slate-700"
+          >
+              <p
+                class="text-[0.7rem] sm:text-xs font-semibold uppercase tracking-[0.25em] text-slate-600"
+              >
+                Numerical results (rounded to 2 d.p.)
+              </p>
+            <p id="displayC" class="mt-1 text-2xl font-extrabold text-sky-900">
+              c = 10.00
+            </p>
+            <ul class="mt-2 space-y-1 text-xs sm:text-sm">
+              <li id="areaA"></li>
+              <li id="areaB"></li>
+              <li id="areaC" class="font-semibold text-sky-900"></li>
+              <li id="areaCompare" class="mt-1 font-semibold"></li>
+            </ul>
+          </div>
+        </div>
+        <!-- 方格面積圖 -->
+        <div class="flex items-center justify-center">
+          <svg
+            id="areaSvg"
+            viewBox="0 0 260 220"
+            class="w-full max-w-md drop-shadow-md"
+          >
+            <defs>
+              <linearGradient id="sqA" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe66d" />
+                <stop offset="100%" stop-color="#ff9f1c" />
+              </linearGradient>
+              <linearGradient id="sqB" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#9bf6ff" />
+                <stop offset="100%" stop-color="#00bbf9" />
+              </linearGradient>
+              <linearGradient id="sqC" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#b28dff" />
+                <stop offset="100%" stop-color="#7209b7" />
+              </linearGradient>
+            </defs>
+            <!-- 三角形 -->
+            <polygon
+              id="triArea"
+              points="60,160 210,160 60,40"
+              fill="#0f172a"
+              opacity="0.8"
+            ></polygon>
+            <!-- a² -->
+            <rect
+              id="sqArect"
+              x="60"
+              y="160"
+              width="0"
+              height="0"
+              fill="url(#sqA)"
+              opacity="0.9"
+            ></rect>
+            <!-- b² -->
+            <rect
+              id="sqBrect"
+              x="20"
+              y="40"
+              width="0"
+              height="0"
+              fill="url(#sqB)"
+              opacity="0.9"
+            ></rect>
+            <!-- c² -->
+            <rect
+              id="sqCrect"
+              x="0"
+              y="0"
+              width="0"
+              height="0"
+              fill="url(#sqC)"
+              opacity="0.9"
+            ></rect>
+          </svg>
+        </div>
+      </section>
+
+      <!-- Chinese maths history -->
+      <section
+        id="history"
+        class="mt-10 grid gap-6 rounded-3xl bg-white p-6 shadow-lg lg:grid-cols-[2fr,3fr] text-sm sm:text-base"
+      >
+        <div class="space-y-3">
+          <h2 class="text-xl font-semibold text-sky-800">
+            7. Ancient Chinese mathematics and the theorem
+          </h2>
+          <p class="text-slate-700">
+            In ancient China, the Pythagoras-like relationship was already
+            known and applied. It was often called
+            <span class="font-semibold text-sky-700">“Gougu theorem”</span> or
+            <span class="font-semibold text-sky-700">“Gougu method”</span>.
+          </p>
+          <h3 class="text-sm font-semibold text-slate-800">
+            1. Zhoubi Suanjing and “Gou 3, Gu 4, Xian 5”
+          </h3>
+          <ul class="list-disc space-y-1 pl-5 text-slate-700">
+            <li>
+              <span class="italic">Zhoubi Suanjing</span> is an important
+              Chinese text from pre-Qin and Han dynasties, including astronomy,
+              measurement and geometry.
+            </li>
+            <li>
+              It mentions:
+              <span class="font-semibold">
+                “Gou 3, Gu 4, Xian 5 – use this as a rule”
+              </span>
+              – the familiar (3, 4, 5) triple.
+            </li>
+            <li>
+              Ancient mathematicians used this for land measurement, building
+              city walls and aligning instruments – very practical uses.
+            </li>
+          </ul>
+          <h3 class="text-sm font-semibold text-slate-800">
+            2. Terms: Gou, Gu, Xian
+          </h3>
+          <ul class="list-disc space-y-1 pl-5 text-slate-700">
+            <li><span class="font-semibold">Gou (勾)</span>: usually the shorter leg.</li>
+            <li><span class="font-semibold">Gu (股)</span>: usually the longer leg.</li>
+            <li><span class="font-semibold">Xian (弦)</span>: the hypotenuse.</li>
+          </ul>
+          <p class="text-xs text-slate-600">
+            Today’s formula
+            <span class="font-mono">a² + b² = c²</span>
+            continues this old “Gou, Gu, Xian” idea – different cultures
+            discovering the same truth.
+          </p>
+        </div>
+        <div
+          class="flex items-center justify-center rounded-2xl bg-gradient-to-br from-sunshine/70 via-white to-sky-100 p-5"
+        >
+          <div class="space-y-3 text-center text-xs sm:text-sm text-slate-700">
+            <p class="text-[0.7rem] sm:text-xs font-semibold tracking-[0.3em] uppercase text-slate-600">
+              Chinese maths vocabulary
+            </p>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="rounded-xl bg-white p-3 shadow">
+                <p class="text-2xl font-serif text-sky-800">勾</p>
+                <p class="mt-1 text-[0.7rem]">short leg</p>
+              </div>
+              <div class="rounded-xl bg-white p-3 shadow">
+                <p class="text-2xl font-serif text-sky-800">股</p>
+                <p class="mt-1 text-[0.7rem]">long leg</p>
+              </div>
+              <div class="rounded-xl bg-white p-3 shadow">
+                <p class="text-2xl font-serif text-sky-800">弦</p>
+                <p class="mt-1 text-[0.7rem]">hypotenuse</p>
+              </div>
+            </div>
+            <p>
+              Try to explain to a friend or family member in your own words:
+              <span class="font-semibold"
+                >“The sum of the squares of the legs equals the square of the
+                hypotenuse.”</span
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Summary and reflection -->
+      <section
+        class="mt-10 rounded-3xl bg-sky-900 px-6 py-6 sm:px-8 sm:py-7 text-sky-50 shadow-lg text-sm sm:text-base"
+      >
+        <h2 class="text-lg font-semibold">8. Summary and reflection</h2>
+        <p class="mt-2 text-sm">
+          The Pythagoras theorem appears not only in school questions, but also
+          in engineering, architecture, surveying and physics.
+        </p>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-xs sm:text-sm">
+          <li>
+            Can you explain in your own words why a right triangle must satisfy
+            a² + b² = c²?
+          </li>
+          <li>
+            Where can you find right triangles in Hong Kong buildings or daily
+            objects?
+          </li>
+          <li>
+            If you are given two sides, how can Pythagoras’ theorem help you
+            decide whether they can form a right triangle with some third side?
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- Vanilla JS：處理所有互動 -->
+    <script>
+      // Helper: check if triple (a, b, c) is Pythagorean (allow small rounding error)
+      function isPythagoreanTriple(a, b, c) {
+        const lhs = a * a + b * b;
+        const rhs = c * c;
+        return Math.abs(lhs - rhs) < 1e-6;
+      }
+
+      // =============== 1. Calculator ===============
+      const inputA = document.getElementById("inputA");
+      const inputB = document.getElementById("inputB");
+      const inputC = document.getElementById("inputC");
+      const calcMessage = document.getElementById("calcMessage");
+      const calcExplanation = document.getElementById("calcExplanation");
+
+      const calcTriPoly = document.getElementById("calcTriPoly");
+      const calcLegA = document.getElementById("calcLegA");
+      const calcLegB = document.getElementById("calcLegB");
+      const calcHyp = document.getElementById("calcHyp");
+      const labelCalcA = document.getElementById("labelCalcA");
+      const labelCalcB = document.getElementById("labelCalcB");
+      const labelCalcC = document.getElementById("labelCalcC");
+
+      function updateCalcTriangle(a, b) {
+        if (!(a > 0 && b > 0)) return;
+        const scale = 10;
+        const ax = 30;
+        const ay = 140;
+        const bx = ax + a * scale;
+        const by = ay;
+        const cx = ax;
+        const cy = ay - b * scale;
+
+        calcLegA.setAttribute("x1", ax);
+        calcLegA.setAttribute("y1", ay);
+        calcLegA.setAttribute("x2", bx);
+        calcLegA.setAttribute("y2", by);
+
+        calcLegB.setAttribute("x1", ax);
+        calcLegB.setAttribute("y1", ay);
+        calcLegB.setAttribute("x2", cx);
+        calcLegB.setAttribute("y2", cy);
+
+        calcHyp.setAttribute("x1", cx);
+        calcHyp.setAttribute("y1", cy);
+        calcHyp.setAttribute("x2", bx);
+        calcHyp.setAttribute("y2", by);
+
+        calcTriPoly.setAttribute(
+          "points",
+          `${ax},${ay} ${bx},${by} ${cx},${cy}`
+        );
+
+        const c = Math.sqrt(a * a + b * b);
+        labelCalcA.textContent = `a = ${a}`;
+        labelCalcB.textContent = `b = ${b}`;
+        labelCalcC.textContent = `c ≈ ${c.toFixed(2)}`;
+      }
+
+      document
+        .getElementById("pythCalc")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const a = Number(inputA.value);
+          const b = Number(inputB.value);
+          const c = Number(inputC.value);
+
+          const filled = [
+            Number.isFinite(a) && a > 0,
+            Number.isFinite(b) && b > 0,
+            Number.isFinite(c) && c > 0,
+          ].filter(Boolean).length;
+
+          if (filled !== 2) {
+            calcMessage.textContent =
+              "Please enter exactly two sides (not one or three), for example a and b.";
+            calcMessage.className =
+              "mt-2 text-xs sm:text-sm text-rose-600 font-semibold";
+            calcExplanation.textContent = "";
+            return;
+          }
+
+          let resultText = "";
+
+          if ((a > 0 && b > 0 && !c) || (a > 0 && b > 0 && isNaN(c))) {
+            const cVal = Math.sqrt(a * a + b * b);
+            inputC.value = cVal.toFixed(2);
+            resultText = `Given legs a = ${a} and b = ${b}, using a² + b² = c²,
+we get c = √(${a}² + ${b}²) ≈ ${cVal.toFixed(2)}.`;
+            updateCalcTriangle(a, b);
+          } else if (a > 0 && c > 0 && !b) {
+            if (c <= a) {
+              calcMessage.textContent =
+                "Geometrically impossible: the hypotenuse c must be longer than any leg. Please try again.";
+              calcMessage.className =
+                "mt-2 text-xs sm:text-sm text-rose-600 font-semibold";
+              calcExplanation.textContent = "";
+              return;
+            }
+            const bSq = c * c - a * a;
+            if (bSq <= 0) {
+              calcMessage.textContent =
+                "No real right triangle can have these three sides. Please try again.";
+              calcMessage.className =
+                "mt-2 text-xs sm:text-sm text-rose-600 font-semibold";
+              calcExplanation.textContent = "";
+              return;
+            }
+            const bVal = Math.sqrt(bSq);
+            inputB.value = bVal.toFixed(2);
+            resultText = `Given leg a = ${a} and hypotenuse c = ${c}, using c² − a² = b²,
+we get b = √(${c}² − ${a}²) ≈ ${bVal.toFixed(2)}.`;
+            updateCalcTriangle(a, bVal);
+          } else if (b > 0 && c > 0 && !a) {
+            if (c <= b) {
+              calcMessage.textContent =
+                "Geometrically impossible: the hypotenuse c must be longer than any leg. Please try again.";
+              calcMessage.className =
+                "mt-2 text-xs sm:text-sm text-rose-600 font-semibold";
+              calcExplanation.textContent = "";
+              return;
+            }
+            const aSq = c * c - b * b;
+            if (aSq <= 0) {
+              calcMessage.textContent =
+                "No real right triangle can have these three sides. Please try again.";
+              calcMessage.className =
+                "mt-2 text-xs sm:text-sm text-rose-600 font-semibold";
+              calcExplanation.textContent = "";
+              return;
+            }
+            const aVal = Math.sqrt(aSq);
+            inputA.value = aVal.toFixed(2);
+            resultText = `Given leg b = ${b} and hypotenuse c = ${c}, using c² − b² = a²,
+we get a = √(${c}² − ${b}²) ≈ ${aVal.toFixed(2)}.`;
+            updateCalcTriangle(aVal, b);
+          } else {
+            calcMessage.textContent =
+              "Please make sure you enter exactly two positive sides.";
+            calcMessage.className =
+              "mt-2 text-xs sm:text-sm text-rose-600 font-semibold";
+            calcExplanation.textContent = "";
+            return;
+          }
+
+          calcMessage.textContent = "Calculation finished! Explanation:";
+          calcMessage.className =
+            "mt-2 text-xs sm:text-sm text-emerald-700 font-semibold";
+        });
+
+      document.getElementById("resetCalc").addEventListener("click", () => {
+        inputA.value = "";
+        inputB.value = "";
+        inputC.value = "";
+        calcMessage.textContent =
+          "Tip: please enter exactly two sides, e.g. a = 3, b = 4.";
+        calcMessage.className =
+          "mt-2 text-xs sm:text-sm text-slate-700 font-semibold";
+        calcExplanation.textContent = "";
+      });
+
+      // =============== 2. Quiz ===============
+      const quizForm = document.getElementById("quizForm");
+      const quizSummary = document.getElementById("quizSummary");
+
+      const quizAnswers = {
+        q1: "T", // 3,4,5 是勾股數
+        q2: "F", // 6,8,11 不是
+        q3: "D", // 5,12,13
+        q4: "C", // sqrt(9^2 + 3^2) = sqrt(90) ≈ 9.5
+        q5: "T", // converse of Pythagoras theorem
+      };
+
+      const feedbackEls = {
+        q1: document.getElementById("q1Feedback"),
+        q2: document.getElementById("q2Feedback"),
+        q3: document.getElementById("q3Feedback"),
+        q4: document.getElementById("q4Feedback"),
+        q5: document.getElementById("q5Feedback"),
+      };
+
+      quizForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        let score = 0;
+        let total = 5;
+
+        function checkSingle(qName, explanationCorrect, explanationWrong) {
+          const selected = quizForm.querySelector(
+            `input[name="${qName}"]:checked`
+          );
+          if (!selected) {
+            feedbackEls[qName].textContent = "Please choose an answer first.";
+            feedbackEls[qName].className = "text-xs text-rose-600";
+            return;
+          }
+          if (selected.value === quizAnswers[qName]) {
+            score++;
+            feedbackEls[qName].textContent = explanationCorrect;
+            feedbackEls[qName].className = "text-xs text-emerald-700";
+          } else {
+            feedbackEls[qName].textContent = explanationWrong;
+            feedbackEls[qName].className = "text-xs text-amber-700";
+          }
+        }
+
+        checkSingle(
+          "q1",
+          "Correct! 3² + 4² = 9 + 16 = 25, and 5² = 25, so (3, 4, 5) is a Pythagorean triple.",
+          "Check again: 3² + 4² = 9 + 16 = 25, and 5² = 25, so (3, 4, 5) is actually a Pythagorean triple."
+        );
+        checkSingle(
+          "q2",
+          "Correct! 6² + 8² = 36 + 64 = 100, but 11² = 121, so they are not equal and this is not a triple.",
+          "Notice 6² + 8² = 36 + 64 = 100, but 11² = 121, so they are not equal – not a Pythagorean triple."
+        );
+        checkSingle(
+          "q3",
+          "Correct! 5² + 12² = 25 + 144 = 169, so the hypotenuse is √169 = 13 cm.",
+          "Try the calculation: 5² + 12² = 25 + 144 = 169, so the hypotenuse is √169 = 13 cm."
+        );
+        checkSingle(
+          "q4",
+          "Correct! c = √(9² + 3²) = √(81 + 9) = √90 ≈ 9.5 m.",
+          "Use Pythagoras: c = √(9² + 3²) = √(81 + 9) = √90 ≈ 9.5 m."
+        );
+        checkSingle(
+          "q5",
+          "Correct! This is the converse of Pythagoras’ theorem: if a² + b² = c², the angle opposite c is a right angle.",
+          "This statement is true; it is the converse of Pythagoras’ theorem: if a² + b² = c², the angle opposite c is a right angle."
+        );
+
+        quizSummary.textContent = `Your score: ${score} / ${total}.`;
+        quizSummary.className =
+          "mt-2 text-xs sm:text-sm font-semibold " +
+          (score === total
+            ? "text-emerald-700"
+            : score >= 3
+            ? "text-sky-700"
+            : "text-rose-700");
+      });
+
+      document.getElementById("resetQuiz").addEventListener("click", () => {
+        quizForm.reset();
+        Object.values(feedbackEls).forEach((el) => (el.textContent = ""));
+        quizSummary.textContent = "";
+      });
+
+      // =============== 3. Drag & Drop ===============
+      const pool = document.getElementById("pool");
+      const dropYes = document.getElementById("drop-yes");
+      const dropNo = document.getElementById("drop-no");
+      const dragdropFeedback = document.getElementById("dragdropFeedback");
+
+      const dragTriples = [
+        { id: "t1", triple: [3, 4, 5], isPyth: true },
+        { id: "t2", triple: [5, 12, 13], isPyth: true },
+        { id: "t3", triple: [7, 24, 25], isPyth: true },
+        { id: "t4", triple: [2, 3, 4], isPyth: false },
+        { id: "t5", triple: [6, 8, 10], isPyth: true },
+        { id: "t6", triple: [4, 6, 9], isPyth: false },
+      ];
+
+      function createChip(item) {
+        const div = document.createElement("div");
+        div.textContent = `(${item.triple.join(", ")})`;
+        div.className =
+          "cursor-move rounded-full bg-white px-3 py-1 text-xs sm:text-sm shadow border border-slate-200 select-none";
+        div.draggable = true;
+        div.dataset.id = item.id;
+        return div;
+      }
+
+      function resetDragdrop() {
+        pool.innerHTML = "";
+        dropYes.innerHTML = "";
+        dropNo.innerHTML = "";
+        dragTriples.forEach((item) => {
+          pool.appendChild(createChip(item));
+        });
+        dragdropFeedback.textContent =
+          "Drag each triple into the box you think is correct, then press “Check result”.";
+        dragdropFeedback.className = "mt-2 text-xs sm:text-sm text-slate-700";
+      }
+
+      // Drag & drop behaviour
+      let dragged = null;
+
+      document.addEventListener("dragstart", (e) => {
+        if (e.target && e.target.dataset && e.target.dataset.id) {
+          dragged = e.target;
+          e.dataTransfer.effectAllowed = "move";
+        }
+      });
+
+      [pool, dropYes, dropNo].forEach((zone) => {
+        zone.addEventListener("dragover", (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+        });
+        zone.addEventListener("drop", (e) => {
+          e.preventDefault();
+          if (dragged) {
+            zone.appendChild(dragged);
+            dragged = null;
+          }
+        });
+      });
+
+      document
+        .getElementById("checkDragdrop")
+        .addEventListener("click", () => {
+          let correct = 0;
+          let total = dragTriples.length;
+
+          function countCorrect(zone, shouldBePyth) {
+            Array.from(zone.children).forEach((chip) => {
+              const id = chip.dataset.id;
+              const item = dragTriples.find((t) => t.id === id);
+              if (!item) return;
+              if (item.isPyth === shouldBePyth) correct++;
+            });
+          }
+
+          countCorrect(dropYes, true);
+          countCorrect(dropNo, false);
+
+          if (dropYes.children.length + dropNo.children.length === 0) {
+            dragdropFeedback.textContent =
+              "Please drag at least one triple into a box before checking.";
+            dragdropFeedback.className =
+              "mt-2 text-xs sm:text-sm text-rose-600";
+            return;
+          }
+
+          dragdropFeedback.textContent = `You correctly classified ${correct} out of ${total} triples.`;
+          dragdropFeedback.className =
+            "mt-2 text-xs sm:text-sm font-semibold " +
+            (correct === total
+              ? "text-emerald-700"
+              : correct >= total / 2
+              ? "text-sky-700"
+              : "text-rose-700");
+        });
+
+      document
+        .getElementById("resetDragdrop")
+        .addEventListener("click", resetDragdrop);
+
+      resetDragdrop();
+
+      // =============== 4. Slider exploration (a² + b² = c²) ===============
+      const sliderA = document.getElementById("sliderA");
+      const sliderB = document.getElementById("sliderB");
+      const displayA = document.getElementById("displayA");
+      const displayB = document.getElementById("displayB");
+      const displayC = document.getElementById("displayC");
+
+      const triArea = document.getElementById("triArea");
+      const sqArect = document.getElementById("sqArect");
+      const sqBrect = document.getElementById("sqBrect");
+      const sqCrect = document.getElementById("sqCrect");
+
+      const areaAEl = document.getElementById("areaA");
+      const areaBEl = document.getElementById("areaB");
+      const areaCEl = document.getElementById("areaC");
+      const areaCompareEl = document.getElementById("areaCompare");
+
+      function updateGeometry() {
+        const a = Number(sliderA.value);
+        const b = Number(sliderB.value);
+        const c = Math.sqrt(a * a + b * b);
+
+        displayA.textContent = `a = ${a}`;
+        displayB.textContent = `b = ${b}`;
+        displayC.textContent = `c = ${c.toFixed(2)}`;
+
+        const scale = 10;
+        const baseX = 60;
+        const baseY = 160;
+
+        const ax = baseX;
+        const ay = baseY;
+        const bx = baseX + a * scale;
+        const by = baseY;
+        const cx = baseX;
+        const cy = baseY - b * scale;
+
+        triArea.setAttribute("points", `${ax},${ay} ${bx},${by} ${cx},${cy}`);
+
+        sqArect.setAttribute("x", ax);
+        sqArect.setAttribute("y", ay);
+        sqArect.setAttribute("width", a * scale);
+        sqArect.setAttribute("height", a * scale);
+
+        sqBrect.setAttribute("x", ax - b * scale);
+        sqBrect.setAttribute("y", cy);
+        sqBrect.setAttribute("width", b * scale);
+        sqBrect.setAttribute("height", b * scale);
+
+        const cPix = c * scale;
+        const angleRad = Math.atan2(by - cy, bx - cx);
+        const angleDeg = (angleRad * 180) / Math.PI;
+        sqCrect.setAttribute("width", cPix);
+        sqCrect.setAttribute("height", cPix);
+        sqCrect.setAttribute("x", 0);
+        sqCrect.setAttribute("y", -cPix);
+        sqCrect.setAttribute(
+          "transform",
+          `translate(${cx}, ${cy}) rotate(${angleDeg})`
+        );
+
+        const areaAValue = a * a;
+        const areaBValue = b * b;
+        const areaCValue = c * c;
+
+        areaAEl.textContent = `a² = ${a}² = ${areaAValue.toFixed(2)}`;
+        areaBEl.textContent = `b² = ${b}² = ${areaBValue.toFixed(2)}`;
+        areaCEl.textContent = `c² ≈ ${c.toFixed(2)}² ≈ ${areaCValue.toFixed(
+          2
+        )}`;
+
+        const lhs = areaAValue + areaBValue;
+        const rhs = areaCValue;
+        const diff = Math.abs(lhs - rhs);
+
+        areaCompareEl.textContent =
+          diff < 0.01
+            ? `So a² + b² ≈ c² (${lhs.toFixed(2)} ≈ ${rhs.toFixed(2)})`
+            : `a² + b² = ${lhs.toFixed(2)}, c² = ${rhs.toFixed(
+                2
+              )} (small rounding difference)`;
+        areaCompareEl.className =
+          "mt-1 font-semibold " +
+          (diff < 0.01 ? "text-emerald-700" : "text-amber-700");
+      }
+
+      sliderA.addEventListener("input", updateGeometry);
+      sliderB.addEventListener("input", updateGeometry);
+      updateGeometry();
+    </script>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center">
+      <div class="max-w-7xl mx-auto px-4">
+        <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+        he founded the world by his wisdom<br>
+        and stretched out the heavens by his understanding.</p>
+        <p class="text-sm mb-2">Jeremiah 10:12</p>
+        <p class="text-xs mb-4 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+        <p class="text-xs mb-4">耶利米書 10:12</p>
+        <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKDSE Math: Frustums & Similarity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Noto+Sans+HK:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Outfit', 'Noto Sans HK', sans-serif;
+            background-color: #f0fdfa; /* Teal-50 */
+            color: #0f172a;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(20, 184, 166, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Teal Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #0d9488; /* Teal-600 */
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #ccfbf1; /* Teal-100 */
+            border-radius: 2px;
+        }
+
+        .chart-bar { transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-teal-700 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-shapes text-2xl"></i>
+                <span class="text-xl font-bold tracking-tight">Math<span class="text-teal-200">Lab</span> HK</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-medium">
+                <a href="#concept" class="hover:text-teal-200 transition">Concept</a>
+                <a href="#simulator" class="hover:text-teal-200 transition">Frustum Tool</a>
+                <a href="#history" class="hover:text-teal-200 transition">History</a>
+            </div>
+            <div class="text-xs bg-teal-800 px-3 py-1 rounded-full border border-teal-600">
+                Unit: Similar Figures
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="bg-gradient-to-b from-teal-700 to-teal-900 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Frustums & Similarity</h1>
+            <p class="text-teal-100 text-lg max-w-2xl mx-auto mb-8">
+                Visualizing the relationship between Original Cones, Removed Parts, and the remaining Frustum.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#simulator" class="bg-teal-400 text-teal-900 font-bold py-2 px-6 rounded-full hover:bg-teal-300 transition shadow-lg">
+                    <i class="fas fa-cut mr-2"></i> Cut a Cone
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Concept Section -->
+    <section id="concept" class="py-12 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="md:w-1/2">
+                    <h2 class="text-2xl font-bold text-teal-700 mb-4 border-l-4 border-teal-500 pl-4">The "Subtraction" Strategy</h2>
+                    <p class="text-slate-600 mb-4 leading-relaxed">
+                        A <strong>Frustum</strong> is made by cutting a smaller cone (or pyramid) from the top of a larger one.
+                    </p>
+                    <div class="bg-teal-50 p-4 rounded-lg border border-teal-100 mb-4">
+                        <p class="font-mono text-teal-800 font-bold text-center">
+                            \( V_{frustum} = V_{large} - V_{small} \)
+                        </p>
+                    </div>
+                    <p class="text-slate-600 text-sm">
+                        <strong>Key Property:</strong> The small cone and large cone are <strong>Similar Figures</strong>. Their dimensions are proportional.
+                    </p>
+                    <p class="font-mono text-center text-slate-500 mt-2 text-sm">
+                        \( \frac{r}{R} = \frac{h}{H} \)
+                    </p>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <!-- Concept SVG -->
+                    <svg width="280" height="220" viewBox="0 0 280 220">
+                        <!-- Large Cone Outline (Phantom) -->
+                        <path d="M 140 20 L 220 200 L 60 200 Z" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+                        <!-- Small Cone (Top) -->
+                        <path d="M 140 20 L 180 110 L 100 110 Z" fill="rgba(20, 184, 166, 0.2)" stroke="#14b8a6" stroke-width="2"/>
+                        <!-- Frustum (Bottom) -->
+                        <path d="M 100 110 L 180 110 L 220 200 L 60 200 Z" fill="rgba(15, 23, 42, 0.8)" stroke="#0f172a" stroke-width="2"/>
+                        
+                        <!-- Labels -->
+                        <text x="190" y="65" class="text-xs" fill="#14b8a6">Small Cone</text>
+                        <text x="230" y="160" class="text-xs" fill="#0f172a">Frustum</text>
+                        
+                        <!-- Arrows -->
+                        <line x1="260" y1="20" x2="260" y2="200" stroke="#64748b" marker-end="url(#arrow)"/>
+                        <text x="265" y="110" font-size="12" fill="#64748b">H</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Tool: Frustum Calculator -->
+    <section id="simulator" class="py-16 bg-teal-50">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <h2 class="text-3xl font-bold text-center text-slate-800 mb-8">Frustum Simulator</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Controls -->
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="text-lg font-bold text-teal-800 mb-6 flex items-center">
+                        <i class="fas fa-sliders-h mr-2"></i> Dimensions
+                    </h3>
+
+                    <!-- Large Cone Height -->
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium">Total Height (H)</label>
+                            <span class="text-sm font-bold text-teal-600"><span id="val-H">20</span> cm</span>
+                        </div>
+                        <input type="range" id="input-H" min="10" max="30" value="20" oninput="updateFrustum()">
+                    </div>
+
+                    <!-- Base Radius -->
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium">Base Radius (R)</label>
+                            <span class="text-sm font-bold text-teal-600"><span id="val-R">10</span> cm</span>
+                        </div>
+                        <input type="range" id="input-R" min="5" max="15" value="10" oninput="updateFrustum()">
+                    </div>
+
+                    <!-- Cut Position -->
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-medium">Cut Height (h) <span class="text-xs text-slate-400">(from top)</span></label>
+                            <span class="text-sm font-bold text-pink-600"><span id="val-h">10</span> cm</span>
+                        </div>
+                        <input type="range" id="input-h" min="1" max="19" value="10" oninput="updateFrustum()">
+                        <div class="text-xs text-right mt-1 text-slate-400">Ratio h:H = <span id="ratio-hH">1:2</span></div>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-teal-100 p-4 rounded-xl">
+                            <div class="text-xs uppercase text-teal-600 font-bold mb-1">Small Cone Vol</div>
+                            <div class="text-xl font-bold text-teal-900" id="res-v-small">--</div>
+                        </div>
+                        <div class="bg-slate-200 p-4 rounded-xl">
+                            <div class="text-xs uppercase text-slate-600 font-bold mb-1">Frustum Vol</div>
+                            <div class="text-xl font-bold text-slate-900" id="res-v-frustum">--</div>
+                        </div>
+                        <div class="col-span-2 bg-white border border-slate-200 p-3 rounded-lg flex justify-between items-center">
+                            <span class="text-sm font-medium text-slate-500">Total Volume (V_large)</span>
+                            <span class="text-lg font-bold text-slate-700" id="res-v-large">--</span>
+                        </div>
+                    </div>
+
+                    <!-- Calculation Details -->
+                    <div class="mt-6 bg-teal-50/50 rounded-lg p-4 text-sm space-y-3 font-mono text-slate-600 shadow-inner">
+                        <div class="text-xs font-bold text-slate-400 uppercase mb-2">Calculation Steps</div>
+                        <div class="flex justify-between border-b border-teal-100 pb-2">
+                            <span>1. Find small radius r:<br><span class="text-xs text-slate-400">r = R × (h/H)</span></span>
+                            <span class="text-teal-700" id="step-r">--</span>
+                        </div>
+                        <div class="flex justify-between border-b border-teal-100 pb-2">
+                            <span>2. Large Volume:<br><span class="text-xs text-slate-400">V = ⅓πR²H</span></span>
+                            <span class="text-teal-700" id="step-VL">--</span>
+                        </div>
+                        <div class="flex justify-between border-b border-teal-100 pb-2">
+                            <span>3. Small Volume:<br><span class="text-xs text-slate-400">v = ⅓πr²h</span></span>
+                            <span class="text-teal-700" id="step-Vs">--</span>
+                        </div>
+                        <div class="flex justify-between font-bold text-teal-900 pt-1">
+                            <span>4. Frustum Volume:<br><span class="text-xs text-slate-400">V_large - V_small</span></span>
+                            <span id="step-VF">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="space-y-8">
+                    <!-- Visualization -->
+                    <div class="bg-white rounded-2xl shadow-sm p-4 flex flex-col items-center justify-center relative overflow-hidden h-[400px]">
+                        <div class="absolute top-4 left-4 text-xs font-mono text-slate-400">CROSS-SECTION VIEW</div>
+                        
+                        <svg id="frustum-svg" width="400" height="400" viewBox="0 0 400 400">
+                            <defs>
+                                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                            
+                            <!-- Center Line -->
+                            <line x1="200" y1="20" x2="200" y2="380" stroke="#e2e8f0" stroke-dasharray="5,5"/>
+
+                            <!-- Large Cone (Phantom) -->
+                            <path id="shape-large" d="" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4"/>
+
+                            <!-- Small Cone -->
+                            <path id="shape-small" d="" fill="rgba(20, 184, 166, 0.3)" stroke="#14b8a6" stroke-width="2"/>
+
+                            <!-- Frustum -->
+                            <path id="shape-frustum" d="" fill="rgba(15, 23, 42, 0.8)" stroke="#0f172a" stroke-width="2"/>
+
+                            <!-- Dimension Lines -->
+                            <line id="line-H" x1="380" y1="" x2="380" y2="" stroke="#64748b" marker-start="url(#dot)" marker-end="url(#dot)"/>
+                            <text id="text-H" x="385" y="" font-size="12" fill="#64748b">H</text>
+
+                            <line id="line-h" x1="350" y1="" x2="350" y2="" stroke="#be185d" marker-start="url(#dot)" marker-end="url(#dot)"/>
+                            <text id="text-h" x="355" y="" font-size="12" fill="#be185d">h</text>
+
+                            <!-- Radius Lines -->
+                            <line id="line-R" x1="200" y1="" x2="" y2="" stroke="#64748b" stroke-width="2"/>
+                            <text id="text-R" x="" y="" font-size="12" fill="#64748b" text-anchor="middle">R</text>
+
+                            <line id="line-r" x1="200" y1="" x2="" y2="" stroke="#be185d" stroke-width="2"/>
+                            <text id="text-r" x="" y="" font-size="12" fill="#be185d" text-anchor="middle">r</text>
+
+                            <defs>
+                                <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+                                    <circle cx="5" cy="5" r="5" fill="#64748b" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <!-- Ratio Strategy Panel (NEW) -->
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 shadow-sm">
+                        <h3 class="font-bold text-indigo-900 mb-4 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-500 mr-2"></i> The Ratio Strategy (Shortcut)
+                        </h3>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex justify-between items-center">
+                                <span class="text-indigo-700">1. Length Ratio (k = h/H)</span>
+                                <span class="font-mono font-bold bg-white px-2 py-1 rounded" id="calc-k">--</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-indigo-700">2. Volume Ratio (k³)</span>
+                                <span class="font-mono font-bold bg-white px-2 py-1 rounded text-orange-600" id="calc-k3">--</span>
+                            </div>
+                            <div class="p-3 bg-white rounded-lg text-slate-600 leading-relaxed border-l-4 border-indigo-400">
+                                <p class="mb-2"><strong>Quick Logic:</strong></p>
+                                <p>Volume of Top = <span id="txt-percent-top">--</span>% of Total</p>
+                                <p>Volume of Frustum = <span id="txt-percent-frustum">--</span>% of Total</p>
+                                <p class="mt-2 text-xs text-slate-400">Formula: \(V_{frustum} = V_{total} \times (1 - k^3)\)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Corner (NEW) -->
+    <section id="history" class="py-16 bg-white border-t border-slate-200">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <div class="flex flex-col md:flex-row gap-8 items-start">
+                <div class="md:w-1/3 text-center md:text-left">
+                    <div class="inline-block p-4 rounded-full bg-teal-50 text-teal-600 mb-4 text-4xl border border-teal-100">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2">History Corner</h2>
+                    <h3 class="text-lg text-teal-600 font-bold mb-4">Liu Hui & The Nine Chapters</h3>
+                    <p class="text-sm text-slate-500">
+                        Ancient Chinese mathematicians mastered volume calculations centuries ago.
+                    </p>
+                </div>
+                <div class="md:w-2/3 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    <h4 class="font-bold text-lg mb-3">The "Shang Gong" (Construction) Chapter</h4>
+                    <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+                        In the mathematical classic <em>The Nine Chapters on the Mathematical Art</em> (九章算術), written around the 1st century AD, there is a dedicated chapter called "Shang Gong" (Consultations on Construction).
+                    </p>
+                    <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+                        The famous mathematician <strong>Liu Hui (劉徽)</strong> (3rd century AD) provided detailed commentaries. He used a method called <strong>dissection</strong> to calculate volumes.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                            <div class="text-xs font-bold text-slate-400 uppercase mb-1">Square Frustum</div>
+                            <div class="font-bold text-teal-800">Fangting (方亭)</div>
+                            <p class="text-xs text-slate-500 mt-1">A pavilion with a square base. Liu Hui broke this shape down into a central block and wedges.</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm">
+                            <div class="text-xs font-bold text-slate-400 uppercase mb-1">Circular Frustum</div>
+                            <div class="font-bold text-teal-800">Yuanting (圓亭)</div>
+                            <p class="text-xs text-slate-500 mt-1">Similar to the cone frustum in our tool. The book provided precise volume formulas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="py-16 bg-teal-900 text-white">
+        <div class="container mx-auto px-4 max-w-2xl text-center">
+            <h2 class="text-2xl font-bold mb-6">Quick Check</h2>
+            <div class="bg-teal-800 p-8 rounded-2xl shadow-xl text-left">
+                <p class="font-bold text-lg mb-4">
+                    Q: A cone of height \(3h\) is cut at height \(h\) from the top. What is the ratio of the Volume of the small top cone to the original large cone?
+                </p>
+                <div class="space-y-2">
+                    <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded bg-teal-700 hover:bg-teal-600 transition">A. \(1:3\)</button>
+                    <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded bg-teal-700 hover:bg-teal-600 transition">B. \(1:9\)</button>
+                    <button onclick="checkQuiz(this, true)" class="w-full text-left p-3 rounded bg-teal-700 hover:bg-teal-600 transition">C. \(1:27\)</button>
+                    <button onclick="checkQuiz(this, false)" class="w-full text-left p-3 rounded bg-teal-700 hover:bg-teal-600 transition">D. \(1:8\)</button>
+                </div>
+                <div id="quiz-feedback" class="mt-4 font-bold hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-sm">
+        <p class="italic mb-2">But God made the earth by his power;<br>
+        he founded the world by his wisdom<br>
+        and stretched out the heavens by his understanding.</p>
+        <p class="mb-2">Jeremiah 10:12</p>
+        <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+        <p class="text-xs mb-4">耶利米書 10:12</p>
+        <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+    </footer>
+
+    <script>
+        function updateFrustum() {
+            // Inputs
+            const H = parseFloat(document.getElementById('input-H').value);
+            const R = parseFloat(document.getElementById('input-R').value);
+            const h = parseFloat(document.getElementById('input-h').value);
+
+            // Constraints
+            const inputH = document.getElementById('input-h');
+            inputH.max = H - 1;
+            if(h >= H) return; 
+
+            // Calc
+            // Similar triangles: r/R = h/H => r = R * (h/H)
+            const r = R * (h / H);
+            
+            const volSmall = (1/3) * Math.PI * r * r * h;
+            const volLarge = (1/3) * Math.PI * R * R * H;
+            const volFrustum = volLarge - volSmall;
+
+            // Update UI Values
+            document.getElementById('val-H').innerText = H;
+            document.getElementById('val-R').innerText = R;
+            document.getElementById('val-h').innerText = h;
+            
+            // Simplified ratio logic (GCD)
+            const gcd = (a, b) => b ? gcd(b, a%b) : a;
+            const common = gcd(h, H);
+            document.getElementById('ratio-hH').innerText = `${h/common}:${H/common}`;
+
+            document.getElementById('res-v-small').innerText = volSmall.toFixed(1);
+            document.getElementById('res-v-large').innerText = volLarge.toFixed(1);
+            document.getElementById('res-v-frustum').innerText = volFrustum.toFixed(1);
+
+            // -- Update Step-by-Step Details --
+            document.getElementById('step-r').innerText = `${R} × (${h}/${H}) = ${r.toFixed(2)} cm`;
+            document.getElementById('step-VL').innerText = `⅓π(${R})²(${H}) = ${volLarge.toFixed(1)}`;
+            document.getElementById('step-Vs').innerText = `⅓π(${r.toFixed(1)})²(${h}) = ${volSmall.toFixed(1)}`;
+            document.getElementById('step-VF').innerText = `${volLarge.toFixed(1)} - ${volSmall.toFixed(1)} = ${volFrustum.toFixed(1)}`;
+
+            // -- Update Ratio Strategy Panel --
+            const k = h / H;
+            const k3 = Math.pow(k, 3);
+            const percentTop = (k3 * 100).toFixed(1);
+            const percentFrustum = ((1 - k3) * 100).toFixed(1);
+
+            document.getElementById('calc-k').innerText = k.toFixed(2);
+            document.getElementById('calc-k3').innerText = k3.toFixed(3);
+            document.getElementById('txt-percent-top').innerText = percentTop;
+            document.getElementById('txt-percent-frustum').innerText = percentFrustum;
+
+            // Draw SVG
+            drawFrustumSVG(H, R, h, r);
+        }
+
+        function drawFrustumSVG(H, R, h, r) {
+            const svgHeight = 400;
+            const svgWidth = 400;
+            const scale = 8; // Pixels per cm
+            const centerX = svgWidth / 2;
+            const bottomY = 350;
+            
+            const peakY = bottomY - (H * scale);
+            const cutY = peakY + (h * scale); 
+
+            // Coordinates
+            const peak = `${centerX},${peakY}`;
+            const lbL = `${centerX - R*scale},${bottomY}`;
+            const lbR = `${centerX + R*scale},${bottomY}`;
+            const sbL = `${centerX - r*scale},${cutY}`;
+            const sbR = `${centerX + r*scale},${cutY}`;
+
+            // 1. Large Cone Phantom
+            document.getElementById('shape-large').setAttribute('d', `M ${peak} L ${lbR} L ${lbL} Z`);
+
+            // 2. Small Cone
+            document.getElementById('shape-small').setAttribute('d', `M ${peak} L ${sbR} L ${sbL} Z`);
+
+            // 3. Frustum
+            document.getElementById('shape-frustum').setAttribute('d', `M ${sbL} L ${sbR} L ${lbR} L ${lbL} Z`);
+
+            // 4. Lines & Labels
+            const lineX_H = centerX + (R*scale) + 40;
+            const lineX_h = centerX + (R*scale) + 20;
+
+            // Height Line (Total)
+            const lH = document.getElementById('line-H');
+            lH.setAttribute('x1', lineX_H); lH.setAttribute('x2', lineX_H);
+            lH.setAttribute('y1', peakY); lH.setAttribute('y2', bottomY);
+            
+            const tH = document.getElementById('text-H');
+            tH.setAttribute('x', lineX_H + 5);
+            tH.setAttribute('y', peakY + (H*scale)/2);
+
+            // Cut Height Line
+            const lh = document.getElementById('line-h');
+            lh.setAttribute('x1', lineX_h); lh.setAttribute('x2', lineX_h);
+            lh.setAttribute('y1', peakY); lh.setAttribute('y2', cutY);
+
+            const th = document.getElementById('text-h');
+            th.setAttribute('x', lineX_h + 5);
+            th.setAttribute('y', peakY + (h*scale)/2);
+
+            // Radius lines
+            const lineR = document.getElementById('line-R');
+            lineR.setAttribute('x2', centerX + R*scale);
+            lineR.setAttribute('y1', bottomY + 20); lineR.setAttribute('y2', bottomY + 20);
+            const textR = document.getElementById('text-R');
+            textR.setAttribute('x', centerX + (R*scale)/2); textR.setAttribute('y', bottomY + 35);
+
+            const liner = document.getElementById('line-r');
+            liner.setAttribute('x2', centerX + r*scale);
+            liner.setAttribute('y1', cutY - 10); liner.setAttribute('y2', cutY - 10);
+            const textr = document.getElementById('text-r');
+            textr.setAttribute('x', centerX + (r*scale)/2); textr.setAttribute('y', cutY - 15);
+        }
+
+        function updateRatios() {
+            // Placeholder for ratio lab if needed separately,
+            // but for now the main frustum tool covers the user request.
+        }
+
+        function checkQuiz(btn, isCorrect) {
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.classList.remove('hidden', 'text-green-400', 'text-red-400');
+            
+            if(isCorrect) {
+                feedback.innerText = "Correct! (1/3)^3 = 1/27";
+                feedback.classList.add('text-green-400');
+            } else {
+                feedback.innerText = "Try again. Remember: Volume ratio = (Length ratio)^3";
+                feedback.classList.add('text-red-400');
+            }
+        }
+
+        // Init
+        updateFrustum();
+    </script>
+</body>
+</html>

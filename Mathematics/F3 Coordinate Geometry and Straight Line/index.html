@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoordGeo Explorer | HKDSE Chapter 8</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- MathJax Config -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <!-- MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        
+        .canvas-container {
+            touch-action: none; 
+        }
+        
+        ::-webkit-scrollbar { width: 8px; background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px; width: 16px;
+            border-radius: 50%; background: #ffffff;
+            margin-top: -6px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer;
+            background: rgba(255,255,255,0.3); border-radius: 2px;
+        }
+
+        /* Number Input Styling for Dark Card */
+        .coord-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.375rem;
+            color: white;
+            padding: 0.25rem;
+            width: 3.5rem;
+            text-align: center;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            transition: all 0.2s;
+        }
+        .coord-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        /* Remove arrows from number input */
+        .coord-input::-webkit-outer-spin-button,
+        .coord-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* --- DYNAMIC LIGHTING EFFECTS --- */
+        .bento-card {
+            position: relative;
+            background-color: white;
+            border-radius: 1.5rem; /* rounded-3xl */
+            overflow: hidden;
+            border: 1px solid #e2e8f0; /* slate-200 */
+            transition: border-color 0.3s;
+        }
+        
+        /* The glow effect layer */
+        .bento-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(99, 102, 241, 0.06), /* Indigo glow */
+                transparent 40%
+            );
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none; /* Click through */
+        }
+
+        /* Border glow layer */
+        .bento-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(
+                600px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(99, 102, 241, 0.4), 
+                transparent 40%
+            );
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        /* Hover state for lighting */
+        .bento-grid:hover .bento-card::before,
+        .bento-grid:hover .bento-card::after {
+            opacity: 1;
+        }
+
+        /* Ensure content sits above the glow */
+        .bento-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+        }
+
+        /* Special style for the dark blue stats card to make glow visible */
+        .bento-card.dark-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .bento-card.dark-card::before {
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y), 
+                rgba(255, 255, 255, 0.1), 
+                transparent 40%
+            );
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0 z-50 sticky top-0 opacity-95 backdrop-blur-sm">
+        <div>
+            <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
+                CoordGeo Explorer
+            </h1>
+            <p class="text-xs text-slate-500 font-medium tracking-wide">HKDSE MATHEMATICS • CHAPTER 8</p>
+        </div>
+        <div class="hidden md:block text-sm text-slate-400">
+            Interactive Learning Tool
+        </div>
+    </nav>
+
+    <!-- Main Grid Layout -->
+    <main id="main-grid" class="bento-grid flex-1 p-4 md:p-6 grid grid-cols-1 md:grid-cols-12 md:auto-rows-min gap-4 max-w-[1600px] mx-auto w-full">
+
+        <!-- 1. Interactive Canvas (Top Left) -->
+        <!-- Reduced min-height to make it more compact (350px/400px) -->
+        <div class="col-span-1 md:col-span-8 min-h-[350px] md:min-h-[400px] bento-card shadow-lg">
+            <div class="bento-content flex flex-col h-full">
+                <div class="absolute top-4 left-6 z-10 pointer-events-none">
+                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full">Interactive Graph</span>
+                </div>
+                
+                <!-- Canvas Container -->
+                <div class="flex-1 w-full h-full relative canvas-container" id="canvas-wrapper">
+                    <canvas id="geoCanvas" class="w-full h-full cursor-crosshair"></canvas>
+                    
+                    <!-- Floating Controls -->
+                    <div class="absolute bottom-4 right-4 flex gap-2">
+                        <button onclick="resetView()" class="bg-white shadow-md border border-slate-200 hover:bg-slate-50 text-slate-600 px-4 py-2 rounded-xl text-sm font-semibold transition">
+                            Reset View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Real-time Data Panel (Top Right) -->
+        <!-- Reduced padding (p-5) to save vertical space matching the smaller graph -->
+        <div class="col-span-1 md:col-span-4 h-full bento-card dark-card shadow-lg text-white">
+            <div class="bento-content p-5 flex flex-col gap-4">
+                
+                <!-- Coordinates Section -->
+                <div>
+                    <h2 class="text-indigo-100 text-sm font-semibold uppercase tracking-wider mb-3">Coordinates</h2>
+                    <div class="space-y-3">
+                        <!-- Point A Inputs -->
+                        <div class="flex justify-between items-center bg-white/10 p-3 rounded-xl border border-white/10">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-rose-400 shadow-sm shadow-rose-900/20"></div>
+                                <span class="font-mono text-lg">A</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-indigo-200 text-sm">x</span>
+                                <input type="number" id="inAx" class="coord-input" step="0.5">
+                                <span class="text-indigo-200 text-sm">y</span>
+                                <input type="number" id="inAy" class="coord-input" step="0.5">
+                            </div>
+                        </div>
+
+                        <!-- Point B Inputs -->
+                        <div class="flex justify-between items-center bg-white/10 p-3 rounded-xl border border-white/10">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-emerald-400 shadow-sm shadow-emerald-900/20"></div>
+                                <span class="font-mono text-lg">B</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-indigo-200 text-sm">x</span>
+                                <input type="number" id="inBx" class="coord-input" step="0.5">
+                                <span class="text-indigo-200 text-sm">y</span>
+                                <input type="number" id="inBy" class="coord-input" step="0.5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standard Props -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-indigo-900/40 p-3 rounded-xl border border-indigo-500/30">
+                        <div class="text-indigo-200 text-xs mb-1">Slope ($m$)</div>
+                        <div id="displaySlope" class="text-2xl font-bold font-mono">-</div>
+                    </div>
+                    <div class="bg-indigo-900/40 p-3 rounded-xl border border-indigo-500/30">
+                        <div class="text-indigo-200 text-xs mb-1">Distance ($d$)</div>
+                        <div id="displayDist" class="text-2xl font-bold font-mono">-</div>
+                    </div>
+                    <div class="bg-indigo-900/40 p-3 rounded-xl col-span-2 border border-indigo-500/30">
+                        <div class="text-indigo-200 text-xs mb-1">Midpoint ($M$)</div>
+                        <div id="displayMid" class="text-xl font-bold font-mono">-</div>
+                    </div>
+                </div>
+
+                <!-- Section Formula Controls -->
+                <div class="bg-orange-500/20 p-4 rounded-xl border border-orange-400/30 mt-2">
+                    <h2 class="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-3 flex items-center justify-between">
+                        <span>Internal Division ($P$)</span>
+                        <span class="text-[10px] bg-orange-500/40 px-2 py-0.5 rounded text-white">Ratio r : s</span>
+                    </h2>
+                    
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="flex-1 text-center">
+                            <label class="text-xs text-orange-200 block mb-1">r = <span id="valR">1</span></label>
+                            <input type="range" id="inputR" min="1" max="5" value="1" step="1" class="w-full">
+                        </div>
+                        <div class="text-orange-200 font-bold">:</div>
+                        <div class="flex-1 text-center">
+                            <label class="text-xs text-orange-200 block mb-1">s = <span id="valS">2</span></label>
+                            <input type="range" id="inputS" min="1" max="5" value="2" step="1" class="w-full">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-orange-900/40 p-3 rounded-lg border border-orange-500/30">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-orange-400 shadow-sm shadow-orange-900/20"></div>
+                            <span class="font-mono text-lg text-orange-100">P</span>
+                        </div>
+                        <span id="displayP" class="font-mono font-bold text-xl text-orange-100">...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Formulas (Cheat Sheet) -->
+        <div class="col-span-1 md:col-span-8 h-auto bento-card bg-slate-50 shadow-lg">
+            <div class="bento-content p-6">
+                <h3 class="font-bold text-slate-400 text-sm uppercase tracking-wide mb-4">HKDSE Formula Sheet</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Slope -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col hover:border-indigo-300 transition">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Slope (m)</span>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center">
+                            $$m = \frac{y_2 - y_1}{x_2 - x_1}$$
+                        </div>
+                    </div>
+
+                    <!-- Distance -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col hover:border-blue-300 transition">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Distance</span>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center text-sm">
+                            $$\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$$
+                        </div>
+                    </div>
+
+                    <!-- Midpoint -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col hover:border-green-300 transition">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            <span class="text-xs font-bold text-slate-500 uppercase">Midpoint</span>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center text-sm">
+                            $$(\frac{x_1+x_2}{2}, \frac{y_1+y_2}{2})$$
+                        </div>
+                    </div>
+
+                    <!-- Section Formula -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-orange-200 ring-1 ring-orange-100 flex flex-col hover:ring-orange-300 transition">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                            <span class="text-xs font-bold text-orange-600 uppercase">Section Formula</span>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center text-sm">
+                            $$(\frac{rx_2+sx_1}{r+s}, \frac{ry_2+sy_1}{r+s})$$
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Chinese History Corner -->
+        <div class="col-span-1 md:col-span-4 h-full bento-card bg-amber-50 border-amber-100 shadow-lg">
+            <div class="bento-content p-6">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-2xl">📜</span>
+                    <h2 class="text-amber-900 font-bold text-lg">Chinese History Corner</h2>
+                </div>
+                
+                <div class="prose prose-sm text-amber-900/80 leading-relaxed">
+                    <p class="mb-2">
+                        <strong>The Gougu Theorem (勾股定理)</strong> from <em>Zhoubi Suanjing (周髀算經)</em> relates perfectly to our Distance Formula.
+                    </p>
+                    <div class="flex gap-2 text-xs font-mono text-amber-700 bg-amber-100/50 p-2 rounded mb-2">
+                        <div>Run = Gou (勾)</div>
+                        <div>Rise = Gu (股)</div>
+                        <div>Dist = Xian (弦)</div>
+                    </div>
+                    <p class="text-xs border-t border-amber-200 pt-2">
+                        <strong>Ancient Surveying:</strong> <em>Liu Hui (劉徽)</em> used "Chong Cha" (double difference) methods that conceptually mirror how we use ratios in the Section Formula.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- DYNAMIC LIGHTING LOGIC ---
+        const gridContainer = document.getElementById("main-grid");
+        
+        gridContainer.addEventListener("mousemove", (e) => {
+            const cards = document.getElementsByClassName("bento-card");
+            for(const card of cards) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+            }
+        });
+
+        // --- MATH LOGIC ---
+        const GRID_SIZE = 40; 
+        const AXIS_COLOR = '#64748b';
+        const GRID_COLOR = '#e2e8f0';
+        
+        let state = {
+            width: 0, height: 0,
+            origin: { x: 0, y: 0 },
+            points: {
+                A: { x: -3, y: -2, color: '#fb7185' },
+                B: { x: 4, y: 3, color: '#34d399' }
+            },
+            ratio: { r: 1, s: 2 },
+            dragging: null
+        };
+
+        const canvas = document.getElementById('geoCanvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('canvas-wrapper');
+        
+        // Manual Inputs
+        const inAx = document.getElementById('inAx');
+        const inAy = document.getElementById('inAy');
+        const inBx = document.getElementById('inBx');
+        const inBy = document.getElementById('inBy');
+        
+        const displaySlope = document.getElementById('displaySlope');
+        const displayDist = document.getElementById('displayDist');
+        const displayMid = document.getElementById('displayMid');
+        const displayP = document.getElementById('displayP');
+        
+        const inputR = document.getElementById('inputR');
+        const inputS = document.getElementById('inputS');
+        const valR = document.getElementById('valR');
+        const valS = document.getElementById('valS');
+
+        function init() {
+            resize();
+            window.addEventListener('resize', resize);
+            
+            canvas.addEventListener('mousedown', handleStart);
+            window.addEventListener('mousemove', handleMove);
+            window.addEventListener('mouseup', handleEnd);
+
+            canvas.addEventListener('touchstart', (e) => handleStart(e.touches[0]));
+            window.addEventListener('touchmove', (e) => handleMove(e.touches[0]));
+            window.addEventListener('touchend', handleEnd);
+
+            inputR.addEventListener('input', (e) => {
+                state.ratio.r = parseInt(e.target.value);
+                valR.innerText = state.ratio.r;
+                render();
+            });
+            inputS.addEventListener('input', (e) => {
+                state.ratio.s = parseInt(e.target.value);
+                valS.innerText = state.ratio.s;
+                render();
+            });
+
+            // Input Handlers
+            const inputs = [
+                { el: inAx, pt: 'A', axis: 'x' },
+                { el: inAy, pt: 'A', axis: 'y' },
+                { el: inBx, pt: 'B', axis: 'x' },
+                { el: inBy, pt: 'B', axis: 'y' }
+            ];
+
+            inputs.forEach(item => {
+                item.el.addEventListener('input', (e) => {
+                    const val = parseFloat(e.target.value);
+                    if (!isNaN(val)) {
+                        state.points[item.pt][item.axis] = val;
+                        render();
+                    }
+                });
+            });
+
+            render();
+        }
+
+        function resize() {
+            const rect = wrapper.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            state.width = rect.width;
+            state.height = rect.height;
+            state.origin = {
+                x: Math.floor(state.width / 2),
+                y: Math.floor(state.height / 2)
+            };
+            render();
+        }
+
+        function toScreen(x, y) {
+            return {
+                x: state.origin.x + (x * GRID_SIZE),
+                y: state.origin.y - (y * GRID_SIZE)
+            };
+        }
+
+        function toLogic(sx, sy) {
+            return {
+                x: (sx - state.origin.x) / GRID_SIZE,
+                y: (state.origin.y - sy) / GRID_SIZE
+            };
+        }
+
+        function snapToGrid(val) {
+            // Only snap when dragging with mouse/touch, not when typing
+            return Math.round(val * 2) / 2; 
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, state.width, state.height);
+            drawGrid();
+            drawAxes();
+            drawTriangle(); 
+            drawLine();
+            
+            const Ax = state.points.A.x, Ay = state.points.A.y;
+            const Bx = state.points.B.x, By = state.points.B.y;
+            const r = state.ratio.r, s = state.ratio.s;
+            const Px = (r * Bx + s * Ax) / (r + s);
+            const Py = (r * By + s * Ay) / (r + s);
+            
+            drawPoint({x: Px, y: Py}, 'P', '#fb923c'); 
+
+            drawPoint(state.points.A, 'A', state.points.A.color);
+            drawPoint(state.points.B, 'B', state.points.B.color);
+            
+            updateUI(Px, Py);
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = GRID_COLOR;
+            ctx.lineWidth = 1;
+            for (let x = state.origin.x % GRID_SIZE; x < state.width; x += GRID_SIZE) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, state.height); ctx.stroke();
+            }
+            for (let y = state.origin.y % GRID_SIZE; y < state.height; y += GRID_SIZE) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(state.width, y); ctx.stroke();
+            }
+        }
+
+        function drawAxes() {
+            ctx.strokeStyle = AXIS_COLOR;
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, state.origin.y); ctx.lineTo(state.width, state.origin.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(state.origin.x, 0); ctx.lineTo(state.origin.x, state.height); ctx.stroke();
+            ctx.font = '12px Outfit';
+            ctx.fillStyle = AXIS_COLOR;
+            ctx.fillText('x', state.width - 15, state.origin.y - 5);
+            ctx.fillText('y', state.origin.x + 5, 15);
+        }
+
+        function drawTriangle() {
+            const pA = toScreen(state.points.A.x, state.points.A.y);
+            const pB = toScreen(state.points.B.x, state.points.B.y);
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#94a3b8'; 
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(pA.x, pA.y);
+            ctx.lineTo(pB.x, pA.y); 
+            ctx.lineTo(pB.x, pB.y); 
+            ctx.stroke();
+            ctx.setLineDash([]); 
+        }
+
+        function drawLine() {
+            const pA = toScreen(state.points.A.x, state.points.A.y);
+            const pB = toScreen(state.points.B.x, state.points.B.y);
+            ctx.strokeStyle = '#4f46e5'; 
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(pA.x, pA.y);
+            ctx.lineTo(pB.x, pB.y);
+            ctx.stroke();
+        }
+
+        function drawPoint(point, label, color) {
+            const pos = toScreen(point.x, point.y);
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = color;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 16px Outfit';
+            ctx.fillText(label, pos.x + 15, pos.y - 15);
+        }
+
+        function handleStart(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || e.pageX;
+            const clientY = e.clientY || e.pageY;
+            const mx = clientX - rect.left;
+            const my = clientY - rect.top;
+
+            const pA = toScreen(state.points.A.x, state.points.A.y);
+            const pB = toScreen(state.points.B.x, state.points.B.y);
+
+            if (Math.hypot(mx - pA.x, my - pA.y) < 20) {
+                state.dragging = 'A';
+            } else if (Math.hypot(mx - pB.x, my - pB.y) < 20) {
+                state.dragging = 'B';
+            }
+        }
+
+        function handleMove(e) {
+            if (!state.dragging) return;
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || e.pageX;
+            const clientY = e.clientY || e.pageY;
+            const mx = clientX - rect.left;
+            const my = clientY - rect.top;
+            const logicPos = toLogic(mx, my);
+            state.points[state.dragging].x = snapToGrid(logicPos.x);
+            state.points[state.dragging].y = snapToGrid(logicPos.y);
+            requestAnimationFrame(render);
+        }
+
+        function handleEnd() {
+            state.dragging = null;
+        }
+
+        function resetView() {
+            state.points.A.x = -3;
+            state.points.A.y = -2;
+            state.points.B.x = 4;
+            state.points.B.y = 3;
+            state.ratio = { r: 1, s: 2 };
+            inputR.value = 1; valR.innerText = 1;
+            inputS.value = 2; valS.innerText = 2;
+            render();
+        }
+
+        function updateUI(Px, Py) {
+            const Ax = state.points.A.x;
+            const Ay = state.points.A.y;
+            const Bx = state.points.B.x;
+            const By = state.points.B.y;
+
+            // Only update inputs if they are not currently focused (to prevent fighting cursor)
+            if (document.activeElement !== inAx) inAx.value = Ax;
+            if (document.activeElement !== inAy) inAy.value = Ay;
+            if (document.activeElement !== inBx) inBx.value = Bx;
+            if (document.activeElement !== inBy) inBy.value = By;
+
+            const dy = By - Ay;
+            const dx = Bx - Ax;
+            let mStr = dx === 0 ? "Undefined" : (Number.isInteger(dy/dx) ? dy/dx : (dy/dx).toFixed(2));
+            displaySlope.innerText = mStr;
+
+            const d = Math.sqrt(dx*dx + dy*dy);
+            displayDist.innerText = Number.isInteger(d) ? d : d.toFixed(2);
+
+            const Mx = (Ax + Bx) / 2;
+            const My = (Ay + By) / 2;
+            displayMid.innerText = `(${Mx}, ${My})`;
+            
+            const pStrX = Number.isInteger(Px) ? Px : Px.toFixed(2);
+            const pStrY = Number.isInteger(Py) ? Py : Py.toFixed(2);
+            displayP.innerText = `(${pStrX}, ${pStrY})`;
+        }
+
+        init();
+    </script>
+    
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+            he founded the world by his wisdom<br>
+            and stretched out the heavens by his understanding.</p>
+            <p class="text-sm mb-2">Jeremiah 10:12</p>
+            <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+            <p class="text-xs mb-4">耶利米書 10:12</p>
+            <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </div>
+    </footer>
+</body>
+</html>

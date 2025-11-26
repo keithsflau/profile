@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Quadrilaterals | HK Engineering Lab</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Noto Sans HK for body, Ma Shan Zheng for History headers -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+HK:wght@300;400;500;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans HK"', 'sans-serif'],
+                        chinese: ['"Ma Shan Zheng"', 'cursive'],
+                        mono: ['"Roboto Mono"', 'monospace'],
+                    },
+                    colors: {
+                        'hk-blue': '#007AFF',
+                        'hk-red': '#FF3B30',
+                        'paper-bg': '#fdfbf7',
+                        'paper-border': '#e6d5b8',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .reason-card {
+            transition: all 0.2s;
+        }
+        .reason-card:hover {
+            transform: translateX(5px);
+            border-left-color: #007AFF;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans selection:bg-hk-blue selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-ruler-combined text-cyan-400 text-2xl"></i>
+                    <span class="font-bold text-xl tracking-wide">HK Geo<span class="text-cyan-400">Lab</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#history" class="hover:text-cyan-400 transition">History</a>
+                    <a href="#lab" class="hover:text-cyan-400 transition">Engineering Lab</a>
+                    <a href="#properties" class="hover:text-cyan-400 transition">Properties</a>
+                    <a href="#reasons" class="hover:text-cyan-400 transition">Reasons</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2">
+                <div class="inline-block px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-xs font-bold mb-4 uppercase tracking-wider">HKDSE Mathematics Module</div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
+                    Mastering <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Quadrilaterals</span>
+                </h1>
+                <p class="text-lg text-slate-600 mb-6">
+                    Welcome, future engineers. Geometry is the foundation of structural integrity. From ancient Chinese land surveying to modern skyscrapers in Central, understanding four-sided shapes is essential.
+                </p>
+                <a href="#lab" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition gap-2">
+                    Enter Lab <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative w-64 h-64 md:w-80 md:h-80">
+                    <div class="absolute inset-0 bg-blue-200 rounded-lg transform rotate-6 opacity-50 animate-pulse"></div>
+                    <div class="absolute inset-0 bg-cyan-200 rounded-lg transform -rotate-6 opacity-50"></div>
+                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center shadow-xl transform hover:scale-105 transition duration-500">
+                        <i class="fa-solid fa-draw-polygon text-white text-6xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+
+        <!-- SECTION 1: CULTURAL CONTEXT -->
+        <section id="history" class="scroll-mt-24">
+            <div class="relative bg-paper-bg border-2 border-paper-border rounded-xl shadow-md overflow-hidden p-8 md:p-12">
+                <div class="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-amber-800/30 rounded-tl-xl"></div>
+                <div class="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-amber-800/30 rounded-br-xl"></div>
+                
+                <div class="grid md:grid-cols-3 gap-8 items-center">
+                    <div class="md:col-span-2">
+                        <h2 class="text-3xl font-bold text-amber-900 mb-2 font-chinese flex items-center gap-3">
+                            <i class="fa-solid fa-scroll"></i> 
+                            Cultural Context: The Nine Chapters
+                        </h2>
+                        <h3 class="text-lg font-serif italic text-amber-700 mb-6">Jiuzhang Suanshu (九章算術)</h3>
+                        
+                        <p class="text-slate-700 mb-4 leading-relaxed">
+                            Long before modern engineering textbooks, ancient Chinese mathematicians were masters of practical geometry. The <strong>"Nine Chapters on the Mathematical Art"</strong> (compiled around 1st century AD) is a testament to this legacy.
+                        </p>
+                        <p class="text-slate-700 mb-4 leading-relaxed">
+                            In the chapter known as <strong>"Fangtian" (Rectangular Fields 方田)</strong>, scholars developed methods to calculate the areas of various land shapes for taxation. They didn't just deal with perfect squares; they developed precise formulas for the <strong>trapezoid (Ti Tian 梯田)</strong>, essential for surveying irregular farming plots.
+                        </p>
+                        <p class="text-slate-700 leading-relaxed border-l-4 border-amber-500 pl-4 bg-amber-50 py-2">
+                            <strong class="text-amber-900">The Gougu Rule (勾股):</strong> While typically associated with triangles (Pythagoras), the relationship between the base (Gou) and altitude (Gu) was fundamental in defining the precision of rectangular structures—a principle still used by HK surveyors today.
+                        </p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center border border-amber-200 p-4 bg-white shadow-sm rounded-lg rotate-1 hover:rotate-0 transition">
+                        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-48 object-contain">
+                            <defs>
+                                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e6d5b8" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                            <text x="100" y="30" font-family="'Ma Shan Zheng', cursive" font-size="20" fill="#92400e" text-anchor="middle">楊輝三角</text>
+                            <circle cx="100" cy="50" r="4" fill="#92400e" />
+                            <circle cx="80" cy="80" r="4" fill="#92400e" />
+                            <circle cx="120" cy="80" r="4" fill="#92400e" />
+                            <circle cx="60" cy="110" r="4" fill="#92400e" />
+                            <circle cx="100" cy="110" r="4" fill="#92400e" />
+                            <circle cx="140" cy="110" r="4" fill="#92400e" />
+                            <path d="M100 50 L60 110 L140 110 Z" fill="none" stroke="#92400e" stroke-width="1" opacity="0.5"/>
+                        </svg>
+                        <p class="text-xs text-amber-800 mt-2 font-chinese text-center">Ancient Calculation Logic</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: INTERACTIVE ENGINEERING LAB -->
+        <section id="lab" class="scroll-mt-24">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Interactive Engineering Lab</h2>
+                <p class="text-slate-500 mt-2">Adjust parameters to see how Area and Perimeter change in real-time.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Controls Panel -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-100 h-fit">
+                    <h3 class="font-bold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-blue-500"></i> Parameters
+                    </h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Select Shape</label>
+                        <select id="shapeSelect" class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                            <option value="square">Square (正方形)</option>
+                            <option value="rectangle">Rectangle (長方形)</option>
+                            <option value="parallelogram">Parallelogram (平行四邊形)</option>
+                            <option value="trapezium">Isosceles Trapezium (等腰梯形)</option>
+                        </select>
+                    </div>
+
+                    <div id="controlsContainer" class="space-y-5">
+                        <!-- Sliders will appear here -->
+                    </div>
+                </div>
+
+                <!-- Canvas & Output Area -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-2xl shadow-inner border border-slate-200 p-4 flex justify-center items-center relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNlMmU4ZjAiLz48L3N2Zz4=')]">
+                        <canvas id="geometryCanvas" width="600" height="400" class="w-full h-auto max-h-[400px]"></canvas>
+                        <div class="absolute bottom-4 right-4 bg-white/80 backdrop-blur px-3 py-1 rounded text-xs text-slate-400 font-mono">
+                            Canvas Renderer v1.2 (Fixed)
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                            <p class="text-sm text-blue-600 font-semibold uppercase tracking-wide">Area (面積)</p>
+                            <p class="text-3xl font-bold text-blue-900 font-mono mt-1" id="areaDisplay">0</p>
+                            <p class="text-xs text-blue-400 mt-2 font-mono" id="areaFormula">Formula</p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
+                            <p class="text-sm text-emerald-600 font-semibold uppercase tracking-wide">Perimeter (周界)</p>
+                            <p class="text-3xl font-bold text-emerald-900 font-mono mt-1" id="perimeterDisplay">0</p>
+                            <p class="text-xs text-emerald-400 mt-2 font-mono" id="perimeterFormula">Formula</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PROPERTIES CHEAT SHEET -->
+        <section id="properties" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8 text-center">Properties Cheat Sheet</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1: Square -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border-t-4 border-pink-500 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center text-pink-600">
+                            <i class="fa-regular fa-square"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Square</h3>
+                    </div>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                        <li>All 4 sides equal length</li>
+                        <li>All 4 angles are 90°</li>
+                        <li>Diagonals bisect at 90°</li>
+                        <li>Diagonals are equal length</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: Rectangle -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border-t-4 border-blue-500 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                            <i class="fa-solid fa-vector-square"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Rectangle</h3>
+                    </div>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                        <li>Opposite sides equal</li>
+                        <li>All 4 angles are 90°</li>
+                        <li>Diagonals bisect each other</li>
+                        <li>Diagonals are equal length</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3: Parallelogram -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border-t-4 border-purple-500 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600">
+                            <i class="fa-solid fa-shapes"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Parallelogram</h3>
+                    </div>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                        <li>Opposite sides parallel & equal</li>
+                        <li>Opposite angles equal</li>
+                        <li>Diagonals bisect each other</li>
+                        <li>Consecutive angles sum to 180°</li>
+                    </ul>
+                </div>
+
+                <!-- Card 4: Trapezium -->
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 border-t-4 border-orange-500 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+                            <i class="fa-solid fa-draw-polygon"></i>
+                        </div>
+                        <h3 class="font-bold text-lg">Trapezium</h3>
+                    </div>
+                    <ul class="text-sm text-slate-600 space-y-2 list-disc list-inside">
+                        <li>One pair of parallel sides</li>
+                        <li>Isosceles: Base angles equal</li>
+                        <li>Isosceles: Diagonals equal</li>
+                        <li>Area uses average of bases</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: REASON ABBREVIATIONS -->
+        <section id="reasons" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8 text-center flex items-center justify-center gap-3">
+                <i class="fa-solid fa-book-open text-blue-600"></i> HKDSE Reason Dictionary
+            </h2>
+
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden max-w-5xl mx-auto">
+                <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                    
+                    <!-- Left Column -->
+                    <div class="p-6 md:p-8 space-y-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm mr-2">1</span>
+                                Parallel Lines (平行線)
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">corr. ∠s, AB // CD</p>
+                                    <p class="text-xs text-slate-500 mt-1">Corresponding angles are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">alt. ∠s, AB // CD</p>
+                                    <p class="text-xs text-slate-500 mt-1">Alternate angles are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">int. ∠s, AB // CD</p>
+                                    <p class="text-xs text-slate-500 mt-1">Interior angles are supplementary (sum 180°)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                                <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-sm mr-2">2</span>
+                                Properties of Parallelograms (性質)
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">opp. sides of // gram</p>
+                                    <p class="text-xs text-slate-500 mt-1">Opposite sides are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">opp. ∠s of // gram</p>
+                                    <p class="text-xs text-slate-500 mt-1">Opposite angles are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">diags. of // gram</p>
+                                    <p class="text-xs text-slate-500 mt-1">Diagonals bisect each other</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                                <span class="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-sm mr-2">3</span>
+                                Angles & Polygons (多邊形)
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">∠ sum of polygon</p>
+                                    <p class="text-xs text-slate-500 mt-1">Sum of interior angles = (n-2) × 180°</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">sum of ext. ∠s of polygon</p>
+                                    <p class="text-xs text-slate-500 mt-1">Sum of exterior angles = 360°</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="p-6 md:p-8 space-y-8">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                                <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-sm mr-2">4</span>
+                                Tests for Parallelograms (判別方法)
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">opp. sides equal</p>
+                                    <p class="text-xs text-slate-500 mt-1">2 pairs of opposite sides are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">opp. ∠s equal</p>
+                                    <p class="text-xs text-slate-500 mt-1">2 pairs of opposite angles are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">diags. bisect each other</p>
+                                    <p class="text-xs text-slate-500 mt-1">Diagonals bisect each other</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">2 sides equal and //</p>
+                                    <p class="text-xs text-slate-500 mt-1">One pair of sides is equal and parallel</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-sm mr-2">5</span>
+                                Theorems & Special Shapes (定理)
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">mid-pt. theorem</p>
+                                    <p class="text-xs text-slate-500 mt-1">Mid-point Theorem</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">intercept theorem</p>
+                                    <p class="text-xs text-slate-500 mt-1">Intercept Theorem</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">base ∠s, isos. trap.</p>
+                                    <p class="text-xs text-slate-500 mt-1">Base angles of isosceles trapezium are equal</p>
+                                </div>
+                                <div class="reason-card bg-slate-50 p-3 rounded border-l-4 border-slate-300">
+                                    <p class="font-mono font-bold text-slate-800">property of rhombus</p>
+                                    <p class="text-xs text-slate-500 mt-1">Diagonals perp., bisect angles, etc.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: MINI QUIZ -->
+        <section id="quiz" class="scroll-mt-24 pb-20">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-slate-900 text-white rounded-2xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-blue-600 rounded-full opacity-20 blur-2xl"></div>
+                    
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                        <i class="fa-solid fa-clipboard-question text-yellow-400"></i>
+                        Quick Check Quiz
+                    </h2>
+                    
+                    <div id="quizContainer" class="space-y-6"></div>
+                    
+                    <div id="quizResult" class="hidden mt-6 p-4 bg-slate-800 rounded-lg border border-slate-700 text-center">
+                        <p class="font-bold text-xl" id="scoreText"></p>
+                        <button onclick="resetQuiz()" class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded text-sm transition">Retry</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+            he founded the world by his wisdom<br>
+            and stretched out the heavens by his understanding.</p>
+            <p class="text-sm mb-2">Jeremiah 10:12</p>
+            <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+            <p class="text-xs mb-4">耶利米書 10:12</p>
+            <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /**
+         * INTERACTIVE LAB LOGIC
+         */
+        const canvas = document.getElementById('geometryCanvas');
+        const ctx = canvas.getContext('2d');
+        const shapeSelect = document.getElementById('shapeSelect');
+        const controlsContainer = document.getElementById('controlsContainer');
+        
+        let currentShape = 'square';
+        let params = {};
+
+        const shapeConfig = {
+            square: {
+                controls: [{ id: 'side', label: 'Side Length (邊長)', min: 50, max: 200, val: 150 }],
+                calculate: (p) => ({
+                    area: p.side * p.side,
+                    perimeter: p.side * 4,
+                    areaFormula: 'Side²',
+                    perimeterFormula: '4 × Side'
+                })
+            },
+            rectangle: {
+                controls: [
+                    { id: 'width', label: 'Width (闊)', min: 50, max: 250, val: 200 },
+                    { id: 'height', label: 'Height (高)', min: 50, max: 200, val: 120 }
+                ],
+                calculate: (p) => ({
+                    area: p.width * p.height,
+                    perimeter: 2 * (Number(p.width) + Number(p.height)),
+                    areaFormula: 'Width × Height',
+                    perimeterFormula: '2 × (Width + Height)'
+                })
+            },
+            parallelogram: {
+                controls: [
+                    { id: 'base', label: 'Base (底)', min: 100, max: 250, val: 180 },
+                    { id: 'height', label: 'Height (高)', min: 50, max: 180, val: 120 },
+                    { id: 'skew', label: 'Slant (斜度)', min: 0, max: 100, val: 40 }
+                ],
+                calculate: (p) => {
+                    const slantSide = Math.sqrt(Math.pow(p.height, 2) + Math.pow(p.skew, 2));
+                    return {
+                        area: p.base * p.height,
+                        perimeter: 2 * (Number(p.base) + slantSide),
+                        areaFormula: 'Base × Height',
+                        perimeterFormula: '2 × (Base + Slant Side)'
+                    };
+                }
+            },
+            trapezium: {
+                controls: [
+                    { id: 'topBase', label: 'Top Base (上底)', min: 50, max: 150, val: 100 },
+                    { id: 'bottomBase', label: 'Bottom Base (下底)', min: 160, max: 280, val: 220 },
+                    { id: 'height', label: 'Height (高)', min: 50, max: 180, val: 140 }
+                ],
+                calculate: (p) => {
+                    const diff = Math.abs(p.bottomBase - p.topBase) / 2;
+                    const leg = Math.sqrt(Math.pow(p.height, 2) + Math.pow(diff, 2));
+                    return {
+                        area: ((Number(p.topBase) + Number(p.bottomBase)) * p.height) / 2,
+                        perimeter: Number(p.topBase) + Number(p.bottomBase) + (2 * leg),
+                        areaFormula: '((Top + Bottom) × Height) / 2',
+                        perimeterFormula: 'Top + Bottom + (2 × Leg)'
+                    };
+                }
+            }
+        };
+
+        function initLab() {
+            if (!controlsContainer) return;
+            updateControls();
+            draw();
+            shapeSelect.addEventListener('change', (e) => {
+                currentShape = e.target.value;
+                updateControls();
+                draw();
+            });
+        }
+
+        function updateControls() {
+            controlsContainer.innerHTML = '';
+            const config = shapeConfig[currentShape];
+            
+            params = {};
+            config.controls.forEach(c => params[c.id] = c.val);
+
+            config.controls.forEach(control => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-50 p-3 rounded-lg border border-slate-200';
+                div.innerHTML = `
+                    <div class="flex justify-between mb-1">
+                        <label class="text-xs font-semibold uppercase text-slate-500">${control.label}</label>
+                        <span class="text-xs font-mono text-blue-600 font-bold" id="val-${control.id}">${control.val}</span>
+                    </div>
+                    <input type="range" id="${control.id}" min="${control.min}" max="${control.max}" value="${control.val}" 
+                        class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                `;
+                controlsContainer.appendChild(div);
+
+                const input = div.querySelector('input');
+                input.addEventListener('input', (e) => {
+                    params[control.id] = Number(e.target.value);
+                    document.getElementById(`val-${control.id}`).innerText = params[control.id];
+                    draw();
+                });
+            });
+        }
+
+        function draw() {
+            if(!ctx) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; 
+            ctx.strokeStyle = '#2563EB'; 
+            ctx.lineWidth = 3;
+
+            // Start Main Path
+            ctx.beginPath();
+
+            let drawDimFn = null; // Store dimension drawing to call AFTER stroke
+
+            if (currentShape === 'square') {
+                const s = params.side;
+                ctx.rect(cx - s/2, cy - s/2, s, s);
+            } 
+            else if (currentShape === 'rectangle') {
+                const w = params.width;
+                const h = params.height;
+                ctx.rect(cx - w/2, cy - h/2, w, h);
+            }
+            else if (currentShape === 'parallelogram') {
+                const b = params.base;
+                const h = params.height;
+                const sk = params.skew;
+                
+                const startX = cx - (b/2) - (sk/2);
+                const startY = cy + (h/2);
+
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(startX + b, startY);
+                ctx.lineTo(startX + b + sk, startY - h);
+                ctx.lineTo(startX + sk, startY - h);
+                ctx.closePath();
+                
+                // Delay drawing dimension
+                drawDimFn = () => drawDimensionLine(cx, startY, cx, startY - h, 'h');
+            }
+            else if (currentShape === 'trapezium') {
+                const tb = params.topBase;
+                const bb = params.bottomBase;
+                const h = params.height;
+
+                const startY = cy + (h/2);
+                
+                ctx.moveTo(cx - bb/2, startY);
+                ctx.lineTo(cx + bb/2, startY);
+                ctx.lineTo(cx + tb/2, startY - h);
+                ctx.lineTo(cx - tb/2, startY - h);
+                ctx.closePath();
+
+                // Delay drawing dimension
+                drawDimFn = () => drawDimensionLine(cx, startY, cx, startY - h, 'h');
+            }
+
+            // Draw Main Shape First
+            ctx.fill();
+            ctx.stroke();
+
+            // Then Draw Dimensions (so they don't break the main path)
+            if(drawDimFn) drawDimFn();
+
+            // Math Updates
+            const math = shapeConfig[currentShape].calculate(params);
+            const areaDisplay = document.getElementById('areaDisplay');
+            if(areaDisplay) {
+                areaDisplay.innerText = Math.round(math.area).toLocaleString();
+                document.getElementById('perimeterDisplay').innerText = Math.round(math.perimeter).toLocaleString();
+                document.getElementById('areaFormula').innerText = math.areaFormula;
+                document.getElementById('perimeterFormula').innerText = math.perimeterFormula;
+            }
+        }
+
+        function drawDimensionLine(x1, y1, x2, y2, label) {
+            ctx.save();
+            ctx.strokeStyle = '#94a3b8';
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        /**
+         * QUIZ LOGIC
+         */
+        const questions = [
+            {
+                q: "A rhombus has diagonals of length 10cm and 24cm. What is the angle at which they intersect?",
+                options: ["45°", "60°", "90°", "180°"],
+                correct: 2,
+                explanation: "Property of Rhombus: The diagonals always bisect each other at right angles (90°)."
+            },
+            {
+                q: "Which quadrilateral has only ONE pair of parallel sides?",
+                options: ["Parallelogram", "Square", "Trapezium", "Rhombus"],
+                correct: 2,
+                explanation: "A Trapezium has exactly one pair of parallel sides. A parallelogram has two."
+            },
+            {
+                q: "If the area of a rectangle is 24cm² and width is 4cm, what is the perimeter?",
+                options: ["20cm", "24cm", "10cm", "12cm"],
+                correct: 0,
+                explanation: "Length = Area/Width = 24/4 = 6cm. Perimeter = 2(6+4) = 20cm."
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quizContainer');
+            if(!container) return;
+
+            questions.forEach((q, idx) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = "bg-slate-800 p-6 rounded-xl border border-slate-700";
+                
+                let buttonsHTML = '';
+                q.options.forEach((opt, optIdx) => {
+                    buttonsHTML += `<button onclick="checkAnswer(${idx}, ${optIdx}, this)" class="w-full text-left p-3 rounded-lg bg-slate-700 hover:bg-slate-600 mb-2 transition flex items-center justify-between group">
+                        <span>${opt}</span>
+                        <i class="fa-regular fa-circle text-slate-400 group-hover:text-white"></i>
+                    </button>`;
+                });
+
+                qDiv.innerHTML = `
+                    <p class="font-bold text-lg mb-4 text-slate-100"><span class="text-blue-400 mr-2">Q${idx+1}.</span> ${q.q}</p>
+                    <div class="space-y-2">${buttonsHTML}</div>
+                    <div id="feedback-${idx}" class="mt-4 hidden p-3 rounded text-sm"></div>
+                `;
+                container.appendChild(qDiv);
+            });
+        }
+
+        function checkAnswer(qIdx, optIdx, btnElement) {
+            const q = questions[qIdx];
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+            const allBtns = btnElement.parentElement.querySelectorAll('button');
+            
+            allBtns.forEach(b => b.disabled = true);
+
+            if (optIdx === q.correct) {
+                btnElement.classList.remove('bg-slate-700');
+                btnElement.classList.add('bg-emerald-600', 'border-emerald-500');
+                btnElement.querySelector('i').classList.remove('fa-circle', 'fa-regular');
+                btnElement.querySelector('i').classList.add('fa-check-circle', 'fa-solid');
+                
+                feedbackEl.className = "mt-4 p-3 rounded text-sm bg-emerald-900/50 text-emerald-200 border border-emerald-800 block";
+                feedbackEl.innerHTML = `<strong>Correct!</strong> ${q.explanation}`;
+            } else {
+                btnElement.classList.remove('bg-slate-700');
+                btnElement.classList.add('bg-red-600');
+                btnElement.querySelector('i').classList.remove('fa-circle', 'fa-regular');
+                btnElement.querySelector('i').classList.add('fa-times-circle', 'fa-solid');
+
+                feedbackEl.className = "mt-4 p-3 rounded text-sm bg-red-900/50 text-red-200 border border-red-800 block";
+                feedbackEl.innerHTML = `<strong>Incorrect.</strong> ${q.explanation}`;
+            }
+        }
+
+        initLab();
+        initQuiz();
+
+    </script>
+</body>
+</html>

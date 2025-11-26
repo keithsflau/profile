@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Percentages (II) Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans HK', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-100 via-indigo-50 to-blue-100 min-h-screen text-gray-800 pb-20">
+
+    <header class="bg-white/90 backdrop-blur shadow-sm sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white px-3 py-1 rounded-lg font-bold shadow-lg shadow-indigo-200">HK Math</div>
+                <h1 class="text-xl font-bold text-slate-800">Percentage (II): Interest & Growth</h1>
+            </div>
+            <div class="hidden md:block text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                F3/F4 Mathematics Dept.
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-16">
+
+        <section class="text-center space-y-6 mt-8">
+            <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 tracking-tight">
+                The Power of Compounding
+            </h2>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                As an engineer, understanding <span class="font-bold text-indigo-600">Exponential Growth</span> is critical. From structural fatigue to your future mortgage, the difference between linear (Simple) and exponential (Compound) growth changes everything.
+            </p>
+        </section>
+
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden ring-1 ring-slate-900/5">
+            <div class="md:flex">
+                <div class="md:w-1/3 bg-slate-900 text-white p-10 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/chinese-pattern.png')]"></div>
+                    <h3 class="text-2xl font-bold mb-4 relative z-10">🧮 Chinese Math History</h3>
+                    <div class="text-indigo-300 font-semibold mb-2 relative z-10">The Green Sprouts Law (青苗法)</div>
+                    <p class="text-sm text-slate-400 relative z-10">Song Dynasty (1069 AD)</p>
+                </div>
+                <div class="md:w-2/3 p-10">
+                    <h4 class="text-xl font-bold text-slate-800 mb-4">Wang Anshi (王安石) & Early Interest</h4>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        In 1069 AD, reformer Wang Anshi introduced the <strong>Green Sprouts Law</strong>. The government lent grain to farmers during planting season, which had to be repaid after harvest with interest.
+                    </p>
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-lg">
+                        <p class="text-sm text-indigo-900">
+                            <strong>Mathematical Insight:</strong> The interest rate was typically <strong>20%</strong> (Growth Factor 1.2). While calculated simply over short periods, this early system demonstrated the government's understanding of <span class="font-bold">Time Value of Money</span>—borrowing 1 measure of grain today costs 1.2 measures tomorrow.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="h-8 w-1 bg-indigo-500 rounded-full"></div>
+                <h3 class="text-2xl font-bold text-slate-800">Simulator 1: The Wealth Battle</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-12 gap-8">
+                <div class="md:col-span-4 space-y-6 glass-panel p-8 rounded-3xl shadow-lg">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Principal ($P$)</label>
+                            <div class="flex items-center mt-1">
+                                <span class="text-gray-400 mr-2">$</span>
+                                <input type="number" id="principal" value="10000" class="w-full bg-slate-50 border-none rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 font-mono text-lg" oninput="updateChart()">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Rate ($R$)</label>
+                            <input type="range" id="rate" min="1" max="20" value="5" class="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer mt-2 accent-indigo-600" oninput="updateChart()">
+                            <div class="text-right text-indigo-600 font-bold"><span id="rateValue">5</span>%</div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Time ($n$)</label>
+                            <input type="range" id="years" min="1" max="50" value="20" class="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer mt-2 accent-purple-600" oninput="updateChart()">
+                            <div class="text-right text-purple-600 font-bold"><span id="yearsValue">20</span> Years</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100">
+                        <div class="flex justify-between items-center text-sm mb-2">
+                            <span class="text-blue-600 font-bold">Simple Interest</span>
+                            <span class="font-mono text-slate-500 text-xs">$A = P(1 + rt)$</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-pink-600 font-bold">Compound Interest</span>
+                            <span class="font-mono text-slate-500 text-xs">$A = P(1 + r)^t$</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-8 bg-white p-6 rounded-3xl shadow-lg border border-slate-100 flex flex-col">
+                    <div class="flex-grow relative h-72">
+                        <canvas id="interestChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="bg-blue-50 p-4 rounded-2xl text-center">
+                            <div class="text-xs text-blue-500 font-bold uppercase tracking-wide">Simple Amount</div>
+                            <div class="text-2xl font-bold text-blue-700 font-mono" id="simpleFinal">$20,000</div>
+                        </div>
+                        <div class="bg-pink-50 p-4 rounded-2xl text-center">
+                            <div class="text-xs text-pink-500 font-bold uppercase tracking-wide">Compound Amount</div>
+                            <div class="text-2xl font-bold text-pink-700 font-mono" id="compoundFinal">$26,533</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8">
+            <div class="bg-gradient-to-br from-orange-50 to-amber-50 p-8 rounded-3xl border border-orange-100">
+                <h3 class="text-xl font-bold text-orange-900 mb-2">📉 Depreciation (Decay)</h3>
+                <p class="text-sm text-orange-700/80 mb-6">Real-world value loss (e.g., cars, electronics).</p>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-bold text-orange-800">Original Price</label>
+                        <input type="number" id="carPrice" value="200000" class="w-32 bg-white border border-orange-200 rounded px-2 py-1 text-right font-mono" oninput="calcDepreciation()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-bold text-orange-800">Decay Rate (%)</label>
+                        <input type="number" id="depRate" value="15" class="w-32 bg-white border border-orange-200 rounded px-2 py-1 text-right font-mono" oninput="calcDepreciation()">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <label class="text-sm font-bold text-orange-800">Years</label>
+                        <input type="number" id="depYears" value="3" class="w-32 bg-white border border-orange-200 rounded px-2 py-1 text-right font-mono" oninput="calcDepreciation()">
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-orange-200">
+                    <div class="text-center">
+                        <div class="text-xs text-orange-600 uppercase font-bold mb-1">Value after <span id="depYearsDisplay">3</span> years</div>
+                        <div class="text-4xl font-mono font-bold text-orange-600" id="depResult">$122,825</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col justify-center text-center">
+                 <h3 class="text-lg font-bold text-slate-800 mb-4">Formula Recap</h3>
+                 <div class="space-y-6">
+                    <div>
+                        <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Growth Factor</div>
+                        <div class="text-3xl font-mono text-green-600 font-bold bg-green-50 inline-block px-4 py-2 rounded-lg">1 + r%</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 uppercase tracking-widest mb-1">Decay Factor</div>
+                        <div class="text-3xl font-mono text-red-500 font-bold bg-red-50 inline-block px-4 py-2 rounded-lg">1 - r%</div>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="mortgage-section">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="h-8 w-1 bg-teal-500 rounded-full"></div>
+                <h3 class="text-2xl font-bold text-slate-800">Simulator 2: HK Property Mortgage</h3>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+                <div class="bg-slate-900 text-white p-6 md:p-8">
+                    <h4 class="text-lg font-bold flex items-center gap-2">
+                        <span>🏠</span> Monthly Repayment Calculator
+                    </h4>
+                    <p class="text-slate-400 text-sm mt-1">
+                        Based on the standard amortization formula used by HK banks.
+                        <br><span class="font-mono text-xs opacity-70">Formula: $M = P \times \frac{r(1+r)^n}{(1+r)^n - 1}$</span>
+                    </p>
+                </div>
+
+                <div class="p-8 grid md:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Property Price (HKD)</label>
+                            <input type="number" id="propPrice" value="6000000" class="w-full border-b-2 border-slate-200 focus:border-teal-500 outline-none py-2 text-xl font-mono text-slate-700 transition-colors" oninput="calcMortgage()">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Down Payment (%)</label>
+                                <input type="number" id="downPay" value="30" class="w-full border-b-2 border-slate-200 focus:border-teal-500 outline-none py-2 text-xl font-mono text-slate-700 transition-colors" oninput="calcMortgage()">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Interest Rate (%)</label>
+                                <input type="number" id="mortRate" value="4.125" step="0.125" class="w-full border-b-2 border-slate-200 focus:border-teal-500 outline-none py-2 text-xl font-mono text-slate-700 transition-colors" oninput="calcMortgage()">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2">Loan Term (Years)</label>
+                            <input type="range" id="mortYears" min="5" max="30" value="25" class="w-full h-2 bg-teal-100 rounded-lg appearance-none cursor-pointer accent-teal-600" oninput="calcMortgage()">
+                            <div class="text-right text-teal-600 font-bold mt-1"><span id="mortYearsDisplay">25</span> Years</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-teal-100 rounded-full opacity-50 blur-2xl"></div>
+
+                        <div class="relative z-10">
+                            <div class="text-center mb-6">
+                                <div class="text-sm text-slate-500 font-semibold uppercase tracking-wider mb-2">Monthly Repayment</div>
+                                <div class="text-4xl font-extrabold text-teal-600 font-mono" id="monthlyPay">$22,468</div>
+                            </div>
+
+                            <div class="space-y-3 pt-6 border-t border-slate-200">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Loan Amount</span>
+                                    <span class="font-bold text-slate-700" id="loanAmt">$4,200,000</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Total Interest Paid</span>
+                                    <span class="font-bold text-red-500" id="totalInt">$2,540,512</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-slate-500">Total Repayment</span>
+                                    <span class="font-bold text-slate-700" id="totalRepay">$6,740,512</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 text-xs text-center text-slate-400">
+                            *Excludes insurance & stamp duty.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-400 text-sm bg-slate-900">
+        <p class="italic mb-2">But God made the earth by his power;<br>
+        he founded the world by his wisdom<br>
+        and stretched out the heavens by his understanding.</p>
+        <p class="mb-2">Jeremiah 10:12</p>
+        <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+        <p class="text-xs mb-4">耶利米書 10:12</p>
+        <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+    </footer>
+
+    <script>
+        let myChart;
+
+        function initChart() {
+            const ctx = document.getElementById('interestChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Simple Interest',
+                            data: [],
+                            borderColor: '#3b82f6', // Blue-500
+                            backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                            borderWidth: 3,
+                            pointRadius: 0,
+                            tension: 0.1,
+                            fill: true
+                        },
+                        {
+                            label: 'Compound Interest',
+                            data: [],
+                            borderColor: '#db2777', // Pink-600
+                            backgroundColor: 'rgba(219, 39, 119, 0.05)',
+                            borderWidth: 3,
+                            pointRadius: 0,
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true } },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1e293b',
+                            bodyColor: '#1e293b',
+                            borderColor: '#e2e8f0',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + Math.round(context.raw).toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            border: { display: false },
+                            grid: { color: '#f1f5f9' },
+                            ticks: { callback: function(value) { return '$' + value/1000 + 'k'; } }
+                        }
+                    }
+                }
+            });
+            updateChart();
+            calcDepreciation();
+            calcMortgage();
+        }
+
+        function updateChart() {
+            const P = parseFloat(document.getElementById('principal').value) || 0;
+            const r = parseFloat(document.getElementById('rate').value);
+            const t = parseInt(document.getElementById('years').value);
+
+            document.getElementById('rateValue').innerText = r;
+            document.getElementById('yearsValue').innerText = t;
+
+            const labels = [];
+            const simpleData = [];
+            const compoundData = [];
+
+            for(let i = 0; i <= t; i++) {
+                labels.push('Y' + i);
+                let simpleA = P * (1 + (r/100 * i));
+                let compoundA = P * Math.pow((1 + r/100), i);
+                simpleData.push(simpleA);
+                compoundData.push(compoundA);
+            }
+
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = simpleData;
+            myChart.data.datasets[1].data = compoundData;
+            myChart.update();
+
+            const finalSimple = simpleData[simpleData.length - 1];
+            const finalCompound = compoundData[compoundData.length - 1];
+
+            document.getElementById('simpleFinal').innerText = '$' + Math.round(finalSimple).toLocaleString();
+            document.getElementById('compoundFinal').innerText = '$' + Math.round(finalCompound).toLocaleString();
+        }
+
+        function calcDepreciation() {
+            const P = parseFloat(document.getElementById('carPrice').value) || 0;
+            const r = parseFloat(document.getElementById('depRate').value) || 0;
+            const n = parseFloat(document.getElementById('depYears').value) || 0;
+
+            document.getElementById('depYearsDisplay').innerText = n;
+            const result = P * Math.pow((1 - r/100), n);
+            document.getElementById('depResult').innerText = '$' + Math.round(result).toLocaleString();
+        }
+
+        function calcMortgage() {
+            // Inputs
+            const price = parseFloat(document.getElementById('propPrice').value) || 0;
+            const downPercent = parseFloat(document.getElementById('downPay').value) || 0;
+            const annualRate = parseFloat(document.getElementById('mortRate').value) || 0;
+            const years = parseInt(document.getElementById('mortYears').value) || 0;
+
+            // Update UI Labels
+            document.getElementById('mortYearsDisplay').innerText = years;
+
+            // 1. Calculate Loan Amount (P)
+            const loanAmount = price * (1 - downPercent / 100);
+            document.getElementById('loanAmt').innerText = '$' + Math.round(loanAmount).toLocaleString();
+
+            // 2. Variables for Formula
+            const P = loanAmount;
+            const r = (annualRate / 100) / 12; // Monthly Interest Rate
+            const n = years * 12; // Total Number of Months
+
+            // 3. Amortization Formula: M = P * [ r(1+r)^n ] / [ (1+r)^n - 1 ]
+            let monthlyPayment = 0;
+            if (r > 0) {
+                monthlyPayment = P * ( (r * Math.pow(1+r, n)) / (Math.pow(1+r, n) - 1) );
+            } else {
+                monthlyPayment = P / n; // If 0% interest
+            }
+
+            // 4. Totals
+            const totalRepayment = monthlyPayment * n;
+            const totalInterest = totalRepayment - P;
+
+            // 5. Update UI
+            document.getElementById('monthlyPay').innerText = '$' + Math.round(monthlyPayment).toLocaleString();
+            document.getElementById('totalRepay').innerText = '$' + Math.round(totalRepayment).toLocaleString();
+            document.getElementById('totalInt').innerText = '$' + Math.round(totalInterest).toLocaleString();
+        }
+
+        window.onload = initChart;
+    </script>
+</body>
+</html>

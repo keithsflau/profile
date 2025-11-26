@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Equations: The Engineer's Guide</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        .engineer-grid {
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
+            linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+        input[type=range] {
+            accent-color: #4f46e5;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 glass-panel border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">📐</span>
+                    <h1 class="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-600">
+                        MathEng <span class="text-slate-500 font-light text-sm">HK Secondary</span>
+                    </h1>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+                    <a href="#concept" class="hover:text-indigo-600 transition">Concept</a>
+                    <a href="#visualizer" class="hover:text-indigo-600 transition">Visualizer</a>
+                    <a href="#solver" class="hover:text-indigo-600 transition">Solver</a>
+                    <a href="#quiz" class="hover:text-indigo-600 transition">HKDSE Quiz</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- Hero Section -->
+        <div class="text-center space-y-4 py-8">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight">
+                Linear Equations in <br/>
+                <span class="text-indigo-600">Two Unknowns</span>
+            </h2>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Welcome, future engineers! Today we bridge the gap between abstract algebra and real-world structural design.
+            </p>
+        </div>
+
+        <!-- Section 1: Concept Intro -->
+        <section id="concept" class="glass-panel rounded-2xl p-6 md:p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-400 opacity-10 rounded-bl-full"></div>
+            
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1 space-y-4">
+                    <h3 class="text-2xl font-bold flex items-center gap-2">
+                        <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg text-sm">Concept</span>
+                        The Engineer's View
+                    </h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Imagine you are designing a suspension bridge. 
+                        <br><br>
+                        <strong>Cable A</strong> creates a tension force modeled by one equation, and <strong>Cable B</strong> creates a force modeled by another. 
+                        The point where these lines cross isn't just a dot on a paper—it's the <strong>Structural Equilibrium Point</strong> (or connection joint). If our math is wrong, the bridge fails!
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-indigo-500">
+                        <p class="text-sm text-slate-500 uppercase tracking-wide font-bold mb-1">Standard Form</p>
+                        <p class="text-xl font-mono">
+                            $Ax + By + C = 0$
+                        </p>
+                    </div>
+                </div>
+                <div class="flex-1 bg-white p-6 rounded-xl shadow-inner border border-slate-100 text-center">
+                    <div class="text-6xl mb-4">🏗️</div>
+                    <p class="text-sm text-slate-500 font-medium">Intersection = Solution</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Visualizer -->
+        <section id="visualizer" class="space-y-6">
+            <div class="flex justify-between items-end">
+                <h3 class="text-2xl font-bold text-slate-800">Graph Visualizer</h3>
+                <span class="text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded">Live Canvas Render</span>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Controls -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Line 1 Control -->
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                        <h4 class="font-bold text-indigo-700 mb-2">Line 1 ($y = m_1x + c_1$)</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="flex justify-between text-xs font-bold text-slate-500">
+                                    <span>Slope ($m_1$)</span>
+                                    <span id="val-m1" class="text-indigo-600">2</span>
+                                </label>
+                                <input type="range" id="m1" min="-5" max="5" step="0.5" value="2" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="flex justify-between text-xs font-bold text-slate-500">
+                                    <span>Y-Intercept ($c_1$)</span>
+                                    <span id="val-c1" class="text-indigo-600">1</span>
+                                </label>
+                                <input type="range" id="c1" min="-5" max="5" step="0.5" value="1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line 2 Control -->
+                    <div class="bg-pink-50 p-4 rounded-xl border border-pink-100">
+                        <h4 class="font-bold text-pink-700 mb-2">Line 2 ($y = m_2x + c_2$)</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="flex justify-between text-xs font-bold text-slate-500">
+                                    <span>Slope ($m_2$)</span>
+                                    <span id="val-m2" class="text-pink-600">-1</span>
+                                </label>
+                                <input type="range" id="m2" min="-5" max="5" step="0.5" value="-1" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="flex justify-between text-xs font-bold text-slate-500">
+                                    <span>Y-Intercept ($c_2$)</span>
+                                    <span id="val-c2" class="text-pink-600">4</span>
+                                </label>
+                                <input type="range" id="c2" min="-5" max="5" step="0.5" value="4" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Result Panel -->
+                    <div class="bg-slate-800 text-white p-4 rounded-xl text-center">
+                        <p class="text-xs text-slate-400 uppercase tracking-widest mb-1">Intersection Point</p>
+                        <p id="intersection-display" class="text-xl font-mono font-bold text-green-400">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Canvas -->
+                <div class="lg:col-span-2 relative engineer-grid bg-white rounded-xl overflow-hidden border border-slate-200 shadow-inner h-[400px]">
+                    <canvas id="graphCanvas" class="w-full h-full"></canvas>
+                    <div class="absolute top-2 right-2 bg-white/80 p-2 rounded text-xs text-slate-500 font-mono">
+                        Grid: 1 unit
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Solver -->
+        <section id="solver" class="space-y-6">
+            <h3 class="text-2xl font-bold text-slate-800">Algebraic Solver</h3>
+            
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <div class="bg-slate-50 p-4 border-b border-slate-200 flex flex-wrap gap-4 items-center justify-between">
+                    <div class="flex gap-2 text-sm">
+                        <button onclick="setMethod('elimination')" id="btn-elim" class="px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium shadow-sm transition">Method of Elimination</button>
+                        <button onclick="setMethod('substitution')" id="btn-sub" class="px-4 py-2 rounded-lg bg-white text-slate-600 font-medium hover:bg-slate-100 border border-slate-200 transition">Method of Substitution</button>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Input Area -->
+                    <div class="space-y-6">
+                        <p class="text-sm text-slate-500">Enter coefficients for the system:</p>
+                        
+                        <div class="space-y-4">
+                            <!-- Eq 1 -->
+                            <div class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                                <span class="font-bold text-slate-400 text-sm">(1)</span>
+                                <input type="number" id="a1" value="2" class="w-12 p-1 bg-slate-50 border border-slate-300 rounded text-center font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <span>$x +$</span>
+                                <input type="number" id="b1" value="3" class="w-12 p-1 bg-slate-50 border border-slate-300 rounded text-center font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <span>$y =$</span>
+                                <input type="number" id="c1_sol" value="13" class="w-12 p-1 bg-slate-50 border border-slate-300 rounded text-center font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+
+                            <!-- Eq 2 -->
+                            <div class="flex items-center gap-2 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                                <span class="font-bold text-slate-400 text-sm">(2)</span>
+                                <input type="number" id="a2" value="5" class="w-12 p-1 bg-slate-50 border border-slate-300 rounded text-center font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <span>$x -$</span>
+                                <input type="number" id="b2" value="2" class="w-12 p-1 bg-slate-50 border border-slate-300 rounded text-center font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                                <span>$y =$</span>
+                                <input type="number" id="c2_sol" value="4" class="w-12 p-1 bg-slate-50 border border-slate-300 rounded text-center font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <button onclick="solveSystem()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:translate-y-[-1px] transition">
+                            Show Solution Steps
+                        </button>
+                    </div>
+
+                    <!-- Steps Output -->
+                    <div class="bg-slate-50 rounded-xl border border-slate-200 p-4 h-96 overflow-y-auto">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-200 pb-2">Step-by-Step Breakdown</h4>
+                        <div id="solution-steps" class="space-y-3 text-sm font-mono text-slate-700">
+                            <!-- Steps generated via JS -->
+                            <p class="text-slate-400 italic">Click "Show Solution Steps" to generate the working.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: HKDSE Quiz -->
+        <section id="quiz" class="pb-12">
+            <h3 class="text-2xl font-bold text-slate-800 mb-6">HKDSE Style Quick Quiz</h3>
+            
+            <div id="quiz-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Questions generated by JS -->
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button onclick="generateQuiz()" class="px-6 py-2 border-2 border-slate-300 text-slate-600 font-bold rounded-full hover:bg-slate-800 hover:text-white hover:border-slate-800 transition">
+                    🔄 Generate New Questions
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-slate-200 py-8 text-center">
+            <p class="text-slate-500 text-sm italic mb-2">But God made the earth by his power;<br>
+            he founded the world by his wisdom<br>
+            and stretched out the heavens by his understanding.</p>
+            <p class="text-slate-500 text-sm mb-2">Jeremiah 10:12</p>
+            <p class="text-slate-400 text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+            <p class="text-slate-400 text-xs mb-4">耶利米書 10:12</p>
+            <p class="text-slate-500 text-xs mt-4 pt-4 border-t border-slate-300">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. VISUALIZER ENGINE ---
+        const canvas = document.getElementById('graphCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let m1 = 2, c1 = 1;
+        let m2 = -1, c2 = 4;
+
+        // Configuration
+        const scale = 30; // pixels per unit
+        
+        function resizeCanvas() {
+            // Make canvas crisp on standard displays
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            drawGraph();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Input Listeners
+        ['m1', 'c1', 'm2', 'c2'].forEach(id => {
+            document.getElementById(id).addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                document.getElementById(`val-${id}`).innerText = val;
+                
+                // Update global vars
+                if(id === 'm1') m1 = val;
+                if(id === 'c1') c1 = val;
+                if(id === 'm2') m2 = val;
+                if(id === 'c2') c2 = val;
+
+                drawGraph();
+            });
+        });
+
+        // Coordinate conversion: Math (x,y) -> Screen (x,y)
+        function toScreen(x, y) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            return {
+                x: centerX + (x * scale),
+                y: centerY - (y * scale) // Canvas Y is inverted
+            };
+        }
+
+        function drawGraph() {
+            // Clear
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const w = canvas.width;
+            const h = canvas.height;
+            const centerX = w / 2;
+            const centerY = h / 2;
+
+            // Draw Grid
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            
+            // Vertical lines
+            for (let i = 0; i <= w/2; i += scale) {
+                // Right side
+                ctx.beginPath(); ctx.moveTo(centerX + i, 0); ctx.lineTo(centerX + i, h); ctx.stroke();
+                // Left side
+                ctx.beginPath(); ctx.moveTo(centerX - i, 0); ctx.lineTo(centerX - i, h); ctx.stroke();
+            }
+            // Horizontal lines
+            for (let i = 0; i <= h/2; i += scale) {
+                // Up
+                ctx.beginPath(); ctx.moveTo(0, centerY - i); ctx.lineTo(w, centerY - i); ctx.stroke();
+                // Down
+                ctx.beginPath(); ctx.moveTo(0, centerY + i); ctx.lineTo(w, centerY + i); ctx.stroke();
+            }
+
+            // Draw Axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(w, centerY); ctx.stroke(); // X-axis
+            ctx.beginPath(); ctx.moveTo(centerX, 0); ctx.lineTo(centerX, h); ctx.stroke(); // Y-axis
+
+            // Plot Line 1 (Indigo)
+            drawLine(m1, c1, '#4f46e5', 3);
+
+            // Plot Line 2 (Pink)
+            drawLine(m2, c2, '#db2777', 3);
+
+            // Calculate Intersection
+            // m1*x + c1 = m2*x + c2  =>  x(m1 - m2) = c2 - c1  => x = (c2 - c1) / (m1 - m2)
+            if (m1 === m2) {
+                document.getElementById('intersection-display').innerHTML = "Parallel Lines (No Solution)";
+                document.getElementById('intersection-display').className = "text-xl font-mono font-bold text-red-400";
+            } else {
+                const intersectX = (c2 - c1) / (m1 - m2);
+                const intersectY = m1 * intersectX + c1;
+                
+                // Draw Intersection Point
+                const pt = toScreen(intersectX, intersectY);
+                ctx.fillStyle = '#22c55e'; // Green
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, 6, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.stroke();
+
+                // Display Text
+                document.getElementById('intersection-display').innerHTML = `(${intersectX.toFixed(2)}, ${intersectY.toFixed(2)})`;
+                document.getElementById('intersection-display').className = "text-xl font-mono font-bold text-green-400";
+            }
+        }
+
+        function drawLine(m, c, color, width) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            
+            // Find points at edge of screen to draw smooth line
+            // x = -10 (roughly) to +10
+            const xStart = -20;
+            const yStart = m * xStart + c;
+            const pStart = toScreen(xStart, yStart);
+
+            const xEnd = 20;
+            const yEnd = m * xEnd + c;
+            const pEnd = toScreen(xEnd, yEnd);
+
+            ctx.beginPath();
+            ctx.moveTo(pStart.x, pStart.y);
+            ctx.lineTo(pEnd.x, pEnd.y);
+            ctx.stroke();
+        }
+
+        // --- 2. SOLVER ENGINE ---
+        let currentMethod = 'elimination';
+
+        function setMethod(method) {
+            currentMethod = method;
+            const elimBtn = document.getElementById('btn-elim');
+            const subBtn = document.getElementById('btn-sub');
+            
+            if(method === 'elimination') {
+                elimBtn.className = "px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium shadow-sm transition";
+                subBtn.className = "px-4 py-2 rounded-lg bg-white text-slate-600 font-medium hover:bg-slate-100 border border-slate-200 transition";
+            } else {
+                subBtn.className = "px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium shadow-sm transition";
+                elimBtn.className = "px-4 py-2 rounded-lg bg-white text-slate-600 font-medium hover:bg-slate-100 border border-slate-200 transition";
+            }
+            solveSystem(); // Re-solve with new method
+        }
+
+        function solveSystem() {
+            const a1 = parseFloat(document.getElementById('a1').value);
+            const b1 = parseFloat(document.getElementById('b1').value);
+            const c1 = parseFloat(document.getElementById('c1_sol').value);
+            const a2 = parseFloat(document.getElementById('a2').value);
+            const b2 = parseFloat(document.getElementById('b2').value);
+            const c2 = parseFloat(document.getElementById('c2_sol').value);
+
+            const container = document.getElementById('solution-steps');
+            container.innerHTML = ""; // Clear
+
+            const det = a1 * b2 - a2 * b1;
+
+            if (Math.abs(det) < 0.0001) {
+                container.innerHTML = `<div class="p-4 bg-red-100 text-red-700 rounded-lg">Determinant is zero. Lines are parallel or identical.</div>`;
+                return;
+            }
+
+            const x = (c1 * b2 - c2 * b1) / det;
+            const y = (a1 * c2 - a2 * c1) / det;
+
+            let steps = [];
+
+            if (currentMethod === 'elimination') {
+                steps.push(`<div class="font-bold text-indigo-600 mb-2">Goal: Eliminate one variable (e.g., y)</div>`);
+                
+                // Simplified Logic: Multiply to match coeff of y
+                // Eq 1 * b2
+                // Eq 2 * b1
+                const newA1 = a1 * Math.abs(b2);
+                const newC1 = c1 * Math.abs(b2);
+                const newA2 = a2 * Math.abs(b1);
+                const newC2 = c2 * Math.abs(b1);
+                const commonY = Math.abs(b1 * b2);
+
+                steps.push(`1. Multiply Equation (1) by ${Math.abs(b2)} and Equation (2) by ${Math.abs(b1)} to make coefficients of $y$ equal magnitude.`);
+                steps.push(`$$ \\begin{cases} ${newA1}x ${b1*b2 > 0 ? '+' : '-'} ${commonY}y = ${newC1} \\\\ ${newA2}x ${b1*b2 > 0 ? '+' : '-'} ${commonY}y = ${newC2} \\end{cases} $$`);
+                
+                const op = (Math.sign(b1) === Math.sign(b2)) ? "Subtract" : "Add";
+                const resA = (Math.sign(b1) === Math.sign(b2)) ? newA1 - newA2 : newA1 + newA2;
+                const resC = (Math.sign(b1) === Math.sign(b2)) ? newC1 - newC2 : newC1 + newC2;
+
+                steps.push(`2. ${op} the equations to eliminate $y$:`);
+                steps.push(`$$ ${resA}x = ${resC} $$`);
+                steps.push(`3. Solve for $x$:`);
+                steps.push(`$$ x = ${x} $$`);
+                steps.push(`4. Substitute $x=${x}$ back into Equation (1):`);
+                steps.push(`$$ ${a1}(${x}) + ${b1}y = ${c1} $$`);
+                steps.push(`$$ ${a1*x} + ${b1}y = ${c1} $$`);
+                steps.push(`$$ ${b1}y = ${c1 - (a1*x)} $$`);
+                steps.push(`$$ y = ${y} $$`);
+
+            } else {
+                // Substitution
+                steps.push(`<div class="font-bold text-indigo-600 mb-2">Goal: Make $x$ the subject in Eq(1) and put into Eq(2)</div>`);
+                steps.push(`1. From Equation (1): $${a1}x + ${b1}y = ${c1}$`);
+                steps.push(`$$ ${a1}x = ${c1} - ${b1}y $$`);
+                steps.push(`$$ x = \\frac{${c1} - ${b1}y}{${a1}} $$`);
+                steps.push(`2. Substitute this expression of $x$ into Equation (2):`);
+                steps.push(`$$ ${a2}(\\frac{${c1} - ${b1}y}{${a1}}) ${b2 < 0 ? '-' : '+'} ${Math.abs(b2)}y = ${c2} $$`);
+                steps.push(`3. Solve for $y$ (multiply all by ${a1} to clear fraction):`);
+                const term1 = a2*c1;
+                const term2 = a2*b1; // coefficient of y from bracket
+                const term3 = b2*a1; // original y coeff scaled
+                steps.push(`$$ ${term1} - ${term2}y ${term3 < 0 ? '-' : '+'} ${Math.abs(term3)}y = ${c2*a1} $$`);
+                steps.push(`$$ (${term3 - term2})y = ${c2*a1 - term1} $$`);
+                steps.push(`$$ y = ${y} $$`);
+                steps.push(`4. Substitute $y=${y}$ back into expression for $x$:`);
+                steps.push(`$$ x = ${x} $$`);
+            }
+
+            steps.push(`<div class="bg-green-100 p-2 rounded text-green-800 font-bold border border-green-200 mt-2">Final Solution: (${x}, ${y})</div>`);
+
+            container.innerHTML = steps.join('\n');
+            // Trigger MathJax re-render
+            MathJax.typesetPromise();
+        }
+
+        // --- 3. QUIZ ENGINE ---
+        const quizData = [
+            {
+                q: "Which of the following points lies on the line $y = 2x + 3$?",
+                options: ["(1, 4)", "(2, 7)", "(0, 0)", "(-1, 0)"],
+                correct: 1,
+                explanation: "Substitute $x=2$: $y = 2(2) + 3 = 4 + 3 = 7$. So (2,7) is correct."
+            },
+            {
+                q: "What is the slope of the line $3x + 2y - 6 = 0$?",
+                options: ["3", "-3/2", "2/3", "3/2"],
+                correct: 1,
+                explanation: "Rearrange to $y=mx+c$: $2y = -3x + 6 \\rightarrow y = -\\frac{3}{2}x + 3$. Slope is $-3/2$."
+            },
+            {
+                q: "If two lines intersect at point P, P is known as the...",
+                options: ["Y-intercept", "Slope", "Solution", "Constant"],
+                correct: 2,
+                explanation: "The intersection point represents the pair of $(x,y)$ values that satisfy both equations simultaneously, i.e., the Solution."
+            },
+            {
+                q: "Find the intersection of $x = 2$ and $y = 3$.",
+                options: ["(2, 3)", "(3, 2)", "(0, 0)", "(2, 0)"],
+                correct: 0,
+                explanation: "Vertical line $x=2$ and horizontal line $y=3$ simply meet at $(2,3)$."
+            }
+        ];
+
+        function generateQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            
+            // Pick 3 random questions
+            const shuffled = [...quizData].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+
+            selected.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "glass-panel p-6 rounded-xl border border-slate-200 shadow-lg flex flex-col";
+                
+                let html = `<div class="mb-4"><span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-1 rounded">Q${index+1}</span></div>`;
+                html += `<p class="text-slate-800 font-medium mb-4">${item.q}</p>`;
+                html += `<div class="space-y-2 flex-grow">`;
+                
+                item.options.forEach((opt, i) => {
+                    html += `<button onclick="checkAnswer(this, ${i === item.correct}, '${item.explanation.replace(/'/g, "\\'")}')" class="w-full text-left p-2 rounded hover:bg-slate-50 border border-transparent hover:border-indigo-100 transition text-sm text-slate-600">
+                        ${String.fromCharCode(65+i)}. ${opt}
+                    </button>`;
+                });
+                
+                html += `</div>`;
+                html += `<div class="mt-4 text-xs p-3 rounded bg-slate-50 hidden feedback-box border"></div>`;
+                
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+            MathJax.typesetPromise();
+        }
+
+        function checkAnswer(btn, isCorrect, explanation) {
+            const parent = btn.parentElement;
+            const feedback = parent.nextElementSibling;
+            
+            // Reset styles
+            Array.from(parent.children).forEach(b => {
+                b.className = "w-full text-left p-2 rounded border border-transparent opacity-50 cursor-not-allowed";
+                b.disabled = true;
+            });
+
+            if(isCorrect) {
+                btn.className = "w-full text-left p-2 rounded bg-green-100 border border-green-300 text-green-800 font-bold";
+                feedback.innerHTML = `✅ <strong>Correct!</strong><br>${explanation}`;
+                feedback.classList.remove('hidden', 'bg-red-50', 'border-red-200');
+                feedback.classList.add('bg-green-50', 'border-green-200', 'text-green-800');
+            } else {
+                btn.className = "w-full text-left p-2 rounded bg-red-100 border border-red-300 text-red-800";
+                feedback.innerHTML = `❌ <strong>Incorrect.</strong><br>${explanation}`;
+                feedback.classList.remove('hidden', 'bg-green-50', 'border-green-200');
+                feedback.classList.add('bg-red-50', 'border-red-200', 'text-red-800');
+            }
+            feedback.classList.remove('hidden');
+            MathJax.typesetPromise();
+        }
+
+        // Init
+        resizeCanvas();
+        generateQuiz();
+
+    </script>
+</body>
+</html>

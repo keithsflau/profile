@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 7: Handling Continuous Data</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Config for Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        math: {
+                            light: '#818cf8',
+                            DEFAULT: '#4f46e5', // Indigo 600
+                            dark: '#312e81',
+                        },
+                        fun: {
+                            pink: '#ec4899',
+                            teal: '#14b8a6',
+                            orange: '#f97316'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-tr from-math to-fun-pink rounded-lg flex items-center justify-center text-white font-bold">7</div>
+                    <span class="font-bold text-xl text-slate-800 tracking-tight">Math<span class="text-math">Master</span> HK</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#concepts" class="text-slate-600 hover:text-math transition">Concepts</a>
+                    <a href="#grouper" class="text-slate-600 hover:text-math transition">Grouper</a>
+                    <a href="#polygon" class="text-slate-600 hover:text-math transition">Polygons</a>
+                    <a href="#cumulative" class="text-slate-600 hover:text-math transition">Cumulative</a>
+                    <a href="#quiz" class="px-4 py-2 bg-math text-white rounded-full hover:bg-math-dark transition shadow-lg shadow-math/30">Take Quiz</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-pink-50 -z-10"></div>
+        <!-- Decorative blobs -->
+        <div class="absolute top-20 right-0 w-72 h-72 bg-fun-teal/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-10 w-96 h-96 bg-fun-pink/10 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-indigo-100 text-indigo-700 text-sm font-semibold mb-6">Form 1 - 3 Mathematics</span>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6">
+                Handling <span class="text-transparent bg-clip-text bg-gradient-to-r from-math to-fun-pink">Continuous Data</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-600 mb-10">
+                Master histograms, frequency polygons, cumulative frequency, and class intervals. Visualize how we organize the chaotic world of continuous numbers.
+            </p>
+            <a href="#concepts" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-xl text-white bg-math hover:bg-math-dark transition-all shadow-xl shadow-indigo-500/30 transform hover:-translate-y-1">
+                Start Learning
+                <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- Concept Section -->
+    <section id="concepts" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-slate-900">Key Concepts</h2>
+                <p class="mt-2 text-slate-500">Understanding the vocabulary of Chapter 7</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Concept 1 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-2xl hover:border-math/30 transition-all duration-300">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors">
+                        <svg class="w-6 h-6 text-blue-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Continuous Data</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        Data that can take <strong>any value</strong> within a range. It is measured, not counted.
+                    </p>
+                    <div class="mt-4 text-sm font-semibold text-blue-600 bg-blue-50 inline-block px-3 py-1 rounded-full">Example: Height, Weight, Time</div>
+                </div>
+
+                <!-- Concept 2 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-2xl hover:border-fun-pink/30 transition-all duration-300">
+                    <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-fun-pink transition-colors">
+                        <svg class="w-6 h-6 text-fun-pink group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Class Interval</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        The range of values for a specific group (bin).
+                        <br>
+                        <span class="italic text-sm">Class Width = Upper Boundary - Lower Boundary</span>
+                    </p>
+                    <div class="mt-4 text-sm font-semibold text-pink-600 bg-pink-50 inline-block px-3 py-1 rounded-full">Example: 150cm - 155cm</div>
+                </div>
+
+                <!-- Concept 3 -->
+                <div class="group p-8 rounded-2xl bg-white border border-slate-100 shadow-lg hover:shadow-2xl hover:border-fun-teal/30 transition-all duration-300">
+                    <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-fun-teal transition-colors">
+                        <svg class="w-6 h-6 text-fun-teal group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Class Mark</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        The mid-point of a class interval. It represents the data in that group.
+                        <br>
+                        <span class="italic text-sm">(Lower Limit + Upper Limit) ÷ 2</span>
+                    </p>
+                    <div class="mt-4 text-sm font-semibold text-teal-600 bg-teal-50 inline-block px-3 py-1 rounded-full">Used for: Frequency Polygons</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activity 1: The Data Grouper -->
+    <section id="grouper" class="py-20 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900">Activity 1: The Data Grouper</h2>
+                    <p class="mt-2 text-slate-600">See how changing the <span class="text-math font-bold">Class Width</span> changes the shape of the Histogram.</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button onclick="regenerateData()" class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-math transition shadow-sm font-medium flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        New Random Data
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Controls & Data Panel -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Raw Data Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-md">
+                        <h3 class="font-bold text-slate-700 mb-2 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-slate-400"></span> Raw Data (Heights in cm)
+                        </h3>
+                        <div id="rawDataContainer" class="h-32 overflow-y-auto text-sm font-mono bg-slate-50 p-3 rounded-lg grid grid-cols-4 gap-2 text-slate-500">
+                            <!-- JS populates this -->
+                        </div>
+                    </div>
+
+                    <!-- Slider Control -->
+                    <div class="bg-math p-6 rounded-2xl shadow-lg text-white">
+                        <label class="block text-sm font-medium text-indigo-100 mb-2">Adjust Class Width (Bin Size)</label>
+                        <input type="range" id="binSlider" min="2" max="10" value="5" step="1" 
+                            class="w-full h-2 bg-indigo-200 rounded-lg appearance-none cursor-pointer accent-white hover:accent-indigo-50">
+                        <div class="flex justify-between mt-2 text-sm">
+                            <span>Detailed (2cm)</span>
+                            <span id="binDisplay" class="font-bold text-xl">5cm</span>
+                            <span>General (10cm)</span>
+                        </div>
+                    </div>
+
+                    <!-- Frequency Table -->
+                    <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Height (cm)</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Class Mark</th>
+                                    <th class="px-4 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Freq</th>
+                                </tr>
+                            </thead>
+                            <tbody id="freqTableBody" class="bg-white divide-y divide-slate-200 text-sm">
+                                <!-- JS populates this -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Chart Panel -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white p-6 rounded-2xl shadow-xl h-full border border-slate-100">
+                        <h3 class="font-bold text-xl text-slate-800 mb-4">Histogram</h3>
+                        <div class="relative h-96 w-full">
+                            <canvas id="grouperChart"></canvas>
+                        </div>
+                        <div class="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200 text-yellow-800 text-sm flex items-start gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <p><strong>Note for Continuous Data:</strong> In a Histogram, the bars must touch each other! There are no gaps between 150-155 and 155-160 because height is continuous.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activity 2: Polygon Plotter -->
+    <section id="polygon" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Activity 2: The Frequency Polygon</h2>
+                <p class="mt-2 text-slate-600">The Frequency Polygon is a line graph that connects the <span class="text-fun-pink font-bold">Class Marks</span> (mid-points).</p>
+            </div>
+
+            <div class="bg-slate-900 p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                <!-- Background decoration -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl"></div>
+                
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 relative z-10">
+                    <div class="text-white">
+                        <h3 class="text-xl font-bold">Visualization</h3>
+                    </div>
+                    <div class="flex items-center gap-3 mt-4 md:mt-0">
+                        <span class="text-slate-300 text-sm font-medium">Show Polygon</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="polygonToggle" class="sr-only peer" onchange="togglePolygon()">
+                            <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-fun-pink"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="relative h-[400px] w-full bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                    <canvas id="polygonChart"></canvas>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-2 gap-4 text-slate-300 text-sm">
+                    <div class="flex items-center gap-3 bg-slate-800 p-3 rounded-lg">
+                        <div class="w-4 h-4 bg-indigo-500 rounded-sm"></div>
+                        <span>The Histogram (Area represents frequency)</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-slate-800 p-3 rounded-lg">
+                        <div class="w-4 h-4 bg-fun-pink rounded-full border-2 border-white"></div>
+                        <span>The Polygon (Connects the Class Marks)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activity 3: Cumulative Frequency (Ogive) -->
+    <section id="cumulative" class="py-20 bg-orange-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-slate-900">Activity 3: Cumulative Frequency Polygon (Ogive)</h2>
+                <p class="mt-2 text-slate-600 max-w-2xl mx-auto">
+                    The Cumulative Frequency Polygon, or <span class="text-fun-orange font-bold">Ogive</span>, helps us find the Median (Q2) and Quartiles (Q1, Q3).
+                </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-xl border border-orange-100">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Chart -->
+                    <div class="flex-1 relative h-[450px]">
+                        <canvas id="cumulativeChart"></canvas>
+                    </div>
+
+                    <!-- Side Panel Info -->
+                    <div class="lg:w-80 space-y-6">
+                        <div class="bg-orange-50 p-6 rounded-xl border border-orange-200">
+                            <h3 class="font-bold text-fun-orange mb-2 text-lg">Plotting Rules</h3>
+                            <ul class="space-y-3 text-sm text-slate-700">
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-fun-orange mt-1.5"></div>
+                                    <span><strong>X-Axis:</strong> Upper Class Boundaries (e.g., 155, 160, 165)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-fun-orange mt-1.5"></div>
+                                    <span><strong>Y-Axis:</strong> Cumulative Frequency (Running Total)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-fun-orange mt-1.5"></div>
+                                    <span><strong>Start Point:</strong> Frequency 0 at the lower boundary of the first class.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-xl border border-slate-200">
+                            <h3 class="font-bold text-slate-800 mb-2">Finding the Median</h3>
+                            <p class="text-sm text-slate-600 mb-4">
+                                To find the median height, find <strong>N/2</strong> on the Y-axis (Cumulative Frequency), draw a line to the curve, then down to the X-axis.
+                            </p>
+                            <div class="text-center p-3 bg-slate-100 rounded-lg text-slate-500 font-mono text-sm">
+                                Total (N) = 50 <br>
+                                Median Position = 25
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="py-20 bg-indigo-50">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-math font-bold tracking-wider uppercase text-sm">Review</span>
+                <h2 class="text-3xl font-bold text-slate-900 mt-2">Knowledge Check</h2>
+                <p class="text-slate-600">Test your understanding of Chapter 7 concepts.</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Q1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-indigo-100" id="q1-container">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">1. Which of the following is an example of Continuous Data?</h3>
+                    <div class="space-y-3">
+                        <button onclick="checkAnswer(1, 0)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">A</span>
+                            Number of students in a class
+                        </button>
+                        <button onclick="checkAnswer(1, 1)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">B</span>
+                            Weight of an apple
+                        </button>
+                        <button onclick="checkAnswer(1, 2)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">C</span>
+                            Number of goals in a football match
+                        </button>
+                    </div>
+                    <div id="feedback-1" class="hidden mt-4 p-4 rounded-lg text-sm"></div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-indigo-100" id="q2-container">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">2. If a class interval is 150 - 159, what is the Class Mark?</h3>
+                    <div class="space-y-3">
+                        <button onclick="checkAnswer(2, 0)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">A</span>
+                            154
+                        </button>
+                        <button onclick="checkAnswer(2, 1)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">B</span>
+                            155
+                        </button>
+                        <button onclick="checkAnswer(2, 2)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">C</span>
+                            154.5
+                        </button>
+                    </div>
+                    <div id="feedback-2" class="hidden mt-4 p-4 rounded-lg text-sm"></div>
+                </div>
+
+                 <!-- Q3 -->
+                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-indigo-100" id="q3-container">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">3. Why do bars in a Histogram touch each other?</h3>
+                    <div class="space-y-3">
+                        <button onclick="checkAnswer(3, 0)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">A</span>
+                            It looks nicer
+                        </button>
+                        <button onclick="checkAnswer(3, 1)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">B</span>
+                            Because the data is continuous and there are no gaps between classes
+                        </button>
+                        <button onclick="checkAnswer(3, 2)" class="q-btn w-full text-left p-4 rounded-xl border border-slate-200 hover:border-math hover:bg-indigo-50 transition flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-500 font-bold">C</span>
+                            To save space on the paper
+                        </button>
+                    </div>
+                    <div id="feedback-3" class="hidden mt-4 p-4 rounded-lg text-sm"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+            he founded the world by his wisdom<br>
+            and stretched out the heavens by his understanding.</p>
+            <p class="text-sm mb-2">Jeremiah 10:12</p>
+            <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+            <p class="text-xs mb-4">耶利米書 10:12</p>
+            <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- Global State ---
+        let rawData = [];
+        let grouperChartInstance = null;
+        let polygonChartInstance = null;
+        let cumulativeChartInstance = null;
+        const totalStudents = 50;
+        const minHeight = 150;
+        const maxHeight = 190;
+
+        // --- Init ---
+        window.onload = function() {
+            regenerateData();
+        };
+
+        // --- Logic: Data Generation ---
+        function regenerateData() {
+            rawData = [];
+            // Generate heights with a slight normal distribution tendency for realism
+            for(let i=0; i<totalStudents; i++) {
+                // Bias slightly towards the middle (170cm)
+                let u = 0, v = 0;
+                while(u === 0) u = Math.random();
+                while(v === 0) v = Math.random();
+                let num = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+                let height = num * 5 + 170; // Mean 170, SD 5
+                
+                // Clamp
+                if(height < minHeight) height = minHeight + Math.random();
+                if(height > maxHeight) height = maxHeight - Math.random();
+                
+                rawData.push(parseFloat(height.toFixed(1))); // 1 decimal place
+            }
+            rawData.sort((a,b) => a-b);
+            
+            // UI Update
+            const container = document.getElementById('rawDataContainer');
+            container.innerHTML = rawData.map(h => `<span>${h}</span>`).join('');
+            
+            updateAnalysis();
+        }
+
+        // --- Logic: Frequency Distribution ---
+        function updateAnalysis() {
+            const slider = document.getElementById('binSlider');
+            const binWidth = parseInt(slider.value);
+            document.getElementById('binDisplay').innerText = binWidth + " cm";
+
+            // 1. Create Bins
+            // Start at closest round number below min
+            const startVal = Math.floor(minHeight / 5) * 5; 
+            const bins = [];
+            
+            for (let curr = startVal; curr < maxHeight; curr += binWidth) {
+                bins.push({
+                    start: curr,
+                    end: curr + binWidth,
+                    label: `${curr} - ${curr + binWidth}`, // HK Style 150 - 155 (continuous implies <)
+                    count: 0
+                });
+            }
+
+            // 2. Count Frequencies
+            rawData.forEach(h => {
+                for(let b of bins) {
+                    if (h >= b.start && h < b.end) {
+                        b.count++;
+                        break;
+                    }
+                }
+            });
+
+            // 3. Update Table
+            const tbody = document.getElementById('freqTableBody');
+            tbody.innerHTML = '';
+            bins.forEach(b => {
+                const classMark = (b.start + b.end) / 2;
+                const row = `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-4 py-2 border-b border-slate-100 font-mono text-slate-700">${b.start} &#8804; x &lt; ${b.end}</td>
+                        <td class="px-4 py-2 border-b border-slate-100 text-slate-500">${classMark}</td>
+                        <td class="px-4 py-2 border-b border-slate-100 text-right font-bold text-math">${b.count}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            // 4. Update Charts
+            renderGrouperChart(bins);
+            renderPolygonChart(bins);
+            renderCumulativeChart(bins);
+        }
+
+        // Listener for slider
+        document.getElementById('binSlider').addEventListener('input', updateAnalysis);
+
+        // --- Chart.js: Histogram (Grouper) ---
+        function renderGrouperChart(bins) {
+            const ctx = document.getElementById('grouperChart').getContext('2d');
+            const labels = bins.map(b => b.label);
+            const data = bins.map(b => b.count);
+
+            if(grouperChartInstance) grouperChartInstance.destroy();
+
+            grouperChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frequency',
+                        data: data,
+                        backgroundColor: 'rgba(79, 70, 229, 0.6)', // Indigo-600
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1,
+                        // KEY FOR HISTOGRAM:
+                        barPercentage: 1.0,
+                        categoryPercentage: 1.0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Frequency' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Height (cm) - Class Intervals' },
+                            grid: { display: false } // Cleaner look
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: (context) => `Interval: ${context[0].label}`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Chart.js: Polygon Plotter (Mixed Chart) ---
+        function renderPolygonChart(bins) {
+            const ctx = document.getElementById('polygonChart').getContext('2d');
+            
+            // To make the polygon look correct in ChartJS, it shares the x-axis with the bar chart.
+            // The points naturally align with the center of the bars.
+            
+            const labels = bins.map(b => `${(b.start+b.end)/2}`); // Use Class Marks as labels
+            const data = bins.map(b => b.count);
+
+            // Add endpoints with 0 frequency for proper polygon shape (HK style usually anchors to 0 at ends)
+            // For simplicity in this UI, we just plot the active bins
+            
+            if(polygonChartInstance) polygonChartInstance.destroy();
+
+            const showPoly = document.getElementById('polygonToggle').checked;
+
+            polygonChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            type: 'line',
+                            label: 'Freq. Polygon',
+                            data: data,
+                            borderColor: '#ec4899', // Pink
+                            backgroundColor: 'rgba(236, 72, 153, 0.2)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0, // Straight lines between points
+                            hidden: !showPoly,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#ec4899',
+                            pointRadius: 5
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Histogram',
+                            data: data,
+                            backgroundColor: 'rgba(99, 102, 241, 0.3)', // Faded Indigo
+                            borderColor: 'rgba(99, 102, 241, 0.5)',
+                            borderWidth: 1,
+                            barPercentage: 1.0,
+                            categoryPercentage: 1.0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#cbd5e1' }
+                        },
+                        x: { 
+                            title: { display: true, text: 'Class Mark (Height cm)', color:'#cbd5e1' },
+                            grid: { display: false },
+                            ticks: { color: '#cbd5e1' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#fff' } }
+                    }
+                }
+            });
+        }
+
+        // --- Chart.js: Cumulative Frequency (Ogive) ---
+        function renderCumulativeChart(bins) {
+            const ctx = document.getElementById('cumulativeChart').getContext('2d');
+            
+            // Prepare Data for Ogive
+            // X-Axis: Upper Boundaries
+            // Y-Axis: Cumulative Frequency
+            // MUST start at (Lower Bound of First Class, 0)
+            
+            const labels = [];
+            const data = [];
+            let runningTotal = 0;
+
+            // Add starting point
+            if(bins.length > 0) {
+                labels.push(bins[0].start);
+                data.push(0);
+            }
+
+            // Loop through bins
+            bins.forEach(b => {
+                runningTotal += b.count;
+                labels.push(b.end);
+                data.push(runningTotal);
+            });
+
+            if(cumulativeChartInstance) cumulativeChartInstance.destroy();
+
+            cumulativeChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Cumulative Frequency',
+                        data: data,
+                        borderColor: '#f97316', // Orange
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#f97316',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.1 // Slight curve
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Cumulative Frequency' },
+                            max: totalStudents // Set max to N
+                        },
+                        x: {
+                            title: { display: true, text: 'Height (cm) - Upper Boundaries' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function togglePolygon() {
+            if(!polygonChartInstance) return;
+            const isChecked = document.getElementById('polygonToggle').checked;
+            // Toggle the visibility of dataset 0 (Line)
+            polygonChartInstance.setDatasetVisibility(0, isChecked);
+            polygonChartInstance.update();
+        }
+
+        // --- Quiz Logic ---
+        const answers = [1, 2, 1]; // Correct indexes (0-based) for Q1, Q2, Q3
+        const explanations = [
+            "Correct! Height, Weight, and Time are measured on a continuous scale. Counting students or goals gives discrete integers.",
+            "Correct! The Class Mark is the average of the limits: (150 + 159) ÷ 2 = 154.5.",
+            "Correct! Continuous data flows from one value to the next without breaks, so the bars must touch to represent this continuity."
+        ];
+
+        function checkAnswer(qNum, selectedIndex) {
+            const correctIndex = answers[qNum-1];
+            const feedbackEl = document.getElementById(`feedback-${qNum}`);
+            
+            // Get buttons for this specific question
+            const container = document.getElementById(`q${qNum}-container`);
+            const qButtons = container.querySelectorAll('button');
+
+            // Reset styles
+            qButtons.forEach(btn => {
+                btn.classList.remove('bg-emerald-50', 'border-emerald-500', 'bg-red-50', 'border-red-500');
+                btn.classList.add('border-slate-200');
+            });
+
+            feedbackEl.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-red-100', 'text-red-800');
+
+            if (selectedIndex === correctIndex) {
+                // Correct
+                qButtons[selectedIndex].classList.remove('border-slate-200');
+                qButtons[selectedIndex].classList.add('bg-emerald-50', 'border-emerald-500');
+                feedbackEl.innerHTML = `<strong>Great Job!</strong> ${explanations[qNum-1]}`;
+                feedbackEl.classList.add('bg-emerald-100', 'text-emerald-800', 'block');
+            } else {
+                // Incorrect
+                qButtons[selectedIndex].classList.remove('border-slate-200');
+                qButtons[selectedIndex].classList.add('bg-red-50', 'border-red-500');
+                feedbackEl.innerHTML = `<strong>Not quite.</strong> Try again!`;
+                feedbackEl.classList.add('bg-red-100', 'text-red-800', 'block');
+            }
+        }
+    </script>
+</body>
+</html>

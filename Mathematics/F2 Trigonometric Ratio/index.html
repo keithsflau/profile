@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trig Lab: An Engineer's Intro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #4F46E5;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white p-6 shadow-lg">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight">HK Secondary Math Lab</h1>
+                <p class="text-indigo-100 text-sm mt-1">Engineer's Perspective: Introduction to Trigonometry</p>
+            </div>
+            <div class="mt-4 md:mt-0 bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm border border-white/30">
+                <span class="font-semibold">Target:</span> Form 2-3 / HKDSE Foundation
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-8 space-y-12">
+
+        <section class="grid md:grid-cols-2 gap-8 items-start">
+            <div class="bg-white p-8 rounded-2xl shadow-xl border-l-8 border-indigo-500 relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-100 rounded-full blur-xl opacity-50"></div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">👷‍♂️ Why do we need this?</h2>
+                <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                    Hello students! As a professional engineer, I can't measure every distance with a ruler. 
+                    Imagine trying to measure the height of the <strong>IFC building</strong> or the length of the <strong>Tsing Ma Bridge</strong> cable by hand. It's impossible!
+                </p>
+                <p class="text-gray-600">
+                    Trigonometry allows us to calculate unknown distances using <strong>angles</strong>. It is the bridge between geometry (shapes) and algebra (numbers).
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-8 rounded-2xl shadow-xl relative">
+                <div class="flex items-center space-x-3 mb-4">
+                    <span class="bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">History</span>
+                    <h2 class="text-2xl font-bold">The Origins</h2>
+                </div>
+                <p class="text-slate-300 mb-4">
+                    The word comes from Greek: <em>Trigonon</em> (triangle) + <em>Metron</em> (measure).
+                </p>
+                <ul class="space-y-3 text-sm text-slate-400">
+                    <li class="flex items-start">
+                        <span class="mr-2 text-yellow-400">✦</span>
+                        <span><strong>Ancient Egypt:</strong> Used primitive trig to build Pyramids by calculating shadow ratios (Seqt).</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2 text-yellow-400">✦</span>
+                        <span><strong>Hipparchus (190–120 BC):</strong> A Greek astronomer often called the "Father of Trigonometry" for creating the first chord tables to predict star movements.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="lab" class="space-y-6">
+            <div class="text-center">
+                <h2 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">
+                    Interactive Trigonometry Lab
+                </h2>
+                <p class="text-gray-500 mt-2">Adjust the triangle and watch the ratios change instantly.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 grid lg:grid-cols-3">
+                
+                <div class="p-8 bg-slate-50 border-r border-slate-200 flex flex-col justify-center space-y-8">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 flex justify-between">
+                            <span>Height (Opposite)</span>
+                            <span id="oppVal" class="text-blue-600">4</span>
+                        </label>
+                        <input type="range" id="oppSlider" min="1" max="10" step="0.1" value="4" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb accent-blue-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 flex justify-between">
+                            <span>Base (Adjacent)</span>
+                            <span id="adjVal" class="text-green-600">3</span>
+                        </label>
+                        <input type="range" id="adjSlider" min="1" max="10" step="0.1" value="3" 
+                            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb accent-green-600">
+                    </div>
+
+                    <div class="p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                        <p class="text-xs font-bold text-yellow-800 uppercase mb-1">Calculated Angle (θ)</p>
+                        <p class="text-3xl font-mono text-yellow-900" id="angleDisplay">53.1°</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 p-8 relative bg-grid-pattern flex flex-col items-center justify-center min-h-[400px]">
+                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#444 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+                    <svg id="triSvg" width="500" height="350" class="overflow-visible drop-shadow-xl transition-all duration-300">
+                        <path id="trianglePath" d="M50 300 L450 300 L450 50 Z" fill="rgba(79, 70, 229, 0.1)" stroke="#4F46E5" stroke-width="4" stroke-linejoin="round"/>
+                        
+                        <text id="hypLabel" x="250" y="150" fill="#666" class="text-sm font-bold" text-anchor="middle">Hypotenuse</text>
+                        <text id="oppLabel" x="470" y="175" fill="#2563EB" class="text-sm font-bold" transform="rotate(90, 470, 175)">Opposite</text>
+                        <text id="adjLabel" x="250" y="330" fill="#16A34A" class="text-sm font-bold" text-anchor="middle">Adjacent</text>
+                        
+                        <path id="angleArc" d="M100 300 Q 110 290 100 300" fill="none" stroke="#F59E0B" stroke-width="3" />
+                        <text x="90" y="290" fill="#F59E0B" class="font-bold">θ</text>
+                        
+                        <path id="rightAngle" d="M420 300 L420 270 L450 270" fill="none" stroke="black" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-xl shadow-md border-t-4 border-blue-500 transform transition hover:-translate-y-1">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-bold text-blue-800">SOH</h3>
+                        <span class="text-xs font-mono bg-blue-100 text-blue-800 px-2 py-1 rounded">sin θ</span>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="text-gray-500 text-sm">Opposite / Hypotenuse</div>
+                        <div class="text-3xl font-mono font-bold text-blue-600" id="sinCalc">0.800</div>
+                        <div class="text-xs text-gray-400" id="sinFormula">4 / 5</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-xl shadow-md border-t-4 border-green-500 transform transition hover:-translate-y-1">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-bold text-green-800">CAH</h3>
+                        <span class="text-xs font-mono bg-green-100 text-green-800 px-2 py-1 rounded">cos θ</span>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="text-gray-500 text-sm">Adjacent / Hypotenuse</div>
+                        <div class="text-3xl font-mono font-bold text-green-600" id="cosCalc">0.600</div>
+                        <div class="text-xs text-gray-400" id="cosFormula">3 / 5</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-xl shadow-md border-t-4 border-red-500 transform transition hover:-translate-y-1">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-2xl font-bold text-red-800">TOA</h3>
+                        <span class="text-xs font-mono bg-red-100 text-red-800 px-2 py-1 rounded">tan θ</span>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="text-gray-500 text-sm">Opposite / Adjacent</div>
+                        <div class="text-3xl font-mono font-bold text-red-600" id="tanCalc">1.333</div>
+                        <div class="text-xs text-gray-400" id="tanFormula">4 / 3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-indigo-900 text-white rounded-3xl p-8 md:p-12 shadow-2xl">
+            <h2 class="text-3xl font-bold mb-6 border-b border-indigo-700 pb-4">Check Your Understanding</h2>
+            <div id="quizContainer" class="space-y-6">
+                <div>
+                    <p class="text-lg mb-3">1. If the Opposite side is 3 and the Adjacent side is 4, what is the value of <strong>tan θ</strong>?</p>
+                    <div class="flex gap-4">
+                        <button onclick="checkAnswer(this, false)" class="px-6 py-2 rounded-lg border border-indigo-500 hover:bg-indigo-700 transition">0.6</button>
+                        <button onclick="checkAnswer(this, true)" class="px-6 py-2 rounded-lg border border-indigo-500 hover:bg-indigo-700 transition">0.75</button>
+                        <button onclick="checkAnswer(this, false)" class="px-6 py-2 rounded-lg border border-indigo-500 hover:bg-indigo-700 transition">1.33</button>
+                    </div>
+                    <p class="mt-2 text-sm hidden feedback"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-500 text-center py-8 mt-12">
+        <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+        he founded the world by his wisdom<br>
+        and stretched out the heavens by his understanding.</p>
+        <p class="text-sm mb-2">Jeremiah 10:12</p>
+        <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+        <p class="text-xs mb-4">耶利米書 10:12</p>
+        <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+    </footer>
+
+    <script>
+        // --- Logic for Interactive Triangle ---
+        const oppSlider = document.getElementById('oppSlider');
+        const adjSlider = document.getElementById('adjSlider');
+        
+        // Value Displays
+        const oppValDisplay = document.getElementById('oppVal');
+        const adjValDisplay = document.getElementById('adjVal');
+        const angleDisplay = document.getElementById('angleDisplay');
+        
+        // Ratio Displays
+        const sinCalc = document.getElementById('sinCalc');
+        const cosCalc = document.getElementById('cosCalc');
+        const tanCalc = document.getElementById('tanCalc');
+        const sinFormula = document.getElementById('sinFormula');
+        const cosFormula = document.getElementById('cosFormula');
+        const tanFormula = document.getElementById('tanFormula');
+
+        // SVG Elements
+        const trianglePath = document.getElementById('trianglePath');
+        const hypLabel = document.getElementById('hypLabel');
+        const oppLabel = document.getElementById('oppLabel');
+        const adjLabel = document.getElementById('adjLabel');
+        const rightAngle = document.getElementById('rightAngle');
+
+        function updateTriangle() {
+            // Get inputs
+            const opp = parseFloat(oppSlider.value);
+            const adj = parseFloat(adjSlider.value);
+
+            // Calculate Hypotenuse
+            const hyp = Math.sqrt((opp * opp) + (adj * adj));
+            
+            // Calculate Angle (in radians then degrees)
+            const angleRad = Math.atan(opp / adj);
+            const angleDeg = angleRad * (180 / Math.PI);
+
+            // Update Text Displays
+            oppValDisplay.innerText = opp;
+            adjValDisplay.innerText = adj;
+            angleDisplay.innerText = angleDeg.toFixed(1) + "°";
+
+            // Update Ratios
+            sinCalc.innerText = (opp / hyp).toFixed(3);
+            cosCalc.innerText = (adj / hyp).toFixed(3);
+            tanCalc.innerText = (opp / adj).toFixed(3);
+
+            sinFormula.innerText = `${opp} / ${hyp.toFixed(2)}`;
+            cosFormula.innerText = `${adj} / ${hyp.toFixed(2)}`;
+            tanFormula.innerText = `${opp} / ${adj}`;
+
+            // --- Draw Triangle (Scaling to fit SVG) ---
+            // We define a fixed start point at bottom-left
+            const startX = 50;
+            const startY = 300;
+            
+            // Scale factor: Multiplier to make small numbers (1-10) look big on screen (300px max)
+            const scale = 30; 
+
+            const endX = startX + (adj * scale);
+            const endY = startY - (opp * scale);
+
+            // SVG Path command: M=Move, L=Line, Z=Close
+            trianglePath.setAttribute('d', `M${startX} ${startY} L${endX} ${startY} L${endX} ${endY} Z`);
+
+            // Move Right Angle Marker
+            const markerSize = 20;
+            rightAngle.setAttribute('d', `M${endX - markerSize} ${startY} L${endX - markerSize} ${startY - markerSize} L${endX} ${startY - markerSize}`);
+
+            // Move Labels
+            adjLabel.setAttribute('x', startX + ((adj * scale) / 2));
+            adjLabel.setAttribute('y', startY + 25); // Below line
+
+            oppLabel.setAttribute('x', endX + 25); // Right of line
+            oppLabel.setAttribute('y', startY - ((opp * scale) / 2));
+            // Rotate the opposite label to make it vertical-ish reading
+            oppLabel.setAttribute('transform', `rotate(90, ${endX + 25}, ${startY - ((opp * scale) / 2)})`);
+
+            hypLabel.setAttribute('x', startX + ((adj * scale) / 2) - 10);
+            hypLabel.setAttribute('y', startY - ((opp * scale) / 2) - 10);
+        }
+
+        // Quiz Logic
+        function checkAnswer(btn, isCorrect) {
+            const feedback = btn.parentElement.nextElementSibling;
+            feedback.classList.remove('hidden');
+            if(isCorrect) {
+                feedback.innerText = "Correct! Tan = Opp/Adj = 3/4 = 0.75";
+                feedback.className = "mt-2 text-sm font-bold text-green-400 feedback";
+                btn.classList.add('bg-green-600', 'border-green-600');
+            } else {
+                feedback.innerText = "Try again. Remember SOH CAH TOA.";
+                feedback.className = "mt-2 text-sm font-bold text-red-400 feedback";
+                btn.classList.add('bg-red-600', 'border-red-600');
+            }
+        }
+
+        // Event Listeners
+        oppSlider.addEventListener('input', updateTriangle);
+        adjSlider.addEventListener('input', updateTriangle);
+
+        // Init
+        updateTriangle();
+
+    </script>
+</body>
+</html>

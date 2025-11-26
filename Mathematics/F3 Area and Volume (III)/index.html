@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKDSE Math: Area & Volume II</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Three.js for 3D Mouhefanggai -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls for interaction -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- MathJax for rendering formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&family=Outfit:wght@300;500;700&display=swap');
+        
+        body {
+            font-family: 'Outfit', 'Noto Sans HK', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .math-input {
+            transition: all 0.3s ease;
+        }
+        .math-input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #4F46E5;
+            cursor: pointer;
+            margin-top: -8px; 
+            box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; 
+        }
+        
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #E0E7FF;
+            border-radius: 1.3px;
+        }
+        
+        .shape-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #mouhefanggai-canvas {
+            width: 100%;
+            height: 400px;
+            border-radius: 1rem;
+            cursor: move;
+            outline: none; /* Remove focus outline */
+        }
+
+        /* Scrollbar for proof section */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #4f46e5; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation -->
+    <nav class="bg-indigo-600 text-white sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-cube text-2xl"></i>
+                <span class="text-xl font-bold tracking-tight">Math<span class="text-yellow-300">Lab</span> HK</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#history" class="hover:text-yellow-300 transition">History</a>
+                <a href="#labs" class="hover:text-yellow-300 transition">Interactive Labs</a>
+                <a href="#quiz" class="hover:text-yellow-300 transition">Challenge</a>
+            </div>
+            <div class="text-sm bg-indigo-700 px-3 py-1 rounded-full">
+                Form 5 - Mensuration
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-gradient-to-br from-indigo-600 to-purple-700 text-white pt-20 pb-24 overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10">
+            <svg width="100%" height="100%">
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"/>
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">Area & Volume (II)</h1>
+                <p class="text-xl text-indigo-100 mb-8 max-w-lg">
+                    Master the secrets of Pyramids, Cones, and Spheres. Explore how changing dimensions affects surface area and volume through engineering visualization.
+                </p>
+                <a href="#labs" class="bg-yellow-400 text-indigo-900 font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-yellow-300 transition transform hover:-translate-y-1">
+                    Start Experiment <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <!-- SVG Illustration of shapes -->
+                <svg viewBox="0 0 400 300" class="w-full max-w-md drop-shadow-2xl shape-animation">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0284c7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Cone -->
+                    <path d="M 100 250 L 200 50 L 300 250 Q 200 290 100 250" fill="url(#grad2)" opacity="0.9" />
+                    <ellipse cx="200" cy="250" rx="100" ry="20" fill="#0ea5e9" opacity="0.5" />
+                    <!-- Sphere floating -->
+                    <circle cx="280" cy="100" r="50" fill="url(#grad1)" />
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- History Section -->
+    <section id="history" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <!-- Intro Cards -->
+            <div class="flex flex-col md:flex-row gap-12 items-start mb-16">
+                <div class="md:w-1/3">
+                    <div class="sticky top-24">
+                        <h2 class="text-indigo-600 font-bold tracking-wide uppercase text-sm mb-2">Historical Context</h2>
+                        <h3 class="text-3xl font-bold mb-4 text-slate-800">Wisdom of the Ancients: Zu Geng's Principle</h3>
+                        <p class="text-slate-600 mb-6 leading-relaxed">
+                            Long before Calculus, Chinese mathematicians Zu Chongzhi and Zu Geng solved the sphere volume problem using a brilliant geometric argument involving the <strong>Mouhefanggai</strong>.
+                        </p>
+                        <div class="bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-500">
+                            <h4 class="font-bold text-indigo-800 mb-2">Zu Geng's Principle (祖暅原理)</h4>
+                            <p class="text-sm italic text-indigo-700">
+                                "Power shapes of equal height and equal cross-sectional areas at every level must have equal volumes."
+                                <br>
+                                (冪勢既同，則積不容異)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 text-red-600">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">The Mathematicians</h4>
+                        <p class="text-slate-600 text-sm">
+                            Zu Chongzhi calculated π to 7 decimal places. His son, Zu Geng, solved the volume problem using the intersection of two cylinders.
+                        </p>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                            <i class="fas fa-shapes"></i>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">The Concept</h4>
+                        <p class="text-slate-600 text-sm">
+                            They realized that finding the volume of a sphere directly was hard. But finding the volume of the intersection of two cylinders was easier.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Visualization & Proof -->
+            <div class="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <!-- 3D Canvas Container -->
+                    <div class="relative bg-black h-96 lg:h-auto">
+                        <div id="mouhefanggai-canvas"></div>
+                        <div class="absolute bottom-4 left-4 bg-black/50 px-3 py-1 rounded text-xs text-slate-300 pointer-events-none">
+                            <i class="fas fa-mouse-pointer mr-1"></i> Drag to Rotate | Intersecting Cylinders
+                        </div>
+                    </div>
+
+                    <!-- Proof Content -->
+                    <div class="p-8 lg:p-12 overflow-y-auto max-h-[600px] custom-scroll">
+                        <h3 class="text-2xl font-bold mb-2 text-yellow-400">The Proof (牟合方蓋)</h3>
+                        <p class="text-slate-400 mb-6 text-sm">Deriving \(V = \frac{4}{3}\pi r^3\) without Calculus.</p>
+
+                        <div class="space-y-8">
+                            <!-- Part 1: The Ratio -->
+                            <div>
+                                <h4 class="font-bold text-lg text-indigo-300 border-b border-indigo-500/30 pb-2 mb-3">1. The Cross-Section Ratio</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed mb-2">
+                                    At any height \(h\) from the center, compare the cross-sections:
+                                </p>
+                                <ul class="list-disc pl-5 text-sm text-slate-400 space-y-1 mb-2">
+                                    <li><strong class="text-slate-200">Sphere Area:</strong> A circle with radius \(\sqrt{r^2-h^2}\). <br> \(A_{sphere} = \pi(r^2-h^2)\)</li>
+                                    <li><strong class="text-slate-200">Mouhefanggai Area:</strong> A square with side \(2\sqrt{r^2-h^2}\). <br> \(A_{mou} = (2\sqrt{r^2-h^2})^2 = 4(r^2-h^2)\)</li>
+                                </ul>
+                                <div class="bg-indigo-900/30 p-3 rounded-lg border border-indigo-500/30 text-center">
+                                    <p class="text-sm text-yellow-200">The Ratio is Constant:</p>
+                                    \[ \frac{A_{sphere}}{A_{mou}} = \frac{\pi(r^2-h^2)}{4(r^2-h^2)} = \frac{\pi}{4} \]
+                                    <p class="text-xs text-slate-400 mt-1">By Zu Geng's Principle: \( V_{sphere} = \frac{\pi}{4} V_{mou} \)</p>
+                                </div>
+                            </div>
+
+                            <!-- Part 2: Geometric Derivation -->
+                            <div>
+                                <h4 class="font-bold text-lg text-pink-300 border-b border-pink-500/30 pb-2 mb-3">2. Finding \(V_{mou}\) (The Cube Method)</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed mb-2">
+                                    Imagine the Mouhefanggai inside a Cube of side \(2r\) (Volume \(8r^3\)). We look at the <strong>difference</strong> (gap) between them.
+                                </p>
+                                <div class="text-sm text-slate-400 space-y-2">
+                                    <p>At height \(h\), the area of the gap is:</p>
+                                    \[ A_{gap} = A_{cube} - A_{mou} = 4r^2 - 4(r^2-h^2) = 4h^2 \]
+                                    <p>
+                                        An area of \(4h^2\) represents a square cross-section that grows as we move away from the center. This forms <strong>two square pyramids</strong> (one up, one down).
+                                    </p>
+                                    <p class="pl-4 border-l-2 border-slate-600 bg-slate-800/50 p-2 rounded">
+                                        Volume of 1 Pyramid = \(\frac{1}{3} \times \text{Base} \times \text{Height} = \frac{1}{3}(2r)^2(r) = \frac{4}{3}r^3\)
+                                        <br>
+                                        Volume of Gap (2 Pyramids) = \(\frac{8}{3}r^3\)
+                                    </p>
+                                    <p>Therefore:</p>
+                                    \[ V_{mou} = V_{cube} - V_{gap} = 8r^3 - \frac{8}{3}r^3 = \frac{16}{3}r^3 \]
+                                </div>
+                            </div>
+
+                            <!-- Part 3: Conclusion -->
+                            <div>
+                                <h4 class="font-bold text-lg text-emerald-300 border-b border-emerald-500/30 pb-2 mb-3">3. Final Calculation</h4>
+                                <div class="text-sm text-slate-300">
+                                    <p class="mb-2">Substituting back into the ratio formula:</p>
+                                    \[ V_{sphere} = \frac{\pi}{4} \times V_{mou} \]
+                                    \[ V_{sphere} = \frac{\pi}{4} \times \frac{16}{3}r^3 \]
+                                    <div class="bg-emerald-900/30 p-4 rounded-lg border border-emerald-500/50 mt-3 text-center">
+                                        <span class="text-2xl font-bold text-white">\( V = \frac{4}{3}\pi r^3 \)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Labs -->
+    <section id="labs" class="py-16 bg-slate-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-800">Engineering Simulation Labs</h2>
+                <p class="text-slate-600">Explore parameters and visualize changes in real-time.</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex justify-center mb-8">
+                <div class="bg-white p-1 rounded-lg shadow-sm inline-flex">
+                    <button onclick="switchTab('cone')" id="btn-cone" class="px-6 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white shadow transition">Cone & Pyramid</button>
+                    <button onclick="switchTab('sphere')" id="btn-sphere" class="px-6 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Sphere</button>
+                    <button onclick="switchTab('similar')" id="btn-similar" class="px-6 py-2 rounded-md text-sm font-medium text-slate-600 hover:bg-slate-50 transition">Similar Solids</button>
+                </div>
+            </div>
+
+            <!-- Lab 1: Cone -->
+            <div id="lab-cone" class="lab-content max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-6 flex items-center"><i class="fas fa-sliders-h mr-3 text-indigo-500"></i> Parameters</h3>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Base Radius (r): <span id="cone-r-val" class="text-indigo-600 font-bold">5</span> cm</label>
+                            <input type="range" min="1" max="10" value="5" step="0.5" id="cone-r" class="w-full" oninput="updateCone()">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Height (h): <span id="cone-h-val" class="text-indigo-600 font-bold">10</span> cm</label>
+                            <input type="range" min="2" max="15" value="10" step="0.5" id="cone-h" class="w-full" oninput="updateCone()">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-8">
+                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                <div class="text-xs text-indigo-500 uppercase font-bold">Slant Height (l)</div>
+                                <div class="text-2xl font-bold text-indigo-900" id="cone-l-res">11.18</div>
+                                <div class="text-xs text-indigo-400">√(r² + h²)</div>
+                            </div>
+                            <div class="bg-emerald-50 p-4 rounded-lg">
+                                <div class="text-xs text-emerald-500 uppercase font-bold">Volume</div>
+                                <div class="text-2xl font-bold text-emerald-900" id="cone-v-res">261.8</div>
+                                <div class="text-xs text-emerald-400">⅓πr²h</div>
+                            </div>
+                            <div class="bg-orange-50 p-4 rounded-lg col-span-2">
+                                <div class="text-xs text-orange-500 uppercase font-bold">Total Surface Area</div>
+                                <div class="text-2xl font-bold text-orange-900" id="cone-sa-res">254.1</div>
+                                <div class="text-xs text-orange-400">πrl + πr²</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-lg flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute top-4 left-4 text-xs text-slate-400 font-mono">SIDE VIEW PROJECTION</div>
+                        <svg width="300" height="300" viewBox="0 0 300 300" class="transition-all duration-300">
+                            <!-- Axis line -->
+                            <line x1="150" y1="20" x2="150" y2="280" stroke="#e2e8f0" stroke-dasharray="4" />
+                            
+                            <!-- Cone Triangle -->
+                            <path id="cone-shape" d="M 150 50 L 200 250 L 100 250 Z" fill="rgba(79, 70, 229, 0.2)" stroke="#4F46E5" stroke-width="2"/>
+                            
+                            <!-- Base Ellipse -->
+                            <ellipse id="cone-base" cx="150" cy="250" rx="50" ry="10" fill="none" stroke="#4F46E5" stroke-width="2" stroke-dasharray="4,2"/>
+                            
+                            <!-- Labels -->
+                            <text x="160" y="150" fill="#64748b" font-size="12">h</text>
+                            <text x="125" y="270" fill="#64748b" font-size="12">r</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab 2: Sphere -->
+            <div id="lab-sphere" class="lab-content max-w-5xl mx-auto hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-6 flex items-center"><i class="fas fa-globe mr-3 text-blue-500"></i> Parameters</h3>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Radius (r): <span id="sphere-r-val" class="text-blue-600 font-bold">5</span> cm</label>
+                            <input type="range" min="1" max="10" value="5" step="0.1" id="sphere-r" class="w-full accent-blue-600" oninput="updateSphere()">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mt-8">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-xs text-blue-500 uppercase font-bold">Diameter</div>
+                                <div class="text-2xl font-bold text-blue-900" id="sphere-d-res">10.0</div>
+                                <div class="text-xs text-blue-400">2r</div>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <div class="text-xs text-purple-500 uppercase font-bold">Volume</div>
+                                <div class="text-2xl font-bold text-purple-900" id="sphere-v-res">523.6</div>
+                                <div class="text-xs text-purple-400">4/3πr³</div>
+                            </div>
+                            <div class="bg-pink-50 p-4 rounded-lg col-span-2">
+                                <div class="text-xs text-pink-500 uppercase font-bold">Surface Area</div>
+                                <div class="text-2xl font-bold text-pink-900" id="sphere-sa-res">314.2</div>
+                                <div class="text-xs text-pink-400">4πr²</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-lg flex items-center justify-center relative">
+                        <svg width="300" height="300" viewBox="0 0 300 300">
+                            <!-- Sphere Circle -->
+                            <circle id="sphere-shape" cx="150" cy="150" r="80" fill="url(#sphereGrad)" stroke="#2563eb" stroke-width="1"/>
+                            
+                            <!-- Equator -->
+                            <ellipse id="sphere-equator" cx="150" cy="150" rx="80" ry="20" fill="none" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+                            
+                            <defs>
+                                <radialGradient id="sphereGrad" cx="30%" cy="30%" r="70%" fx="30%" fy="30%">
+                                    <stop offset="0%" style="stop-color:#93c5fd;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+                                </radialGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lab 3: Similar Solids -->
+            <div id="lab-similar" class="lab-content max-w-5xl mx-auto hidden">
+                <div class="glass-panel p-8 rounded-2xl shadow-lg">
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 w-full">
+                            <h3 class="text-xl font-bold mb-4">Similarity Scale Factor (k)</h3>
+                            <p class="text-sm text-slate-600 mb-4">
+                                If length ratio is <span class="font-mono bg-slate-200 px-1 rounded">l₁/l₂ = k</span>, then:
+                                <br>Area Ratio = k²
+                                <br>Volume Ratio = k³
+                            </p>
+                            
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Scale Factor k: <span id="sim-k-val" class="text-purple-600 font-bold">2</span></label>
+                            <input type="range" min="1" max="4" value="2" step="0.1" id="sim-k" class="w-full accent-purple-600" oninput="updateSimilar()">
+                            
+                            <div class="mt-6 space-y-2">
+                                <div class="flex justify-between border-b pb-2">
+                                    <span>Length Multiplier:</span>
+                                    <span class="font-bold" id="res-k">2x</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span>Area Multiplier (k²):</span>
+                                    <span class="font-bold text-orange-600" id="res-k2">4x</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Volume Multiplier (k³):</span>
+                                    <span class="font-bold text-purple-600" id="res-k3">8x</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md:w-2/3 w-full bg-slate-900 rounded-xl p-6 flex justify-around items-end h-64 relative overflow-hidden">
+                            <!-- Reference Object -->
+                            <div class="flex flex-col items-center z-10">
+                                <div class="w-10 h-10 bg-indigo-500 shadow-lg border border-indigo-400 mb-2"></div>
+                                <span class="text-xs text-white">Original (1x)</span>
+                            </div>
+
+                            <!-- Scaled Object -->
+                            <div class="flex flex-col items-center z-10 transition-all duration-300">
+                                <div id="scaled-box" class="bg-purple-500 shadow-lg border border-purple-400 mb-2 relative flex flex-wrap content-start" style="width: 20px; height: 20px;">
+                                    <!-- Grid overlay to show volume units roughly -->
+                                    <div class="absolute inset-0 grid grid-cols-2 grid-rows-2 opacity-30 border-collapse">
+                                        <!-- Grid cells generated via CSS pattern mostly -->
+                                    </div>
+                                </div>
+                                <span class="text-xs text-white">Scaled (k=<span id="lbl-k">2</span>)</span>
+                            </div>
+                            
+                            <!-- Background Grid -->
+                            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 20px 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold text-center mb-8">Engineering Challenge</h2>
+            
+            <div class="grid gap-6">
+                <!-- Question 1 -->
+                <div class="border rounded-xl p-6 hover:shadow-md transition bg-slate-50">
+                    <p class="font-bold text-lg mb-4">1. Two similar cones have base radii of 3cm and 6cm respectively. If the volume of the smaller cone is 10cm³, what is the volume of the larger cone?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">A. 20 cm³</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">B. 40 cm³</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">C. 80 cm³</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">D. 60 cm³</button>
+                    </div>
+                    <p class="result-msg hidden mt-3 text-sm font-bold"></p>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="border rounded-xl p-6 hover:shadow-md transition bg-slate-50">
+                    <p class="font-bold text-lg mb-4">2. If the radius of a sphere is doubled, how many times does its Surface Area increase?</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">A. 2 times</button>
+                        <button onclick="checkAnswer(this, true)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">B. 4 times</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">C. 8 times</button>
+                        <button onclick="checkAnswer(this, false)" class="quiz-btn text-left px-4 py-3 rounded bg-white border border-slate-300 hover:bg-slate-100">D. 16 times</button>
+                    </div>
+                    <p class="result-msg hidden mt-3 text-sm font-bold"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 py-8 text-center">
+        <div class="container mx-auto px-4">
+            <p class="text-sm italic mb-2">But God made the earth by his power;<br>
+            he founded the world by his wisdom<br>
+            and stretched out the heavens by his understanding.</p>
+            <p class="text-sm mb-2">Jeremiah 10:12</p>
+            <p class="text-xs mb-2 mt-4">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+            <p class="text-xs mb-4">耶利米書 10:12</p>
+            <p class="text-xs mt-4 pt-4 border-t border-slate-700">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Navigation Logic ---
+        function switchTab(tabName) {
+            // Hide all
+            document.querySelectorAll('.lab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show selected
+            document.getElementById('lab-' + tabName).classList.remove('hidden');
+
+            // Update buttons
+            ['cone', 'sphere', 'similar'].forEach(t => {
+                const btn = document.getElementById('btn-' + t);
+                if(t === tabName) {
+                    btn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+                    btn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+                    btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+                }
+            });
+        }
+
+        // --- Math Logic ---
+
+        function updateCone() {
+            const r = parseFloat(document.getElementById('cone-r').value);
+            const h = parseFloat(document.getElementById('cone-h').value);
+            
+            // Calc
+            const l = Math.sqrt(r*r + h*h);
+            const v = (1/3) * Math.PI * r * r * h;
+            const sa = (Math.PI * r * l) + (Math.PI * r * r);
+
+            // Update Text
+            document.getElementById('cone-r-val').innerText = r;
+            document.getElementById('cone-h-val').innerText = h;
+            document.getElementById('cone-l-res').innerText = l.toFixed(2);
+            document.getElementById('cone-v-res').innerText = v.toFixed(1);
+            document.getElementById('cone-sa-res').innerText = sa.toFixed(1);
+
+            // Update SVG
+            // Base visual scaling factors
+            const scale = 15; 
+            const centerX = 150;
+            const floorY = 250;
+            
+            const shape = document.getElementById('cone-shape');
+            const base = document.getElementById('cone-base');
+            
+            const radiusPx = r * scale;
+            const heightPx = h * scale;
+
+            // Draw Triangle
+            // Top point: (centerX, floorY - heightPx)
+            // Left base: (centerX - radiusPx, floorY)
+            // Right base: (centerX + radiusPx, floorY)
+            const d = `M ${centerX} ${floorY - heightPx} L ${centerX + radiusPx} ${floorY} L ${centerX - radiusPx} ${floorY} Z`;
+            shape.setAttribute('d', d);
+
+            // Update Base Ellipse
+            base.setAttribute('rx', radiusPx);
+            base.setAttribute('cy', floorY);
+        }
+
+        function updateSphere() {
+            const r = parseFloat(document.getElementById('sphere-r').value);
+            
+            // Calc
+            const v = (4/3) * Math.PI * Math.pow(r, 3);
+            const sa = 4 * Math.PI * Math.pow(r, 2);
+
+            // Update Text
+            document.getElementById('sphere-r-val').innerText = r;
+            document.getElementById('sphere-d-res').innerText = (2*r).toFixed(1);
+            document.getElementById('sphere-v-res').innerText = v.toFixed(1);
+            document.getElementById('sphere-sa-res').innerText = sa.toFixed(1);
+
+            // Update SVG
+            const scale = 12; // Adjusted scale for sphere
+            const shape = document.getElementById('sphere-shape');
+            const equator = document.getElementById('sphere-equator');
+            
+            const rPx = r * scale;
+            shape.setAttribute('r', rPx);
+            equator.setAttribute('rx', rPx);
+            equator.setAttribute('ry', rPx * 0.25); // Perspective for equator
+        }
+
+        function updateSimilar() {
+            const k = parseFloat(document.getElementById('sim-k').value);
+            
+            document.getElementById('sim-k-val').innerText = k;
+            document.getElementById('lbl-k').innerText = k;
+            
+            document.getElementById('res-k').innerText = k + "x";
+            document.getElementById('res-k2').innerText = (k*k).toFixed(2) + "x";
+            document.getElementById('res-k3').innerText = (k*k*k).toFixed(2) + "x";
+
+            // Visual Box
+            const box = document.getElementById('scaled-box');
+            const baseSize = 40; // Base pixel size for 1x
+            
+            box.style.width = (baseSize * k) + "px";
+            box.style.height = (baseSize * k) + "px";
+        }
+
+        // --- Quiz Logic ---
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const msg = parent.nextElementSibling;
+            
+            // Reset styles
+            const allBtns = parent.querySelectorAll('.quiz-btn');
+            allBtns.forEach(b => {
+                b.classList.remove('bg-green-100', 'border-green-500', 'bg-red-100', 'border-red-500', 'text-green-800', 'text-red-800');
+                b.disabled = true;
+            });
+
+            if(isCorrect) {
+                btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                msg.innerText = "Correct! Well done.";
+                msg.classList.remove('hidden', 'text-red-600');
+                msg.classList.add('text-green-600');
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
+                msg.innerText = "Incorrect. Remember the ratio relationships.";
+                msg.classList.remove('hidden', 'text-green-600');
+                msg.classList.add('text-red-600');
+            }
+        }
+
+        // --- Three.js Mouhefanggai Animation ---
+        function initMouhefanggai() {
+            const container = document.getElementById('mouhefanggai-canvas');
+            if (!container) return;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0f172a); // Slate-900
+
+            const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 6;
+            camera.position.y = 2;
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Enable interacting with the model
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; 
+            controls.dampingFactor = 0.05;
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            // Group to hold cylinders
+            const group = new THREE.Group();
+
+            // Material
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x6366f1, // Indigo
+                opacity: 0.5,
+                transparent: true,
+                shininess: 60,
+                side: THREE.DoubleSide
+            });
+
+            const highlightMat = new THREE.MeshPhongMaterial({
+                color: 0xfacc15, // Yellow
+                opacity: 0.3,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+
+            // Cylinder 1 (Horizontal along X)
+            // ThreeJS Cylinder is along Y by default. 
+            // RadiusTop, RadiusBottom, Height, RadialSegments
+            const cyl1 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 4, 32), material);
+            cyl1.rotation.z = Math.PI / 2;
+            group.add(cyl1);
+
+            // Cylinder 2 (Horizontal along Z)
+            const cyl2 = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 4, 32), highlightMat);
+            cyl2.rotation.x = Math.PI / 2;
+            group.add(cyl2);
+
+            scene.add(group);
+
+            // Animation Loop
+            let frameId;
+            const animate = function () {
+                frameId = requestAnimationFrame(animate);
+                
+                // Keep the controls updated for smooth damping
+                controls.update();
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                if(container.clientWidth > 0 && container.clientHeight > 0) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+        }
+
+        // Init Everything
+        window.addEventListener('load', () => {
+            updateCone();
+            updateSphere();
+            updateSimilar();
+            initMouhefanggai();
+        });
+
+    </script>
+</body>
+</html>
