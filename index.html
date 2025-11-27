@@ -21,6 +21,39 @@
                   radial-gradient(circle at 50% 80%, rgba(74, 222, 128, 0.12), transparent 30%);
       filter: blur(60px);
       opacity: 0.9;
+      animation: gradientShift 8s ease-in-out infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { 
+        background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.15), transparent 35%),
+                    radial-gradient(circle at 80% 0%, rgba(192, 132, 252, 0.15), transparent 30%),
+                    radial-gradient(circle at 50% 80%, rgba(74, 222, 128, 0.12), transparent 30%);
+      }
+      50% { 
+        background: radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.2), transparent 35%),
+                    radial-gradient(circle at 20% 0%, rgba(192, 132, 252, 0.2), transparent 30%),
+                    radial-gradient(circle at 50% 20%, rgba(74, 222, 128, 0.15), transparent 30%);
+      }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(30px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
     .glass-card {
       backdrop-filter: blur(10px);
@@ -28,30 +61,62 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .category-card {
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: cardEntrance 0.8s ease-out forwards;
+      opacity: 0;
     }
     .category-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      transform: translateY(-12px) scale(1.05);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+    .category-card:nth-child(1) { animation-delay: 0.1s; }
+    .category-card:nth-child(2) { animation-delay: 0.3s; }
+    .category-card:nth-child(3) { animation-delay: 0.5s; }
+    .category-card:nth-child(4) { animation-delay: 0.7s; }
+    .float-animation {
+      animation: float 5s ease-in-out infinite;
+    }
+    .pulse-animation {
+      animation: pulse 3s ease-in-out infinite;
+    }
+    .bounce-animation {
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 4s ease-in-out infinite;
     }
   </style>
 </head>
-<body class="antialiased text-white bg-slate-950 min-h-screen">
+<body class="antialiased text-white bg-slate-950 min-h-screen overflow-x-hidden">
   <div class="relative min-h-screen overflow-hidden">
     <div aria-hidden="true" class="gradient-bg pointer-events-none"></div>
+    
+    <!-- Sparkles -->
+    <div class="sparkle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+    <div class="sparkle" style="top: 30%; left: 80%; animation-delay: 1s;"></div>
+    <div class="sparkle" style="top: 60%; left: 15%; animation-delay: 2s;"></div>
+    <div class="sparkle" style="top: 80%; left: 70%; animation-delay: 1.5s;"></div>
+    <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 0.5s;"></div>
+    
     <div class="relative z-10">
       
       <!-- Header -->
       <header class="px-6 py-12 sm:py-16">
         <div class="mx-auto max-w-7xl">
-          <div class="text-center space-y-4">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+          <div class="text-center space-y-6">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight float-animation">
               Education Engineering
-              <span class="block mt-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent">
+              <span class="block mt-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 bg-clip-text text-transparent pulse-animation">
                 Portfolio
               </span>
             </h1>
-            <p class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto">
+            <p class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto pulse-animation">
               互動式學習體驗與網頁應用程式 | Interactive Learning Experiences & Web Applications
             </p>
             <p class="text-sm text-white/50">為香港教育而設計 | Designed for Hong Kong Education</p>
