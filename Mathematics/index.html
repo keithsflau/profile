@@ -26,10 +26,34 @@
       backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+      transform: translateY(-2px);
+    }
+    .math-pattern {
+      background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(16, 185, 129, 0.03) 10px, rgba(16, 185, 129, 0.03) 20px),
+        repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(6, 182, 212, 0.03) 10px, rgba(6, 182, 212, 0.03) 20px);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+    }
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    .grid-pattern {
+      background-image: 
+        linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
     }
   </style>
 </head>
-<body class="antialiased text-white bg-slate-950 min-h-screen">
+<body class="antialiased text-white bg-slate-950 min-h-screen math-pattern">
   <div class="relative min-h-screen overflow-hidden">
     <div aria-hidden="true" class="gradient-bg pointer-events-none"></div>
     <div class="relative z-10">
@@ -38,24 +62,33 @@
       <header class="px-6 py-8 sm:py-12">
         <div class="mx-auto max-w-7xl">
           <div class="flex items-center justify-between mb-8">
-            <a href="../index.html" class="text-white/70 hover:text-white transition-colors flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="../index.html" class="text-white/70 hover:text-white transition-colors flex items-center gap-2 group">
+              <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
               </svg>
               <span class="text-sm">返回主頁</span>
             </a>
           </div>
-          <div class="text-center space-y-4">
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 flex items-center justify-center mx-auto">
+          <div class="text-center space-y-6">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 flex items-center justify-center mx-auto float-animation shadow-lg shadow-emerald-500/50">
               <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/>
               </svg>
             </div>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
-              <span class="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-                數學 | Mathematics
-              </span>
-            </h1>
+            <div>
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+                <span class="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                  數學 | Mathematics
+                </span>
+              </h1>
+              <div class="mt-4 flex items-center justify-center gap-4 text-sm text-white/60">
+                <span class="font-mono">a² + b² = c²</span>
+                <span>•</span>
+                <span class="font-mono">π ≈ 3.14159</span>
+                <span>•</span>
+                <span class="font-mono">e ≈ 2.71828</span>
+              </div>
+            </div>
             <p class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto">
               中學數學互動學習資源 | Secondary Mathematics Interactive Learning Resources
             </p>
@@ -69,40 +102,48 @@
           
           <!-- F2 Mathematics -->
           <section>
-            <div class="mb-6">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">中二數學 | F2 Mathematics</h2>
-              <p class="text-white/60">Form 2 Mathematics Topics</p>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="h-1 w-12 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full"></div>
+              <h2 class="text-2xl sm:text-3xl font-semibold">中二數學 | F2 Mathematics</h2>
+              <div class="flex-1 h-1 bg-gradient-to-l from-teal-400 to-emerald-400 rounded-full"></div>
             </div>
+            <p class="text-white/60 mb-6 ml-16">Form 2 Mathematics Topics</p>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               
-              <a href="F2 Continuous Data/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Continuous Data</h3>
-                <p class="text-xs text-white/60">連續數據</p>
+              <a href="F2 Continuous Data/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-emerald-300 transition-colors relative z-10">Continuous Data</h3>
+                <p class="text-xs text-white/60 relative z-10">連續數據</p>
               </a>
 
-              <a href="F2 Estimation and Error/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Estimation and Error</h3>
-                <p class="text-xs text-white/60">估算與誤差</p>
+              <a href="F2 Estimation and Error/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-teal-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-teal-300 transition-colors relative z-10">Estimation and Error</h3>
+                <p class="text-xs text-white/60 relative z-10">估算與誤差</p>
               </a>
 
-              <a href="F2 Linear equations in two unknowns/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Linear Equations (2 Unknowns)</h3>
-                <p class="text-xs text-white/60">二元一次方程</p>
+              <a href="F2 Linear equations in two unknowns/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors relative z-10">Linear Equations (2 Unknowns)</h3>
+                <p class="text-xs text-white/60 relative z-10">二元一次方程</p>
               </a>
 
-              <a href="F2 Pythagoras Theorem/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Pythagoras Theorem</h3>
-                <p class="text-xs text-white/60">畢達哥拉斯定理</p>
+              <a href="F2 Pythagoras Theorem/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-emerald-300 transition-colors relative z-10">Pythagoras Theorem</h3>
+                <p class="text-xs text-white/60 relative z-10">畢達哥拉斯定理</p>
               </a>
 
-              <a href="F2 Rate and Ratio/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Rate and Ratio</h3>
-                <p class="text-xs text-white/60">率與比</p>
+              <a href="F2 Rate and Ratio/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-teal-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-teal-300 transition-colors relative z-10">Rate and Ratio</h3>
+                <p class="text-xs text-white/60 relative z-10">率與比</p>
               </a>
 
-              <a href="F2 Trigonometric Ratio/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Trigonometric Ratio</h3>
-                <p class="text-xs text-white/60">三角比</p>
+              <a href="F2 Trigonometric Ratio/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors relative z-10">Trigonometric Ratio</h3>
+                <p class="text-xs text-white/60 relative z-10">三角比</p>
               </a>
 
             </div>
@@ -110,50 +151,60 @@
 
           <!-- F3 Mathematics -->
           <section>
-            <div class="mb-6">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">中三數學 | F3 Mathematics</h2>
-              <p class="text-white/60">Form 3 Mathematics Topics</p>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="h-1 w-12 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-full"></div>
+              <h2 class="text-2xl sm:text-3xl font-semibold">中三數學 | F3 Mathematics</h2>
+              <div class="flex-1 h-1 bg-gradient-to-l from-cyan-400 to-teal-400 rounded-full"></div>
             </div>
+            <p class="text-white/60 mb-6 ml-16">Form 3 Mathematics Topics</p>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               
-              <a href="F3 Area and Volume (III)/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Area and Volume (III)</h3>
-                <p class="text-xs text-white/60">面積與體積（三）</p>
+              <a href="F3 Area and Volume (III)/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-emerald-300 transition-colors relative z-10">Area and Volume (III)</h3>
+                <p class="text-xs text-white/60 relative z-10">面積與體積（三）</p>
               </a>
 
-              <a href="F3 Coordinate Geometry and Straight Line/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Coordinate Geometry</h3>
-                <p class="text-xs text-white/60">坐標幾何與直線</p>
+              <a href="F3 Coordinate Geometry and Straight Line/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-teal-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-teal-300 transition-colors relative z-10">Coordinate Geometry</h3>
+                <p class="text-xs text-white/60 relative z-10">坐標幾何與直線</p>
               </a>
 
-              <a href="F3 Frustum and Similarity/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Frustum and Similarity</h3>
-                <p class="text-xs text-white/60">平截頭體與相似</p>
+              <a href="F3 Frustum and Similarity/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors relative z-10">Frustum and Similarity</h3>
+                <p class="text-xs text-white/60 relative z-10">平截頭體與相似</p>
               </a>
 
-              <a href="F3 Interest & Growth/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Interest & Growth</h3>
-                <p class="text-xs text-white/60">利息與增長</p>
+              <a href="F3 Interest & Growth/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-emerald-300 transition-colors relative z-10">Interest & Growth</h3>
+                <p class="text-xs text-white/60 relative z-10">利息與增長</p>
               </a>
 
-              <a href="F3 Mastering Quadrilaterals/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Mastering Quadrilaterals</h3>
-                <p class="text-xs text-white/60">掌握四邊形</p>
+              <a href="F3 Mastering Quadrilaterals/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-teal-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-teal-300 transition-colors relative z-10">Mastering Quadrilaterals</h3>
+                <p class="text-xs text-white/60 relative z-10">掌握四邊形</p>
               </a>
 
-              <a href="F3 Quadraliteral/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Quadrilateral</h3>
-                <p class="text-xs text-white/60">四邊形</p>
+              <a href="F3 Quadraliteral/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors relative z-10">Quadrilateral</h3>
+                <p class="text-xs text-white/60 relative z-10">四邊形</p>
               </a>
 
-              <a href="F3 Salary Test/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Salary Test</h3>
-                <p class="text-xs text-white/60">薪酬測試</p>
+              <a href="F3 Salary Test/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-emerald-300 transition-colors relative z-10">Salary Test</h3>
+                <p class="text-xs text-white/60 relative z-10">薪酬測試</p>
               </a>
 
-              <a href="F3-Math-Four-Centres/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">Four Centres Explorer</h3>
-                <p class="text-xs text-white/60">四心探索器</p>
+              <a href="F3-Math-Four-Centres/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-teal-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-teal-300 transition-colors relative z-10">Four Centres Explorer</h3>
+                <p class="text-xs text-white/60 relative z-10">四心探索器</p>
               </a>
 
             </div>
@@ -161,15 +212,18 @@
 
           <!-- F4 Mathematics -->
           <section>
-            <div class="mb-6">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">中四數學 | F4 Mathematics</h2>
-              <p class="text-white/60">Form 4 Mathematics Topics</p>
+            <div class="mb-6 flex items-center gap-3">
+              <div class="h-1 w-12 bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full"></div>
+              <h2 class="text-2xl sm:text-3xl font-semibold">中四數學 | F4 Mathematics</h2>
+              <div class="flex-1 h-1 bg-gradient-to-l from-emerald-400 to-cyan-400 rounded-full"></div>
             </div>
+            <p class="text-white/60 mb-6 ml-16">Form 4 Mathematics Topics</p>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               
-              <a href="F4 Chapter 6 More about Polynomials/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors">More about Polynomials</h3>
-                <p class="text-xs text-white/60">多項式的進一步認識</p>
+              <a href="F4 Chapter 6 More about Polynomials/index.html" class="glass-card rounded-xl p-5 hover:bg-white/10 transition-all duration-300 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/10 rounded-bl-full -mr-10 -mt-10"></div>
+                <h3 class="font-semibold mb-2 group-hover:text-cyan-300 transition-colors relative z-10">More about Polynomials</h3>
+                <p class="text-xs text-white/60 relative z-10">多項式的進一步認識</p>
               </a>
 
             </div>
@@ -195,4 +249,3 @@
   </div>
 </body>
 </html>
-
