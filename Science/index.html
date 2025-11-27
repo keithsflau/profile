@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>科學 | Science - Education Engineering Portfolio</title>
+  <meta name="description" content="初中及高中科學模擬實驗 | Junior & Senior Science Simulations">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .gradient-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(168, 85, 247, 0.15), transparent 35%),
+                  radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.15), transparent 30%),
+                  radial-gradient(circle at 50% 80%, rgba(251, 113, 133, 0.12), transparent 30%);
+      filter: blur(60px);
+      opacity: 0.9;
+    }
+    .glass-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body class="antialiased text-white bg-slate-950 min-h-screen">
+  <div class="relative min-h-screen overflow-hidden">
+    <div aria-hidden="true" class="gradient-bg pointer-events-none"></div>
+    <div class="relative z-10">
+      
+      <!-- Header -->
+      <header class="px-6 py-8 sm:py-12">
+        <div class="mx-auto max-w-7xl">
+          <div class="flex items-center justify-between mb-8">
+            <a href="../index.html" class="text-white/70 hover:text-white transition-colors flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+              <span class="text-sm">返回主頁</span>
+            </a>
+          </div>
+          <div class="text-center space-y-4">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-400 via-pink-500 to-rose-600 flex items-center justify-center mx-auto">
+              <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 0 0-1.022-.547l-2.387-.477a6 6 0 0 0-3.86.517l-.318.158a6 6 0 0 1-3.86.517L6.05 15.21a2 2 0 0 0-1.806.547M8 4h8l-1 1v5.172a2 2 0 0 0 .586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 0 0 9 10.172V5L8 4z"/>
+              </svg>
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+              <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 bg-clip-text text-transparent">
+                科學 | Science
+              </span>
+            </h1>
+            <p class="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto">
+              初中及高中科學模擬實驗 | Junior & Senior Science Simulations
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="px-6 pb-16">
+        <div class="mx-auto max-w-7xl space-y-12">
+          
+          <!-- Junior Science -->
+          <section>
+            <div class="mb-6">
+              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">初中科學 | Junior Science</h2>
+              <p class="text-white/60">Interactive simulations and visualizations for junior secondary science</p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              
+              <a href="Junior%20Science/F2_JS_BioCycle/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">F2 BioCycle</h3>
+                <p class="text-xs text-white/60">Biology cycle simulation</p>
+              </a>
+
+              <a href="Junior%20Science/F2-JS-Ohm-s-Law/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Ohm's Law</h3>
+                <p class="text-xs text-white/60">Physics simulation</p>
+              </a>
+
+              <a href="Junior%20Science/Atomic%20structures/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Atomic Structures</h3>
+                <p class="text-xs text-white/60">Chemistry visualization</p>
+              </a>
+
+              <a href="Junior%20Science/Biodiversity/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Biodiversity</h3>
+                <p class="text-xs text-white/60">Biology exploration</p>
+              </a>
+
+              <a href="Junior%20Science/Water%20Cycle/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Water Cycle</h3>
+                <p class="text-xs text-white/60">Earth science</p>
+              </a>
+
+              <a href="Junior%20Science/DNA/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">DNA</h3>
+                <p class="text-xs text-white/60">Biology structure</p>
+              </a>
+
+              <a href="Junior%20Science/Conduction/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Conduction</h3>
+                <p class="text-xs text-white/60">Heat transfer</p>
+              </a>
+
+              <a href="Junior%20Science/Convection/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Convection</h3>
+                <p class="text-xs text-white/60">Heat transfer</p>
+              </a>
+
+              <a href="Junior%20Science/Particle%20Theory/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Particle Theory</h3>
+                <p class="text-xs text-white/60">Chemistry fundamentals</p>
+              </a>
+
+              <a href="Junior%20Science/Microscope/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Microscope</h3>
+                <p class="text-xs text-white/60">Biology tool</p>
+              </a>
+
+              <a href="Junior%20Science/Nuclear%20Power/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Nuclear Power</h3>
+                <p class="text-xs text-white/60">Energy source</p>
+              </a>
+
+              <a href="Junior%20Science/Renewable%20energy%20sourse/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Renewable Energy</h3>
+                <p class="text-xs text-white/60">Energy sources</p>
+              </a>
+
+              <a href="Junior%20Science/non-renewable%20ennery%20sourse/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Non-Renewable Energy</h3>
+                <p class="text-xs text-white/60">Energy sources</p>
+              </a>
+
+              <a href="Junior%20Science/Radiation/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Radiation</h3>
+                <p class="text-xs text-white/60">Physics concept</p>
+              </a>
+
+              <a href="Junior%20Science/Sankey%20diagram/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Sankey Diagram</h3>
+                <p class="text-xs text-white/60">Energy flow</p>
+              </a>
+
+              <a href="Junior%20Science/Castesian%20Diver/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Cartesian Diver</h3>
+                <p class="text-xs text-white/60">Physics experiment</p>
+              </a>
+
+              <a href="Junior%20Science/Classification%20of%20Plant/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Plant Classification</h3>
+                <p class="text-xs text-white/60">Biology taxonomy</p>
+              </a>
+
+              <a href="Junior%20Science/Living%20Things%20%26%20Habitats/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Living Things & Habitats</h3>
+                <p class="text-xs text-white/60">Biology ecology</p>
+              </a>
+
+              <a href="Junior%20Science/Living%20things%20and%20habitat/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Living Things & Habitat</h3>
+                <p class="text-xs text-white/60">Biology ecology</p>
+              </a>
+
+              <a href="Junior%20Science/Harzard%20Warning%20Label/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Hazard Warning Labels</h3>
+                <p class="text-xs text-white/60">Safety education</p>
+              </a>
+
+              <a href="Junior%20Science/Parity%20Non-Conservation/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Parity Non-Conservation</h3>
+                <p class="text-xs text-white/60">Physics concept</p>
+              </a>
+
+              <a href="Junior%20Science/Conduction%201/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Conduction 1</h3>
+                <p class="text-xs text-white/60">Heat transfer</p>
+              </a>
+
+            </div>
+          </section>
+
+          <!-- Physics -->
+          <section>
+            <div class="mb-6">
+              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">物理 | Physics</h2>
+              <p class="text-white/60">Advanced physics simulations</p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              
+              <a href="Physics/Atomic%20Emission%20Spectra/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Atomic Emission Spectra</h3>
+                <p class="text-xs text-white/60">Spectroscopy visualization</p>
+              </a>
+
+              <a href="Physics/Bernoulli-Simulation/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Bernoulli Simulation</h3>
+                <p class="text-xs text-white/60">Fluid dynamics</p>
+              </a>
+
+              <a href="Physics/Dopper%27s%20Effect/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Doppler's Effect</h3>
+                <p class="text-xs text-white/60">Wave physics</p>
+              </a>
+
+              <a href="Physics/Fraunhofer%20Lines/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Fraunhofer Lines</h3>
+                <p class="text-xs text-white/60">Solar spectrum</p>
+              </a>
+
+              <a href="Physics/Light%20Dispersion%20through%20a%20Prism/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Light Dispersion (Prism)</h3>
+                <p class="text-xs text-white/60">Optics</p>
+              </a>
+
+              <a href="Physics/Light%20Ray%20Diagram%20with%20Convex%20Len%20and%20Concave%20Len/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Lens Ray Diagrams</h3>
+                <p class="text-xs text-white/60">Optics</p>
+              </a>
+
+              <a href="Physics/Photoelectric%20Effect/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Photoelectric Effect</h3>
+                <p class="text-xs text-white/60">Quantum physics</p>
+              </a>
+
+              <a href="Physics/Quantum%20Mechanics/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Quantum Mechanics</h3>
+                <p class="text-xs text-white/60">Advanced physics</p>
+              </a>
+
+              <a href="Physics/atomic%20structure/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
+                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Atomic Structure</h3>
+                <p class="text-xs text-white/60">Chemistry fundamentals</p>
+              </a>
+
+            </div>
+          </section>
+
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="px-6 py-12 mt-16 border-t border-white/10">
+        <div class="mx-auto max-w-7xl text-center">
+          <p class="text-sm italic mb-2 text-white/80">But God made the earth by his power;<br>
+          he founded the world by his wisdom<br>
+          and stretched out the heavens by his understanding.</p>
+          <p class="text-sm mb-2 text-white/70">Jeremiah 10:12</p>
+          <p class="text-xs mb-2 mt-4 text-white/60">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」</p>
+          <p class="text-xs mb-4 text-white/60">耶利米書 10:12</p>
+          <p class="text-xs mt-4 pt-4 border-t border-white/10 text-white/50">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+</body>
+</html>
+

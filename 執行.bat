@@ -25,7 +25,7 @@ echo [OK] 文件已添加
 echo.
 
 echo [3/4] 提交更改...
-git commit -m "更新所有 footer 為包含聖經經文的格式 (Jeremiah 10:12)"
+git commit -m "創建綜合版面及各子文件夾 landing pages - 更新 root index.html 為主要分類入口，創建 Mathematics, Science, Pri-Chi landing pages"
 if errorlevel 1 (
     echo [!] 提交失敗或沒有更改需要提交
 ) else (
@@ -62,4 +62,3 @@ echo   完成！
 echo ================================================
 echo.
 pause
-

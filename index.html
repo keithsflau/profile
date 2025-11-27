@@ -27,6 +27,13 @@
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
+    .category-card {
+      transition: all 0.3s ease;
+    }
+    .category-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
   </style>
 </head>
 <body class="antialiased text-white bg-slate-950 min-h-screen">
@@ -35,7 +42,7 @@
     <div class="relative z-10">
       
       <!-- Header -->
-      <header class="px-6 py-8 sm:py-12">
+      <header class="px-6 py-12 sm:py-16">
         <div class="mx-auto max-w-7xl">
           <div class="text-center space-y-4">
             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -54,287 +61,91 @@
 
       <!-- Main Content -->
       <main class="px-6 pb-16">
-        <div class="mx-auto max-w-7xl space-y-16">
+        <div class="mx-auto max-w-7xl">
           
-          <!-- Featured Projects -->
+          <!-- Main Categories -->
           <section>
-            <div class="mb-8">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">Featured Projects</h2>
-              <p class="text-white/60">精選項目</p>
+            <div class="mb-12 text-center">
+              <h2 class="text-3xl sm:text-4xl font-semibold mb-3">主要分類</h2>
+              <p class="text-white/60">Main Categories</p>
             </div>
-            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            
+            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
               
-              <a href="Hong_Kong_Tycoon_Dream/index.html" class="glass-card rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-                <div class="space-y-3">
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-amber-400 to-rose-500 flex items-center justify-center">
-                      <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v4m0 10v4m7-7h-4M9 12H5m11.657-6.657L14.828 8.17m-5.657 7.657-1.829 1.829m0-11.314 1.829 1.829m5.657 7.657 1.829 1.829"/>
-                      </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold group-hover:text-cyan-300 transition-colors">Hong Kong Tycoon Dream</h3>
+              <!-- Mathematics -->
+              <a href="Mathematics/index.html" class="category-card glass-card rounded-2xl p-8 hover:bg-white/10 group">
+                <div class="space-y-4">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/>
+                    </svg>
                   </div>
-                  <p class="text-sm text-white/70">Economics simulation game for HKDSE classrooms</p>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70">Economics</span>
-                    <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70">Game-Based</span>
+                  <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-2 group-hover:text-cyan-300 transition-colors">數學 | Mathematics</h3>
+                    <p class="text-sm text-white/60">中學數學互動學習資源</p>
+                    <p class="text-xs text-white/50 mt-1">Secondary Mathematics Resources</p>
+                  </div>
+                  <div class="pt-2 text-center">
+                    <span class="text-xs text-cyan-400 group-hover:text-cyan-300">進入 →</span>
                   </div>
                 </div>
               </a>
 
-              <a href="Pri-Chi/portal/language_monopoly/webapp/index.html" class="glass-card rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-                <div class="space-y-3">
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 flex items-center justify-center">
-                      <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5A2.5 2.5 0 0 1 17.5 21H6.5A2.5 2.5 0 0 1 4 18.5V5.5z"/>
-                      </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold group-hover:text-cyan-300 transition-colors">Language Monopoly</h3>
+              <!-- Science -->
+              <a href="Science/index.html" class="category-card glass-card rounded-2xl p-8 hover:bg-white/10 group">
+                <div class="space-y-4">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 via-pink-500 to-rose-600 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 0 0-1.022-.547l-2.387-.477a6 6 0 0 0-3.86.517l-.318.158a6 6 0 0 1-3.86.517L6.05 15.21a2 2 0 0 0-1.806.547M8 4h8l-1 1v5.172a2 2 0 0 0 .586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 0 0 9 10.172V5L8 4z"/>
+                    </svg>
                   </div>
-                  <p class="text-sm text-white/70">Gamified Chinese literacy portal</p>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70">Chinese</span>
-                    <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70">Gamification</span>
+                  <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-2 group-hover:text-cyan-300 transition-colors">科學 | Science</h3>
+                    <p class="text-sm text-white/60">初中及高中科學模擬實驗</p>
+                    <p class="text-xs text-white/50 mt-1">Junior & Senior Science Simulations</p>
                   </div>
-                </div>
-              </a>
-
-              <a href="Mathematics/F3-Math-Four-Centres/index.html" class="glass-card rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 group">
-                <div class="space-y-3">
-                  <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 flex items-center justify-center">
-                      <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/>
-                      </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold group-hover:text-cyan-300 transition-colors">Four Centres Explorer</h3>
-                  </div>
-                  <p class="text-sm text-white/70">Mathematics visualization tool</p>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70">Mathematics</span>
-                    <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-white/70">F3</span>
+                  <div class="pt-2 text-center">
+                    <span class="text-xs text-cyan-400 group-hover:text-cyan-300">進入 →</span>
                   </div>
                 </div>
               </a>
 
-            </div>
-          </section>
-
-          <!-- Science - Junior Science -->
-          <section>
-            <div class="mb-8">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">Junior Science | 初中科學</h2>
-              <p class="text-white/60">Interactive simulations and visualizations</p>
-            </div>
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              
-              <a href="Science/Junior%20Science/F2_JS_BioCycle/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">F2 BioCycle</h3>
-                <p class="text-xs text-white/60">Biology cycle simulation</p>
+              <!-- Pri-Chi -->
+              <a href="Pri-Chi/index.html" class="category-card glass-card rounded-2xl p-8 hover:bg-white/10 group">
+                <div class="space-y-4">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-red-600 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5A2.5 2.5 0 0 1 17.5 21H6.5A2.5 2.5 0 0 1 4 18.5V5.5z"/>
+                    </svg>
+                  </div>
+                  <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-2 group-hover:text-cyan-300 transition-colors">小學中文 | Pri-Chi</h3>
+                    <p class="text-sm text-white/60">中文學習遊戲與資源</p>
+                    <p class="text-xs text-white/50 mt-1">Chinese Language Learning Resources</p>
+                  </div>
+                  <div class="pt-2 text-center">
+                    <span class="text-xs text-cyan-400 group-hover:text-cyan-300">進入 →</span>
+                  </div>
+                </div>
               </a>
 
-              <a href="Science/Junior%20Science/F2-JS-Ohm-s-Law/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Ohm's Law</h3>
-                <p class="text-xs text-white/60">Physics simulation</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Atomic%20structures/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Atomic Structures</h3>
-                <p class="text-xs text-white/60">Chemistry visualization</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Biodiversity/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Biodiversity</h3>
-                <p class="text-xs text-white/60">Biology exploration</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Water%20Cycle/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Water Cycle</h3>
-                <p class="text-xs text-white/60">Earth science</p>
-              </a>
-
-              <a href="Science/Junior%20Science/DNA/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">DNA</h3>
-                <p class="text-xs text-white/60">Biology structure</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Conduction/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Conduction</h3>
-                <p class="text-xs text-white/60">Heat transfer</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Convection/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Convection</h3>
-                <p class="text-xs text-white/60">Heat transfer</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Particle%20Theory/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Particle Theory</h3>
-                <p class="text-xs text-white/60">Chemistry fundamentals</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Microscope/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Microscope</h3>
-                <p class="text-xs text-white/60">Biology tool</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Nuclear%20Power/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Nuclear Power</h3>
-                <p class="text-xs text-white/60">Energy source</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Renewable%20energy%20sourse/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Renewable Energy</h3>
-                <p class="text-xs text-white/60">Energy sources</p>
-              </a>
-
-              <a href="Science/Junior%20Science/non-renewable%20ennery%20sourse/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Non-Renewable Energy</h3>
-                <p class="text-xs text-white/60">Energy sources</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Radiation/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Radiation</h3>
-                <p class="text-xs text-white/60">Physics concept</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Sankey%20diagram/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Sankey Diagram</h3>
-                <p class="text-xs text-white/60">Energy flow</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Cartesian%20Diver/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Cartesian Diver</h3>
-                <p class="text-xs text-white/60">Physics experiment</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Classification%20of%20Plant/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Plant Classification</h3>
-                <p class="text-xs text-white/60">Biology taxonomy</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Living%20Things%20%26%20Habitats/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Living Things & Habitats</h3>
-                <p class="text-xs text-white/60">Biology ecology</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Living%20things%20and%20habitat/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Living Things & Habitat</h3>
-                <p class="text-xs text-white/60">Biology ecology</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Harzard%20Warning%20Label/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Hazard Warning Labels</h3>
-                <p class="text-xs text-white/60">Safety education</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Parity%20Non-Conservation/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Parity Non-Conservation</h3>
-                <p class="text-xs text-white/60">Physics concept</p>
-              </a>
-
-              <a href="Science/Junior%20Science/Conduction%201/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Conduction 1</h3>
-                <p class="text-xs text-white/60">Heat transfer</p>
-              </a>
-
-            </div>
-          </section>
-
-          <!-- Science - Physics -->
-          <section>
-            <div class="mb-8">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">Physics | 物理</h2>
-              <p class="text-white/60">Advanced physics simulations</p>
-            </div>
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              
-              <a href="Science/Physics/Atomic%20Emission%20Spectra/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Atomic Emission Spectra</h3>
-                <p class="text-xs text-white/60">Spectroscopy visualization</p>
-              </a>
-
-              <a href="Science/Physics/Bernoulli-Simulation/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Bernoulli Simulation</h3>
-                <p class="text-xs text-white/60">Fluid dynamics</p>
-              </a>
-
-              <a href="Science/Physics/Dopper%27s%20Effect/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Doppler's Effect</h3>
-                <p class="text-xs text-white/60">Wave physics</p>
-              </a>
-
-              <a href="Science/Physics/Fraunhofer%20Lines/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Fraunhofer Lines</h3>
-                <p class="text-xs text-white/60">Solar spectrum</p>
-              </a>
-
-              <a href="Science/Physics/Light%20Dispersion%20through%20a%20Prism/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Light Dispersion (Prism)</h3>
-                <p class="text-xs text-white/60">Optics</p>
-              </a>
-
-              <a href="Science/Physics/Light%20Ray%20Diagram%20with%20Convex%20Len%20and%20Concave%20Len/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Lens Ray Diagrams</h3>
-                <p class="text-xs text-white/60">Optics</p>
-              </a>
-
-              <a href="Science/Physics/Photoelectric%20Effect/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Photoelectric Effect</h3>
-                <p class="text-xs text-white/60">Quantum physics</p>
-              </a>
-
-              <a href="Science/Physics/Quantum%20Mechanics/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Quantum Mechanics</h3>
-                <p class="text-xs text-white/60">Advanced physics</p>
-              </a>
-
-            </div>
-          </section>
-
-          <!-- Other Science -->
-          <section>
-            <div class="mb-8">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">Other Science Topics</h2>
-              <p class="text-white/60">Additional science resources</p>
-            </div>
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              
-              <a href="Science/atomic%20structure/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Atomic Structure</h3>
-                <p class="text-xs text-white/60">Chemistry fundamentals</p>
-              </a>
-
-              <a href="Science/Cell/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Cell</h3>
-                <p class="text-xs text-white/60">Biology basics</p>
-              </a>
-
-            </div>
-          </section>
-
-          <!-- Pri-Chi Portal -->
-          <section>
-            <div class="mb-8">
-              <h2 class="text-2xl sm:text-3xl font-semibold mb-2">Pri-Chi Portal | 小學中文</h2>
-              <p class="text-white/60">Chinese language learning resources</p>
-            </div>
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              
-              <a href="Pri-Chi/portal/chinesegame2/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Chinese Game 2</h3>
-                <p class="text-xs text-white/60">Interactive Chinese learning</p>
-              </a>
-
-              <a href="Pri-Chi/docs/portal/language_monopoly/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Language Monopoly (Docs)</h3>
-                <p class="text-xs text-white/60">Documentation portal</p>
-              </a>
-
-              <a href="Pri-Chi/docs/index.html" class="glass-card rounded-xl p-4 hover:bg-white/10 transition-all duration-300 group">
-                <h3 class="font-semibold mb-1 group-hover:text-cyan-300 transition-colors">Pri-Chi Docs</h3>
-                <p class="text-xs text-white/60">Documentation</p>
+              <!-- Hong Kong Tycoon Dream -->
+              <a href="Hong_Kong_Tycoon_Dream/index.html" class="category-card glass-card rounded-2xl p-8 hover:bg-white/10 group">
+                <div class="space-y-4">
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-600 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v4m0 10v4m7-7h-4M9 12H5m11.657-6.657L14.828 8.17m-5.657 7.657-1.829 1.829m0-11.314 1.829 1.829m5.657 7.657 1.829 1.829"/>
+                    </svg>
+                  </div>
+                  <div class="text-center">
+                    <h3 class="text-xl font-semibold mb-2 group-hover:text-cyan-300 transition-colors">香江富豪夢</h3>
+                    <p class="text-sm text-white/60">經濟學模擬遊戲</p>
+                    <p class="text-xs text-white/50 mt-1">Economics Simulation Game</p>
+                  </div>
+                  <div class="pt-2 text-center">
+                    <span class="text-xs text-cyan-400 group-hover:text-cyan-300">進入 →</span>
+                  </div>
+                </div>
               </a>
 
             </div>
@@ -360,4 +171,3 @@
   </div>
 </body>
 </html>
-
