@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖經離合體詩完整版 - 22字母全解析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f8fafc; }
+        .serif-font { font-family: 'Noto Serif TC', serif; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        /* Accordion Styles */
+        .accordion-content { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; max-height: 0; overflow: hidden; opacity: 0; }
+        .accordion-content.active { max-height: 2000px; opacity: 1; } /* Increased max-height for Ps 119 */
+        .rotate-icon { transition: transform 0.3s ease; }
+        .rotate-icon.active { transform: rotate(180deg); }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-40 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fa-solid fa-shapes text-indigo-600 text-2xl mr-3"></i>
+                <span class="font-bold text-xl text-slate-900">聖經架構學 <span class="text-xs text-indigo-500 ml-2 border border-indigo-200 px-2 py-0.5 rounded-full">Full Dataset</span></span>
+            </div>
+            <div class="hidden md:block text-sm text-slate-500">主日學工程教材 v3.0</div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-10">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">上帝的字母表：離合體詩全解析</h1>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                點擊下方卡片，展開 <span class="font-bold text-indigo-600">22 個希伯來字母</span> 的完整經文對照。
+                如同工程師檢查每一行代碼，讓我們細讀神話語的精密結構。
+            </p>
+        </div>
+
+        <div id="psalms-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+    </div>
+
+    <div id="detail-modal" class="fixed inset-0 z-50 hidden" aria-modal="true">
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-2xl w-full bg-white shadow-2xl transform transition-transform duration-300 translate-x-full flex flex-col" id="modal-panel">
+            
+            <div class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center sticky top-0 z-10">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900" id="modal-title">Title</h3>
+                    <p class="text-xs text-indigo-600 font-bold uppercase tracking-wider" id="modal-subtitle">Subtitle</p>
+                </div>
+                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 transition-colors">
+                    <i class="fa-solid fa-times text-slate-500"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-800 text-xs uppercase mb-1"><i class="fa-solid fa-ruler-combined mr-2"></i>結構工程</h4>
+                        <p class="text-slate-700 text-sm" id="modal-structure">Structure...</p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
+                        <h4 class="font-bold text-amber-800 text-xs uppercase mb-1"><i class="fa-solid fa-fire mr-2"></i>靈意解讀</h4>
+                        <p class="text-slate-700 text-sm" id="modal-theology">Theology...</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
+                        <h4 class="font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-list-ol mr-2 text-indigo-500"></i> 
+                            22 字母經文對照
+                        </h4>
+                        <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">和合本 (CUV)</span>
+                    </div>
+                    <div id="modal-verses-container" class="space-y-3">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 希伯來字母表常量 (用於參考)
+        const HEBREW_ALPHABET = [
+            {char:"א", name:"Aleph"}, {char:"ב", name:"Bet"}, {char:"ג", name:"Gimel"}, {char:"ד", name:"Dalet"},
+            {char:"ה", name:"He"}, {char:"ו", name:"Vav"}, {char:"ז", name:"Zayin"}, {char:"ח", name:"Het"},
+            {char:"ט", name:"Tet"}, {char:"י", name:"Yod"}, {char:"כ", name:"Kaf"}, {char:"ל", name:"Lamed"},
+            {char:"מ", name:"Mem"}, {char:"נ", name:"Nun"}, {char:"ס", name:"Samekh"}, {char:"ע", name:"Ayin"},
+            {char:"פ", name:"Pe"}, {char:"צ", name:"Tsade"}, {char:"ק", name:"Qoph"}, {char:"ר", name:"Resh"},
+            {char:"ש", name:"Shin"}, {char:"ת", name:"Tav"}
+        ];
+
+        // 完整數據庫
+        const psalmsData = [
+            {
+                id: 111,
+                title: "詩篇 111篇",
+                subtitle: "稱謝耶和華的作為",
+                category: "短句離合體",
+                color: "blue",
+                structure: "每一節包含兩個字母開頭的短句（第9-10節各含三個）。結構緊湊，強調神作為的完整性。",
+                theology: "神的工作是按次序行的。從 Aleph 到 Tav，每一個字母都在數算祂的尊榮與公義。",
+                verses: [
+                    { letter: "א", hebrew: "Aleph", ref: "1a", text: "你們要讚美耶和華！我要在正直人的大會中，並公會中，一心稱謝耶和華。" },
+                    { letter: "ב", hebrew: "Bet", ref: "2", text: "耶和華的作為本為大；凡喜愛的都必考察。" },
+                    { letter: "ג", hebrew: "Gimel", ref: "3a", text: "他所行的是尊榮和威嚴；" },
+                    { letter: "ד", hebrew: "Dalet", ref: "3b", text: "他的公義存到永遠。" },
+                    { letter: "ה", hebrew: "He", ref: "4a", text: "他行了奇事，使人記念；" },
+                    { letter: "ו", hebrew: "Vav", ref: "4b", text: "耶和華有恩惠，有憐憫。" },
+                    { letter: "ז", hebrew: "Zayin", ref: "5a", text: "他賜糧食給敬畏他的人；" },
+                    { letter: "ח", hebrew: "Het", ref: "5b", text: "他必永遠記念他的約。" },
+                    { letter: "ט", hebrew: "Tet", ref: "6a", text: "他向百姓顯出大能的作為，" },
+                    { letter: "י", hebrew: "Yod", ref: "6b", text: "把外邦的地賜給他們為業。" },
+                    { letter: "כ", hebrew: "Kaf", ref: "7a", text: "他手所行的是誠實公平；" },
+                    { letter: "ל", hebrew: "Lamed", ref: "7b", text: "他的訓詞都是確實的，" },
+                    { letter: "מ", hebrew: "Mem", ref: "8a", text: "是永永遠遠堅定的，" },
+                    { letter: "נ", hebrew: "Nun", ref: "8b", text: "是按誠實正直設立的。" },
+                    { letter: "ס", hebrew: "Samekh", ref: "9a", text: "他向百姓施行救贖，" },
+                    { letter: "ע", hebrew: "Ayin", ref: "9b", text: "命定他的約，直到永遠；" },
+                    { letter: "פ", hebrew: "Pe", ref: "9c", text: "他的名聖而可畏。" },
+                    { letter: "צ", hebrew: "Tsade", ref: "10a", text: "敬畏耶和華是智慧的開端；" },
+                    { letter: "ק", hebrew: "Qoph", ref: "10b", text: "凡遵行他命令的是聰明人。" },
+                    { letter: "ר", hebrew: "Resh", ref: "10c", text: "耶和華是永遠當讚美的！" },
+                    { letter: "ש / ת", hebrew: "Shin/Tav", ref: "註", text: "(此詩為短句離合體，最後兩字母結構融合於第10節意境中)" }
+                ]
+            },
+            {
+                id: 119,
+                title: "詩篇 119篇",
+                subtitle: "律法的黃金字母表",
+                category: "完美離合體",
+                color: "indigo",
+                structure: "最宏偉的結構。22個段落，每段8節，共176節。每段的8節經文都以相同的希伯來字母開頭。",
+                theology: "這是對神話語的極致愛慕。用盡所有字母，重複八次，象徵神話語的完美（7+1）與豐盛。",
+                verses: [
+                    { letter: "א", hebrew: "Aleph", ref: "1-8", text: "行為完全、遵行耶和華律法的，這人便為有福！...但願我行事堅定，得以遵守你的律例。" },
+                    { letter: "ב", hebrew: "Bet", ref: "9-16", text: "少年人用什麼潔淨他的行為呢？是要遵行你的話！...我將你的話藏在心裡，免得我得罪你。" },
+                    { letter: "ג", hebrew: "Gimel", ref: "17-24", text: "求你用厚恩待你的僕人，使我存活，我就遵守你的話。求你開我的眼睛，使我看出你律法中的奇妙。" },
+                    { letter: "ד", hebrew: "Dalet", ref: "25-32", text: "我的性命歸於塵土，求你照你的話將我救活。...我選了忠信的道，將你的典章擺在我面前。" },
+                    { letter: "ה", hebrew: "He", ref: "33-40", text: "耶和華啊，求你將你的律例指教我，我必遵守到底！...求你叫我轉眼不看虛假，又叫我在你的道中生活。" },
+                    { letter: "ו", hebrew: "Vav", ref: "41-48", text: "耶和華啊，願你照你的話，使你的慈愛，就是你的救恩，臨到我身上。...我要在你的命令中自樂，這命令素來是我所愛的。" },
+                    { letter: "ז", hebrew: "Zayin", ref: "49-56", text: "求你記念向你僕人所應許的話，叫我有盼望。...我在世寄居，素來以你的律例為詩歌。" },
+                    { letter: "ח", hebrew: "Het", ref: "57-64", text: "耶和華是我的福分；我曾說，我要遵守你的言語。...我半夜必起來稱謝你，因你公義的典章。" },
+                    { letter: "ט", hebrew: "Tet", ref: "65-72", text: "耶和華啊，你向來是照你的話善待僕人。...我受苦是與我有益，為要使我學習你的律例。" },
+                    { letter: "י", hebrew: "Yod", ref: "73-80", text: "你的手製造我，建立我；求你賜我悟性，可以學習你的命令。...願我的心在你的律例上完全，使我不至蒙羞。" },
+                    { letter: "כ", hebrew: "Kaf", ref: "81-88", text: "我心渴想你的救恩，仰望你的應許。...求你照你的慈愛將我救活，我就遵守你口中的法度。" },
+                    { letter: "ל", hebrew: "Lamed", ref: "89-96", text: "耶和華啊，你的話安定在天，直到永遠。...我看萬事盡都有限，惟有你的命令極其寬廣。" },
+                    { letter: "מ", hebrew: "Mem", ref: "97-104", text: "我何等愛慕你的律法，終日不住地思想。...你的言語在我上膛何等甘美，在我口中比蜜更甜！" },
+                    { letter: "נ", hebrew: "Nun", ref: "105-112", text: "你的話是我腳前的燈，是我路上的光。...我的心專向你的律例，永遠遵行，一直到底。" },
+                    { letter: "ס", hebrew: "Samekh", ref: "113-120", text: "心懷二意的人為我所恨；但你的律法為我所愛。...凡有血氣的，就必因你潔淨；我也懼怕你的判語。" },
+                    { letter: "ע", hebrew: "Ayin", ref: "121-128", text: "我行過公平和公義，求你不要撇下我給欺壓我的人！...所以我愛你的命令勝於金子，更勝於精金。" },
+                    { letter: "פ", hebrew: "Pe", ref: "129-136", text: "你的法度奇妙，所以我一心遵守。你的言語一解開就發出亮光，使愚人通達。...我的眼淚下流成河，因為他們不守你的律法。" },
+                    { letter: "צ", hebrew: "Tsade", ref: "137-144", text: "耶和華啊，你是公義的，你的判語也是正直的。...你的言語極其精煉，所以你的僕人喜愛。" },
+                    { letter: "ק", hebrew: "Qoph", ref: "145-152", text: "耶和華啊，我一心呼籲你；求你應允我，我必遵守你的律例！...我趁天未亮呼求；我仰望了你的言語。" },
+                    { letter: "ר", hebrew: "Resh", ref: "153-160", text: "求你看顧我的苦難，搭救我，因我不忘記你的律法。...你話的總綱是真實；你一切公義的典章是永遠長存。" },
+                    { letter: "ש", hebrew: "Shin", ref: "161-168", text: "首領無故地逼迫我，但我的心畏懼你的言語。...愛你律法的人有大平安，什麼都不能使他們絆腳。" },
+                    { letter: "ת", hebrew: "Tav", ref: "169-176", text: "耶和華啊，願我的呼籲達到你面前，照你的話賜我悟性。...我如亡羊走迷了路，求你尋找僕人，因我不忘記你的命令。" }
+                ]
+            },
+            {
+                id: 145,
+                title: "詩篇 145篇",
+                subtitle: "大衛的讚美詩",
+                category: "國度離合體",
+                color: "rose",
+                structure: "每一節以一個字母開頭。注意：在傳統馬索拉文本中，缺少了Nun(נ)的詩節，但在死海古卷(11QPs-a)中有被發現。",
+                theology: "這是讚美的頂峰。我們用盡所有的語言來稱頌那位不可測度的神。",
+                verses: [
+                    { letter: "א", hebrew: "Aleph", ref: "1", text: "我的神、我的王啊，我要尊崇你！我要永永遠遠稱頌你的名！" },
+                    { letter: "ב", hebrew: "Bet", ref: "2", text: "我要天天稱頌你，也要永永遠遠讚美你的名！" },
+                    { letter: "ג", hebrew: "Gimel", ref: "3", text: "耶和華本為大，該受大讚美；其大無法測度。" },
+                    { letter: "ד", hebrew: "Dalet", ref: "4", text: "這代要對那代頌讚你的作為，也要傳揚你的大能。" },
+                    { letter: "ה", hebrew: "He", ref: "5", text: "我要默念你威嚴的尊榮和你奇妙的作為。" },
+                    { letter: "ו", hebrew: "Vav", ref: "6", text: "人要傳說你可畏之事的能力；我也要傳揚你的大德。" },
+                    { letter: "ז", hebrew: "Zayin", ref: "7", text: "他們要記念你的大恩，就要大聲歌唱，並要歌唱你的公義。" },
+                    { letter: "ח", hebrew: "Het", ref: "8", text: "耶和華有恩惠，有憐憫，不輕易發怒，大有慈愛。" },
+                    { letter: "ט", hebrew: "Tet", ref: "9", text: "耶和華善待萬民；他的慈悲覆庇他一切所造的。" },
+                    { letter: "י", hebrew: "Yod", ref: "10", text: "耶和華啊，你一切所造的都要稱謝你；你的聖民也要稱頌你，" },
+                    { letter: "כ", hebrew: "Kaf", ref: "11", text: "傳說你國的榮耀，談論你的大能，" },
+                    { letter: "ל", hebrew: "Lamed", ref: "12", text: "好叫世人知道你大能的作為，並你國度威嚴的榮耀。" },
+                    { letter: "מ", hebrew: "Mem", ref: "13", text: "你的國是永遠的國！你執掌的權柄存到萬代！" },
+                    { letter: "נ", hebrew: "Nun", ref: "死海古卷補全", text: "<span class='text-indigo-600 font-bold'>[工程筆記]</span> 馬索拉文本缺失，死海古卷補全：『耶和華在祂一切的話上是信實的，在祂一切的作為上是慈愛的。』" },
+                    { letter: "ס", hebrew: "Samekh", ref: "14", text: "凡跌倒的，耶和華將他們扶持；凡被壓下的，將他們扶起。" },
+                    { letter: "ע", hebrew: "Ayin", ref: "15", text: "萬民都舉目仰望你；你隨時給他們食物。" },
+                    { letter: "פ", hebrew: "Pe", ref: "16", text: "你張手，使有生氣的都隨願飽足。" },
+                    { letter: "צ", hebrew: "Tsade", ref: "17", text: "耶和華在他一切所行的，無不公義；在他一切所做的都有慈愛。" },
+                    { letter: "ק", hebrew: "Qoph", ref: "18", text: "凡求告耶和華的，就是誠心求告他的，耶和華便與他們相近。" },
+                    { letter: "ר", hebrew: "Resh", ref: "19", text: "敬畏他的，他必成就他們的心願，也必聽他們的呼求，拯救他們。" },
+                    { letter: "ש", hebrew: "Shin", ref: "20", text: "耶和華保護一切愛他的人，卻要滅絕一切的惡人。" },
+                    { letter: "ת", hebrew: "Tav", ref: "21", text: "我的口要說出讚美耶和華的話；惟願凡有血氣的都永永遠遠稱頌他的聖名。" }
+                ]
+            },
+            {
+                id: 37,
+                title: "詩篇 37篇",
+                subtitle: "智慧詩：不懷不平",
+                category: "雙節離合體",
+                color: "amber",
+                structure: "每兩個詩節（每四行）變換一個字母。這種緩慢的推進適合智慧文學的教導。",
+                theology: "不要為作惡的心懷不平。時間（字母順序）站在義人這邊，惡人終將在時間的推進中消失。",
+                verses: [
+                    { letter: "א", hebrew: "Aleph", ref: "1-2", text: "不要為作惡的心懷不平... 因為他們如草快被割下..." },
+                    { letter: "ב", hebrew: "Bet", ref: "3-4", text: "你當倚靠耶和華而行善... 又要以耶和華為樂..." },
+                    { letter: "ג", hebrew: "Gimel", ref: "5-6", text: "當將你的事交託耶和華... 他要使你的公義如光發出..." },
+                    { letter: "ד", hebrew: "Dalet", ref: "7", text: "你當默然倚靠耶和華，耐性等候他..." },
+                    { letter: "ה", hebrew: "He", ref: "8-9", text: "當止住怒氣，離棄忿怒... 因為作惡的必被剪除..." },
+                    { letter: "ו", hebrew: "Vav", ref: "10-11", text: "還有片時，惡人要歸於無有... 但謙卑人必承受地土..." },
+                    { letter: "ז", hebrew: "Zayin", ref: "12-13", text: "惡人設謀害義人... 主必笑他，因見他受罰的日子將要來到。" },
+                    { letter: "ח", hebrew: "Het", ref: "14-15", text: "惡人已經弓上弦，刀出鞘... 他們的刀必刺入自己的心..." },
+                    { letter: "ט", hebrew: "Tet", ref: "16-17", text: "一個義人所有的雖少，強過許多惡人的富餘..." },
+                    { letter: "י", hebrew: "Yod", ref: "18-19", text: "耶和華知道完全人的日子... 他們在急難的時候不致羞愧..." },
+                    { letter: "כ", hebrew: "Kaf", ref: "20", text: "惡人卻要滅亡... 他們要消滅，如煙消滅。" },
+                    { letter: "ל", hebrew: "Lamed", ref: "21-22", text: "惡人借貸而不償還... 蒙耶和華賜福的必承受地土..." },
+                    { letter: "מ", hebrew: "Mem", ref: "23-24", text: "義人的腳步被耶和華立定... 他雖失腳也不至全身仆倒..." },
+                    { letter: "נ", hebrew: "Nun", ref: "25-26", text: "我從前年幼，現在年老，卻未見過義人被棄..." },
+                    { letter: "ס", hebrew: "Samekh", ref: "27-28", text: "你當離惡行善，就可永遠安居... 永蒙保佑..." },
+                    { letter: "ע", hebrew: "Ayin", ref: "29", text: "義人必承受地土，永居其上。" },
+                    { letter: "פ", hebrew: "Pe", ref: "30-31", text: "義人的口談論智慧... 神的律法在他心裡..." },
+                    { letter: "צ", hebrew: "Tsade", ref: "32-33", text: "惡人窺探義人，想要殺他... 耶和華必不撇他在惡人手中..." },
+                    { letter: "ק", hebrew: "Qoph", ref: "34", text: "你當等候耶和華，遵守他的道..." },
+                    { letter: "ר", hebrew: "Resh", ref: "35-36", text: "我見過惡人大有勢力... 有人從那裡經過，不料，他沒有了..." },
+                    { letter: "ש", hebrew: "Shin", ref: "37-38", text: "你要細察那完全人... 因為和平人有好結局..." },
+                    { letter: "ת", hebrew: "Tav", ref: "39-40", text: "但義人得救是由於耶和華... 耶和華幫助他們，解救他們..." }
+                ]
+            }
+        ];
+
+        // 渲染卡片
+        function renderCards() {
+            const grid = document.getElementById('psalms-grid');
+            grid.innerHTML = psalmsData.map(psalm => `
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 cursor-pointer group flex flex-col h-full" onclick="openModal(${psalm.id})">
+                    <div class="h-2 w-full bg-${psalm.color}-500"></div>
+                    <div class="p-6 flex-1 flex flex-col relative">
+                        <div class="absolute top-4 right-4 text-${psalm.color}-100 opacity-20 transform rotate-12 group-hover:rotate-0 transition-transform duration-500">
+                            <i class="fa-solid fa-scroll text-6xl"></i>
+                        </div>
+                        <div class="mb-4">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-${psalm.color}-100 text-${psalm.color}-700 border border-${psalm.color}-200 mb-2">
+                                ${psalm.category}
+                            </span>
+                            <h3 class="text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">${psalm.title}</h3>
+                            <p class="text-sm text-slate-500 mt-1 font-medium">${psalm.subtitle}</p>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-slate-100 flex items-center text-xs text-slate-400 font-mono">
+                            <i class="fa-solid fa-database mr-2 text-indigo-400"></i>
+                            <span>${psalm.verses ? 'FULL_DATASET_LOADED' : 'LOADING...'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 打開模態框
+        function openModal(id) {
+            const psalm = psalmsData.find(p => p.id === id);
+            if (!psalm) return;
+
+            // 填充標題區
+            document.getElementById('modal-title').innerText = psalm.title;
+            document.getElementById('modal-subtitle').innerText = psalm.subtitle;
+            document.getElementById('modal-structure').innerText = psalm.structure;
+            document.getElementById('modal-theology').innerText = psalm.theology;
+
+            // 填充經文列表
+            const container = document.getElementById('modal-verses-container');
+            if (psalm.verses && psalm.verses.length > 0) {
+                container.innerHTML = psalm.verses.map((v, idx) => {
+                    const uniqueId = `verse-${id}-${idx}`;
+                    return `
+                        <div class="bg-white border border-slate-200 rounded-lg overflow-hidden group hover:border-${psalm.color}-300 transition-colors">
+                            <button onclick="toggleAccordion('${uniqueId}')" class="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-white transition-all text-left">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-${psalm.color}-100 text-${psalm.color}-700 rounded-full font-serif font-bold text-lg border border-${psalm.color}-200">
+                                        ${v.letter}
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">${v.hebrew}</span>
+                                        <span class="text-xs font-semibold text-slate-600">Verse ${v.ref}</span>
+                                    </div>
+                                </div>
+                                <i id="icon-${uniqueId}" class="fa-solid fa-chevron-down text-slate-300 text-sm rotate-icon group-hover:text-${psalm.color}-500"></i>
+                            </button>
+                            <div id="${uniqueId}" class="accordion-content">
+                                <div class="p-4 bg-white border-t border-slate-50">
+                                    <p class="text-base text-slate-800 leading-relaxed font-serif tracking-wide text-justify">
+                                        ${v.text}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                container.innerHTML = '<div class="text-center p-8 text-slate-400">暫無詳細經文數據</div>';
+            }
+
+            // 顯示 Drawer
+            const modal = document.getElementById('detail-modal');
+            const panel = document.getElementById('modal-panel');
+            modal.classList.remove('hidden');
+            setTimeout(() => { panel.classList.remove('translate-x-full'); }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            // Optional: Close others
+            // document.querySelectorAll('.accordion-content.active').forEach(el => {
+            //    if(el.id !== id) el.classList.remove('active');
+            // });
+
+            content.classList.toggle('active');
+            icon.classList.toggle('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detail-modal');
+            const panel = document.getElementById('modal-panel');
+            panel.classList.add('translate-x-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+
+        // Init
+        renderCards();
+
+    </script>
+</body>
+</html>

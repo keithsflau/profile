@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖經中的並列結構 (Chiastic Structures)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', 'Noto Serif TC', serif;
+            background-color: #f3f4f6;
+        }
+        .chiastic-line {
+            transition: all 0.3s ease;
+        }
+        .chiastic-line:hover {
+            background-color: rgba(0,0,0,0.03);
+            transform: translateX(4px);
+        }
+        .center-pivot {
+            background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+            border-left: 4px solid #f59e0b;
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .pair-a { border-left: 3px solid #3b82f6; } /* Blue */
+        .pair-b { border-left: 3px solid #10b981; } /* Green */
+        .pair-c { border-left: 3px solid #8b5cf6; } /* Purple */
+        .pair-d { border-left: 3px solid #ec4899; } /* Pink */
+        
+        /* Custom indentation for depth */
+        .depth-0 { margin-left: 0; }
+        .depth-1 { margin-left: 1.5rem; }
+        .depth-2 { margin-left: 3rem; }
+        .depth-3 { margin-left: 4.5rem; }
+        .depth-4 { margin-left: 6rem; }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-800 text-white pb-12 pt-10 px-6 shadow-xl">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex items-center space-x-3 mb-4">
+                <span class="bg-blue-500 text-xs font-bold px-2 py-1 rounded uppercase tracking-widest">Architecture of Scripture</span>
+                <span class="text-blue-300 text-sm">工程師與傳道人的視角</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">聖經中的並列結構</h1>
+            <h2 class="text-xl md:text-2xl text-blue-200 font-light italic">Concentric / Chiastic Narrative Structures</h2>
+            <p class="mt-6 max-w-2xl text-slate-300 leading-relaxed">
+                歡迎來到主日學進階班。作為一名工程師，我驚嘆於聖經文學結構的精密設計；作為一名傳道人，我看見這些結構如何像箭頭一樣指向神的核心心意。這種「三明治」或「洋蔥」式的結構（ABC...C'B'A'）不是隨意的裝飾，而是解鎖經文深層意義的鑰匙。
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 -mt-8 mb-20 space-y-12">
+
+        <section class="bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-green-500 transform transition hover:scale-[1.01] duration-300">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">1. 創世記：伊甸園的失落</h3>
+                    <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">Genesis 2-3</span>
+                </div>
+                <p class="text-gray-600 mb-6 text-sm">這是一個典型的鏡像結構，展示了罪如何破壞了完美的創造，中心點在於那個決定性的悲劇時刻。</p>
+                
+                <div class="space-y-2 font-mono text-sm md:text-base leading-relaxed">
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2">
+                        <span class="font-bold text-green-600 mr-2">A.</span> 亞當被放置在伊甸園，靠近生命樹 <span class="text-gray-400 text-xs">(2:4-17)</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-green-600 mr-2">B.</span> 為亞當創造夏娃 <span class="text-gray-400 text-xs">(2:18-25)</span>
+                    </div>
+                    <div class="chiastic-line depth-2 center-pivot pl-4 py-4 rounded-r-lg">
+                        <span class="font-bold text-amber-600 mr-2">X.</span> 蛇的誘惑與吃禁果 <span class="text-gray-500 text-xs">(3:1-13)</span> <span class="ml-2 text-amber-600 text-xs uppercase tracking-wide border border-amber-600 px-1 rounded">Center / Crisis</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-green-600 mr-2">B'.</span> 對夏娃的懲罰：與亞當的關係被破壞 <span class="text-gray-400 text-xs">(3:16)</span>
+                    </div>
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2">
+                        <span class="font-bold text-green-600 mr-2">A'.</span> 亞當被趕出園子，被隔離在生命樹外 <span class="text-gray-400 text-xs">(3:17-24)</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-green-50 p-4 rounded-lg border border-green-100">
+                    <h4 class="font-bold text-green-800 mb-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        工程師分析
+                    </h4>
+                    <p class="text-sm text-green-900">
+                        這個結構顯示了「創造」與「去創造（De-creation）」的對比。B與B'對應顯示了關係從「合一」變為「管轄與戀慕的張力」。結構本身就在訴說失落的悲劇。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-purple-600 transform transition hover:scale-[1.01] duration-300">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">2. 以斯帖記：命運的逆轉</h3>
+                    <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">Esther</span>
+                </div>
+                <p class="text-gray-600 mb-6 text-sm">全書呈現一個宏大的倒敘結構。神的名字雖然隱藏，但祂在結構的中心（失眠夜）掌管一切。</p>
+                
+                <div class="space-y-2 font-mono text-sm md:text-base leading-relaxed">
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2">
+                        <span class="font-bold text-purple-600 mr-2">A.</span> 亞哈隨魯的王權和瓦實提的失寵 <span class="text-gray-400 text-xs">(1-2)</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-purple-600 mr-2">B.</span> 末底改發現暗殺王的陰謀 <span class="text-gray-400 text-xs">(2:19-23)</span>
+                    </div>
+                    <div class="chiastic-line depth-2 pair-c pl-3 py-2">
+                        <span class="font-bold text-purple-600 mr-2">C.</span> 哈曼被提升、計劃殲滅猶太人 <span class="text-gray-400 text-xs">(3-5)</span>
+                    </div>
+                    <div class="chiastic-line depth-3 center-pivot pl-4 py-4 rounded-r-lg">
+                        <span class="font-bold text-amber-600 mr-2">X.</span> 關鍵轉折：王夜間失眠，誦讀歷史想起末底改 <span class="text-gray-500 text-xs">(6)</span>
+                        <div class="mt-1 text-xs text-amber-800 font-normal">神學含義：看似偶然的失眠，是神介入的樞紐。</div>
+                    </div>
+                    <div class="chiastic-line depth-2 pair-c pl-3 py-2">
+                        <span class="font-bold text-purple-600 mr-2">C'.</span> 哈曼被處死、猶太人得救 <span class="text-gray-400 text-xs">(7-9)</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-purple-600 mr-2">B'.</span> 末底改獲得哈曼的地位和王的恩寵 <span class="text-gray-400 text-xs">(8)</span>
+                    </div>
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2">
+                        <span class="font-bold text-purple-600 mr-2">A'.</span> 末底改的王權和猶太人的歡樂 <span class="text-gray-400 text-xs">(9-10)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-red-500 transform transition hover:scale-[1.01] duration-300">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">3. 士師記：螺旋式的墮落</h3>
+                    <span class="bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full">Judges</span>
+                </div>
+                <p class="text-gray-600 mb-6 text-sm">這不是一個上升的結構，而是一個展示從「好」到「極惡」的對稱。基甸是轉折點。</p>
+                
+                <div class="space-y-2 font-mono text-sm md:text-base leading-relaxed">
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2 opacity-60">
+                        <span class="font-bold text-red-600 mr-2">A.</span> 引言：以色列請求誰領導他們 <span class="text-gray-400 text-xs">(1:1-3:6)</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-red-600 mr-2">B.</span> 俄陀聶 (模範士師)
+                    </div>
+                    <div class="chiastic-line depth-2 pair-c pl-3 py-2">
+                        <span class="font-bold text-red-600 mr-2">C.</span> 以笏 (藉詭計得勝)
+                    </div>
+                    <div class="chiastic-line depth-3 pair-d pl-3 py-2">
+                        <span class="font-bold text-red-600 mr-2">D.</span> 底波拉和巴拉 (女人擊碎敵頭)
+                    </div>
+                    <div class="chiastic-line depth-4 center-pivot pl-4 py-4 rounded-r-lg">
+                        <span class="font-bold text-amber-600 mr-2">E.</span> 基甸：信仰與偶像的轉折點 <span class="text-gray-500 text-xs">(6-8)</span>
+                    </div>
+                    <div class="chiastic-line depth-3 pair-d pl-3 py-2">
+                        <span class="font-bold text-red-600 mr-2">D'.</span> 亞比米勒 (被女人磨石擊碎頭)
+                    </div>
+                    <div class="chiastic-line depth-2 pair-c pl-3 py-2">
+                        <span class="font-bold text-red-600 mr-2">C'.</span> 耶弗他 (魯莽起誓導致內戰)
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-red-600 mr-2">B'.</span> 參孫 (毫無道德的士師)
+                    </div>
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2 opacity-60">
+                        <span class="font-bold text-red-600 mr-2">A'.</span> 附錄：沒有王，各人任意而行 <span class="text-gray-400 text-xs">(17-21)</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-red-50 p-4 rounded-lg border border-red-100">
+                    <p class="text-sm text-red-900 italic">
+                        注意：前半部（B-D）是對外族的戰爭勝利，後半部（D'-B'）卻轉向內戰與自我毀滅。結構本身揭示了「沒有王」的混亂。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-blue-600 transform transition hover:scale-[1.01] duration-300">
+            <div class="p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">4. 耶利米哀歌：廢墟中的盼望</h3>
+                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">Lamentations</span>
+                </div>
+                <p class="text-gray-600 mb-6 text-sm">全書五章本身就是對稱結構，而最核心的中心點（第3章的中間）藏著整本書唯一的盼望。</p>
+                
+                <div class="space-y-2 font-mono text-sm md:text-base leading-relaxed">
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">A.</span> 耶路撒冷的荒涼 <span class="text-gray-400 text-xs">(1:1-11)</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">B.</span> 耶路撒冷被背棄 <span class="text-gray-400 text-xs">(1:12-22)</span>
+                    </div>
+                    <div class="chiastic-line depth-2 pair-c pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">C.</span> 耶和華的忿怒 <span class="text-gray-400 text-xs">(2:1-8)</span>
+                    </div>
+                    <div class="chiastic-line depth-3 pair-d pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">D.</span> 眾民的苦難 <span class="text-gray-400 text-xs">(2:9-3:66)</span>
+                    </div>
+                    
+                    <div class="depth-4 center-pivot p-6 my-4 rounded shadow-inner text-center">
+                        <span class="block text-amber-600 font-bold text-lg mb-2">E. 耶和華的慈愛 (The Pivot)</span>
+                        <div class="text-slate-700 italic font-serif">
+                            「我們不致消滅，是出於耶和華諸般的慈愛... 每早晨，這都是新的。」(3:21-32)
+                        </div>
+                    </div>
+
+                    <div class="chiastic-line depth-3 pair-d pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">D'.</span> 眾民的苦難（繼續） <span class="text-gray-400 text-xs">(3:33-66)</span>
+                    </div>
+                    <div class="chiastic-line depth-2 pair-c pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">C'.</span> 耶和華的忿怒 <span class="text-gray-400 text-xs">(4:11-16)</span>
+                    </div>
+                    <div class="chiastic-line depth-1 pair-b pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">B'.</span> 猶大被背棄 <span class="text-gray-400 text-xs">(4:17-22)</span>
+                    </div>
+                    <div class="chiastic-line depth-0 pair-a pl-3 py-2">
+                        <span class="font-bold text-blue-600 mr-2">A'.</span> 耶路撒冷求救 <span class="text-gray-400 text-xs">(5:1-22)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section class="bg-slate-800 text-slate-200 p-8 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-white mb-4 border-b border-slate-600 pb-2">其他書卷中的模式</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <span class="text-yellow-500 mr-2">✦</span>
+                        <div>
+                            <strong class="text-white">箴言 (Proverbs)</strong>
+                            <p class="text-sm text-slate-400 mt-1">經常使用微型的並列結構（A-B-B'-A'）來對比智慧與愚昧。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-yellow-500 mr-2">✦</span>
+                        <div>
+                            <strong class="text-white">啟示錄 (Revelation)</strong>
+                            <p class="text-sm text-slate-400 mt-1">使用分層的符號重複：七教會、七印、七號、七碗。這是一種螺旋上升的結構。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-yellow-500 mr-2">✦</span>
+                        <div>
+                            <strong class="text-white">敘事模式</strong>
+                            <p class="text-sm text-slate-400 mt-1">許多敘事遵循「困境 → 危機 → 解決」的結構，這也是一種變體的 Chiastic Flow。</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-xl shadow-lg border border-orange-100">
+                <h3 class="text-xl font-bold text-orange-800 mb-4 border-b border-orange-200 pb-2">為什麼這很重要？</h3>
+                <div class="prose text-orange-900 text-sm">
+                    <p class="mb-3">
+                        作為工程師，我們知道<strong>「結構決定功能」</strong>。聖經的文學結構不是隨意的，而是神的靈刻意設計的傳播工具。
+                    </p>
+                    <p class="mb-3">
+                        <strong>1. 鎖定重點：</strong> 在古代口傳文化中，最重要的信息往往放在<strong>中心 (Center)</strong>，而不是結尾。
+                    </p>
+                    <p class="mb-3">
+                        <strong>2. 記憶輔助：</strong> 對稱結構幫助聽眾記憶經文。
+                    </p>
+                    <p>
+                        <strong>3. 神學聚焦：</strong> 透過識別這些結構，我們能看見隱藏在故事背後的神學意圖——即便在最黑暗的審判中（如哀歌），中心依然是神的慈愛。
+                    </p>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center text-sm">
+        <p>&copy; 2023 Sunday School Resources. Built with Precision & Grace.</p>
+        <p class="mt-2 text-xs">Designed for studying God's Word.</p>
+    </footer>
+
+</body>
+</html>

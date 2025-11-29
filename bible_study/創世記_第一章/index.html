@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>創世記第一章 Bible Study | Genesis 1 創造之工</title>
+  <meta name="description" content="創世記第一章經文閱讀與默想，為香港中學生設計的彩色聖經研讀網頁。Genesis 1 bilingual reading & reflection for Hong Kong secondary students.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .gradient-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.15), transparent 35%),
+                  radial-gradient(circle at 80% 0%, rgba(192, 132, 252, 0.15), transparent 30%),
+                  radial-gradient(circle at 50% 80%, rgba(74, 222, 128, 0.12), transparent 30%);
+      filter: blur(60px);
+      opacity: 0.9;
+      animation: gradientShift 8s ease-in-out infinite;
+    }
+    @keyframes gradientShift {
+      0%, 100% { 
+        background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.15), transparent 35%),
+                    radial-gradient(circle at 80% 0%, rgba(192, 132, 252, 0.15), transparent 30%),
+                    radial-gradient(circle at 50% 80%, rgba(74, 222, 128, 0.12), transparent 30%);
+      }
+      50% { 
+        background: radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.2), transparent 35%),
+                    radial-gradient(circle at 20% 0%, rgba(192, 132, 252, 0.2), transparent 30%),
+                    radial-gradient(circle at 50% 20%, rgba(74, 222, 128, 0.15), transparent 30%);
+      }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(30px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .glass-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .category-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: cardEntrance 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    .category-card:hover {
+      transform: translateY(-12px) scale(1.05);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+    .category-card:nth-child(1) { animation-delay: 0.1s; }
+    .category-card:nth-child(2) { animation-delay: 0.3s; }
+    .category-card:nth-child(3) { animation-delay: 0.5s; }
+    .category-card:nth-child(4) { animation-delay: 0.7s; }
+    .float-animation {
+      animation: float 5s ease-in-out infinite;
+    }
+    .pulse-animation {
+      animation: pulse 3s ease-in-out infinite;
+    }
+    .bounce-animation {
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="antialiased text-white bg-slate-950 min-h-screen overflow-x-hidden">
+  <div class="relative min-h-screen overflow-hidden">
+    <div aria-hidden="true" class="gradient-bg pointer-events-none"></div>
+    
+    <!-- Sparkles -->
+    <div class="sparkle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+    <div class="sparkle" style="top: 30%; left: 80%; animation-delay: 1s;"></div>
+    <div class="sparkle" style="top: 60%; left: 15%; animation-delay: 2s;"></div>
+    <div class="sparkle" style="top: 80%; left: 70%; animation-delay: 1.5s;"></div>
+    <div class="sparkle" style="top: 40%; left: 50%; animation-delay: 0.5s;"></div>
+    
+    <div class="relative z-10">
+      
+      <!-- Header / Hero: 創世記第一章 -->
+      <header class="px-6 pt-10 pb-12 sm:pt-16 sm:pb-20">
+        <div class="mx-auto max-w-5xl">
+          <div class="flex flex-col gap-6 text-center">
+            <p class="inline-flex items-center gap-2 mx-auto rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs sm:text-sm text-white/70 shadow-sm">
+              <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              聖經研讀 · Bible Study for HK Secondary Students
+            </p>
+            <div class="space-y-4">
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+                <span class="block bg-gradient-to-r from-cyan-300 via-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                  創世記第一章
+                </span>
+                <span class="mt-3 block text-white/90 text-2xl sm:text-3xl">
+                  Genesis 1 · 神創造的開始
+                </span>
+              </h1>
+              <p class="text-base sm:text-lg text-white/75 max-w-3xl mx-auto leading-relaxed">
+                「起初，神創造天地。」在七日的創造中，我們看見神的能力、秩序和美善。
+                這頁為中學生而設，幫助你<b>閱讀經文</b>、<b>看見結構</b>，並<b>反思今天如何回應創造主</b>。
+              </p>
+              <p class="text-sm text-white/60">
+                “In the beginning God created the heavens and the earth.” (Genesis 1:1)
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="px-6 pb-16">
+        <div class="mx-auto max-w-6xl space-y-16">
+
+          <!-- Passage Overview / Structure -->
+          <section class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10">
+            <div class="flex flex-col gap-6 sm:gap-8">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h2 class="text-2xl sm:text-3xl font-semibold mb-1">經文結構 · Passage Overview</h2>
+                  <p class="text-sm sm:text-base text-white/70">
+                    創世記一章可以分為六日創造加上一日安息。下表幫助你一眼看出每一日的重點。
+                  </p>
+                </div>
+                <div class="text-sm text-white/60">
+                  建議先靜默片刻，求聖靈幫助你明白神的話。
+                </div>
+              </div>
+
+              <div class="grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- Day cards -->
+                <article class="category-card rounded-2xl glass-card p-4 sm:p-5 border border-cyan-400/30 bg-gradient-to-br from-cyan-500/20 via-sky-500/10 to-transparent">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-cyan-300 mb-1">Day 1 · 第一天</p>
+                  <h3 class="text-lg font-semibold mb-1">光與黑暗 · Light & Darkness</h3>
+                  <p class="text-sm text-white/80 mb-1">神說：「要有光」，就有了光。神把光暗分開，定名「晝」與「夜」。</p>
+                  <p class="text-xs text-white/60">God creates light, separates light from darkness, names Day and Night. (1:1–5)</p>
+                </article>
+
+                <article class="category-card rounded-2xl glass-card p-4 sm:p-5 border border-sky-400/30 bg-gradient-to-br from-sky-500/20 via-indigo-500/10 to-transparent">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-sky-300 mb-1">Day 2 · 第二天</p>
+                  <h3 class="text-lg font-semibold mb-1">天空穹蒼 · The Sky</h3>
+                  <p class="text-sm text-white/80 mb-1">神造穹蒼，把穹蒼以上的水與以下的水分開，稱穹蒼為「天」。</p>
+                  <p class="text-xs text-white/60">God makes the expanse (sky) between the waters. (1:6–8)</p>
+                </article>
+
+                <article class="category-card rounded-2xl glass-card p-4 sm:p-5 border border-emerald-400/30 bg-gradient-to-br from-emerald-500/20 via-lime-500/10 to-transparent">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-emerald-300 mb-1">Day 3 · 第三天</p>
+                  <h3 class="text-lg font-semibold mb-1">海與陸地、植物 · Land & Plants</h3>
+                  <p class="text-sm text-white/80 mb-1">水聚在一處，旱地出現，有各樣青草和結果子的樹木。</p>
+                  <p class="text-xs text-white/60">Seas and dry land appear; vegetation grows. (1:9–13)</p>
+                </article>
+
+                <article class="category-card rounded-2xl glass-card p-4 sm:p-5 border border-amber-400/40 bg-gradient-to-br from-amber-500/25 via-orange-500/10 to-transparent">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-amber-200 mb-1">Day 4 · 第四天</p>
+                  <h3 class="text-lg font-semibold mb-1">日月星辰 · Sun, Moon & Stars</h3>
+                  <p class="text-sm text-white/80 mb-1">神造大光、小光和眾星，管理晝夜，分別晝與夜。</p>
+                  <p class="text-xs text-white/60">Heavenly lights rule day and night, mark seasons and days. (1:14–19)</p>
+                </article>
+
+                <article class="category-card rounded-2xl glass-card p-4 sm:p-5 border border-indigo-400/40 bg-gradient-to-br from-indigo-500/25 via-blue-500/10 to-transparent">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-indigo-200 mb-1">Day 5 · 第五天</p>
+                  <h3 class="text-lg font-semibold mb-1">空中與水中的生物 · Birds & Sea Creatures</h3>
+                  <p class="text-sm text-white/80 mb-1">水中充滿活物，天空有各樣飛鳥；神賜福叫牠們多多繁殖。</p>
+                  <p class="text-xs text-white/60">Sea creatures and birds are created and blessed. (1:20–23)</p>
+                </article>
+
+                <article class="category-card rounded-2xl glass-card p-4 sm:p-5 border border-rose-400/40 bg-gradient-to-br from-rose-500/25 via-pink-500/10 to-transparent">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-rose-200 mb-1">Day 6–7 · 第六至七天</p>
+                  <h3 class="text-lg font-semibold mb-1">地上動物、人、安息 · Animals, Humans & Rest</h3>
+                  <p class="text-sm text-white/80 mb-1">神照著自己的形像造人，將管理權交給人；第七日，神安息並賜福。</p>
+                  <p class="text-xs text-white/60">Land animals and humans are made; on the seventh day God rests and blesses. (1:24–2:3)</p>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <!-- Bilingual Passage Highlight -->
+          <section>
+            <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-semibold mb-2">經文選段 · Key Verses</h2>
+                <p class="text-sm sm:text-base text-white/70">以下節錄創世記第一章的重要經文，幫助你細味神的創造。</p>
+              </div>
+              <p class="text-xs sm:text-sm text-white/60">
+                建議：<span class="underline decoration-dotted">先讀中文，再對照英文；然後用 1–2 分鐘安靜默想。</span>
+              </p>
+            </div>
+
+            <div class="grid gap-4 sm:gap-6 md:grid-cols-2">
+              <!-- Verse 1 -->
+              <article class="glass-card rounded-2xl p-4 sm:p-5 border border-white/15 hover:border-cyan-400/50 transition-all duration-300">
+                <p class="text-xs font-semibold tracking-wide text-cyan-300 mb-1">創世記 1:1 · Genesis 1:1</p>
+                <p class="text-base sm:text-lg font-medium mb-2">
+                  起初，神創造天地。
+                </p>
+                <p class="text-sm text-white/80 mb-3">
+                  In the beginning God created the heavens and the earth.
+                </p>
+                <p class="text-xs text-white/60">
+                  這一節宣告<b>整本聖經的出發點</b>：世界不是偶然，而是出於一位有位格的創造主。
+                </p>
+              </article>
+
+              <!-- Verse 27 -->
+              <article class="glass-card rounded-2xl p-4 sm:p-5 border border-white/15 hover:border-emerald-400/50 transition-all duration-300">
+                <p class="text-xs font-semibold tracking-wide text-emerald-300 mb-1">創世記 1:27 · Genesis 1:27</p>
+                <p class="text-base sm:text-lg font-medium mb-2">
+                  神就照著自己的形像造人，乃是照著他的形像造男造女。
+                </p>
+                <p class="text-sm text-white/80 mb-3">
+                  So God created mankind in his own image, in the image of God he created them; male and female he created them.
+                </p>
+                <p class="text-xs text-white/60">
+                  每一個人都有<b>尊嚴與價值</b>，不單因為成績、外貌或能力，而是因為「神的形像」。
+                </p>
+              </article>
+
+              <!-- Verse 31 -->
+              <article class="glass-card rounded-2xl p-4 sm:p-5 border border-white/15 hover:border-amber-400/50 transition-all duration-300">
+                <p class="text-xs font-semibold tracking-wide text-amber-200 mb-1">創世記 1:31 · Genesis 1:31</p>
+                <p class="text-base sm:text-lg font-medium mb-2">
+                  神看著一切所造的都甚好。有晚上，有早晨，是第六日。
+                </p>
+                <p class="text-sm text-white/80 mb-3">
+                  God saw all that he had made, and it was very good. And there was evening, and there was morning—the sixth day.
+                </p>
+                <p class="text-xs text-white/60">
+                  神的創造不單「好」，而是「<b>甚好</b>」。這提醒我們：原本的世界在神眼中是美麗、和諧、沒有破碎的。
+                </p>
+              </article>
+
+              <!-- 2:1–3 summary -->
+              <article class="glass-card rounded-2xl p-4 sm:p-5 border border-white/15 hover:border-indigo-400/50 transition-all duration-300">
+                <p class="text-xs font-semibold tracking-wide text-indigo-200 mb-1">創世記 2:1–3（總結）· Genesis 2:1–3 (Summary)</p>
+                <p class="text-base sm:text-lg font-medium mb-2">
+                  到第七日，神造物的工已經完畢，就在第七日歇了他一切的工，安息了。
+                </p>
+                <p class="text-sm text-white/80 mb-3">
+                  By the seventh day God had finished the work he had been doing; so on the seventh day he rested from all his work.
+                </p>
+                <p class="text-xs text-white/60">
+                  安息不是懶惰，而是<b>在神裡面享受完成的工作</b>，並學習信靠祂的掌管。
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Theological Themes -->
+          <section class="glass-card rounded-3xl p-6 sm:p-8 border border-white/10">
+            <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-semibold mb-2">神學重點 · Key Themes</h2>
+                <p class="text-sm sm:text-base text-white/70">
+                  讀創世記第一章，不只是了解「世界怎樣被造」，更是認識<b>造物主是怎樣的一位神</b>。
+                </p>
+              </div>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-3">
+              <article class="rounded-2xl border border-cyan-400/40 bg-cyan-500/10 p-5 hover:bg-cyan-500/15 transition">
+                <p class="text-xs font-semibold tracking-wide text-cyan-200 mb-2">1. 神的主權與話語 · God’s Sovereign Word</p>
+                <p class="text-sm text-white/85 mb-2">
+                  經文多次出現：「神說……就這樣成了。」神<b>透過說話</b>創造萬有，顯出祂絕對的主權。
+                </p>
+                <p class="text-xs text-white/65">
+                  God creates by His word. Nothing resists Him. This invites us to listen humbly to His Word today.
+                </p>
+              </article>
+
+              <article class="rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-5 hover:bg-emerald-500/15 transition">
+                <p class="text-xs font-semibold tracking-wide text-emerald-200 mb-2">2. 秩序與美善 · Order & Goodness</p>
+                <p class="text-sm text-white/85 mb-2">
+                  從混沌到有次序，從空虛到豐盛，神一步一步地預備環境，再放入生命。
+                </p>
+                <p class="text-xs text-white/65">
+                  The world is not chaotic accident but carefully arranged. God repeatedly calls His creation “good”.
+                </p>
+              </article>
+
+              <article class="rounded-2xl border border-amber-400/40 bg-amber-500/10 p-5 hover:bg-amber-500/15 transition">
+                <p class="text-xs font-semibold tracking-wide text-amber-200 mb-2">3. 人的尊貴呼召 · Human Dignity & Calling</p>
+                <p class="text-sm text-white/85 mb-2">
+                  人被造有「神的形像」，蒙召管理地上萬物，不是濫用，而是<b>代表神照顧與治理</b>。
+                </p>
+                <p class="text-xs text-white/65">
+                  Being made in God’s image gives every person dignity and responsibility in family, school and society.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <!-- Reflection & Application -->
+          <section id="reflection">
+            <div class="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-semibold mb-2">反思與回應 · Reflection & Response</h2>
+                <p class="text-sm sm:text-base text-white/70">
+                  可以個人安靜，也可以小組討論。嘗試用<b>具體例子</b>來分享，不只停留在理論。
+                </p>
+              </div>
+              <button
+                type="button"
+                id="toggle-tips"
+                class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs sm:text-sm text-white/80 hover:bg-white/20 transition"
+              >
+                顯示提示 Show tips
+              </button>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+              <!-- Identity -->
+              <article class="glass-card rounded-2xl border border-white/15 p-5 hover:border-emerald-400/50 transition">
+                <p class="text-xs font-semibold tracking-wide text-emerald-200 mb-1">A. 身份 · Identity</p>
+                <h3 class="text-lg font-semibold mb-2">我在神眼中的價值</h3>
+                <p class="text-sm text-white/85 mb-2">
+                  當你想到「我是誰」時，通常會用甚麼來形容自己？成績？外貌？興趣？還是其他？
+                </p>
+                <p class="text-sm text-white/85 mb-2">
+                  如果真相信「我是照著神的形像被造」，這對你面對失敗或比較時有甚麼幫助？
+                </p>
+                <div class="reflection-tip text-xs text-emerald-100/90 mt-3 hidden">
+                  小提示 Tip: 嘗試寫出三句以「在基督裡，我是……」開頭的句子，幫助自己用神的眼光看自己。
+                </div>
+              </article>
+
+              <!-- Creation Care -->
+              <article class="glass-card rounded-2xl border border-white/15 p-5 hover:border-cyan-400/50 transition">
+                <p class="text-xs font-semibold tracking-wide text-cyan-200 mb-1">B. 管家職分 · Creation Care</p>
+                <h3 class="text-lg font-semibold mb-2">管理而不是濫用</h3>
+                <p class="text-sm text-white/85 mb-2">
+                  在學校或家中，你有沒有留意到浪費資源或破壞環境的行為？你可以怎樣作出小小改變？
+                </p>
+                <p class="text-sm text-white/85 mb-2">
+                  作為神所立的「管家」，今天你可否作出一個具體決定，去好好照顧神的創造？
+                </p>
+                <div class="reflection-tip text-xs text-cyan-100/90 mt-3 hidden">
+                  小提示 Tip: 例如：節省用水、帶水樽、減少即棄用品、關掉不需要的電源，或參與學校環保計劃。
+                </div>
+              </article>
+
+              <!-- Rest -->
+              <article class="glass-card rounded-2xl border border-white/15 p-5 hover:border-indigo-400/50 transition">
+                <p class="text-xs font-semibold tracking-wide text-indigo-200 mb-1">C. 安息 · Rest</p>
+                <h3 class="text-lg font-semibold mb-2">在忙碌中的安靜</h3>
+                <p class="text-sm text-white/85 mb-2">
+                  你的每星期時間表是否「爆滿」？神第七日安息，給你甚麼關於節奏與休息的提醒？
+                </p>
+                <p class="text-sm text-white/85 mb-2">
+                  你可以如何預留固定時間，停止手機與功課，單單安靜在神面前？
+                </p>
+                <div class="reflection-tip text-xs text-indigo-100/90 mt-3 hidden">
+                  小提示 Tip: 從很小的步驟開始，例如每天睡前 5 分鐘，讀一兩節聖經並作簡短禱告。
+                </div>
+              </article>
+
+              <!-- Witness -->
+              <article class="glass-card rounded-2xl border border-white/15 p-5 hover:border-rose-400/50 transition">
+                <p class="text-xs font-semibold tracking-wide text-rose-200 mb-1">D. 見證 · Witness</p>
+                <h3 class="text-lg font-semibold mb-2">在校園中活出「神的形像」</h3>
+                <p class="text-sm text-white/85 mb-2">
+                  在你的班房或朋友圈中，有沒有一個人是你可以主動去關心、鼓勵的？
+                </p>
+                <p class="text-sm text-white/85 mb-2">
+                  這個星期，你可以如何用言語或行動，讓別人透過你多一點看見創造主的愛與公義？
+                </p>
+                <div class="reflection-tip text-xs text-rose-100/90 mt-3 hidden">
+                  小提示 Tip: 想起一個同學，為他／她祈禱，然後找機會聆聽、幫助或說一句建立的說話。
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- Simple closing encouragement -->
+          <section class="pt-4 border-t border-white/10 text-center text-sm text-white/70">
+            <p class="mb-1">
+              可以邀請同學一同閱讀創世記第一章，再分享你們對「神的形像」與「甚好」世界的看法。
+            </p>
+            <p class="text-xs text-white/50">
+              You are created, loved, and called by the Creator God.
+            </p>
+          </section>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="px-6 py-10 mt-4 border-t border-white/10">
+        <div class="mx-auto max-w-5xl text-center space-y-2 text-xs text-white/60">
+          <p>經文出處：和合本修訂版（CUV / ESV 摘譯），只作教學及研經用途。</p>
+          <p>Designed for Hong Kong secondary school Bible study · 使用 Tailwind CSS · 純 HTML5 網頁</p>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // Simple vanilla JS toggle for reflection tips
+    document.addEventListener('DOMContentLoaded', function () {
+      const button = document.getElementById('toggle-tips');
+      const tips = document.querySelectorAll('.reflection-tip');
+      if (!button || !tips.length) return;
+
+      let visible = false;
+      button.addEventListener('click', function () {
+        visible = !visible;
+        tips.forEach(function (tip) {
+          tip.classList.toggle('hidden', !visible);
+        });
+        button.textContent = visible ? '隱藏提示 Hide tips' : '顯示提示 Show tips';
+      });
+    });
+  </script>
+</body>
+</html>

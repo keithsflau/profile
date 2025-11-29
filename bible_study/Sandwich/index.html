@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖經文學結構資料庫 | Biblical Intercalation Database</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                        serif: ['Noto Serif TC', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        eng: {
+                            dark: '#0f172a',
+                            blue: '#3b82f6',
+                            accent: '#06b6d4',
+                            grid: '#1e293b'
+                        },
+                        theology: {
+                            gold: '#d97706',
+                            paper: '#fffbeb',
+                            ink: '#451a03'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f0f4f8; }
+        .blueprint-bg {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .sandwich-connector {
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: 40px;
+            width: 2px;
+            background: repeating-linear-gradient(to bottom, #cbd5e1 0, #cbd5e1 4px, transparent 4px, transparent 8px);
+            z-index: 0;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="blueprint-bg text-slate-800 min-h-screen">
+
+    <nav class="bg-eng-dark text-white sticky top-0 z-50 shadow-xl border-b-4 border-eng-accent">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-eng-blue/20 p-2 rounded-lg border border-eng-blue/50">
+                    <i class="fa-solid fa-layer-group text-eng-accent text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl tracking-wider font-mono">STRUCTURAL<span class="text-eng-accent">.THEOLOGY</span></h1>
+                    <p class="text-xs text-slate-400">Engineering Exegesis Dept. | 結構釋經學部</p>
+                </div>
+            </div>
+            <div class="hidden md:flex gap-6 text-sm font-medium text-slate-300">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-code text-eng-accent"></i> 系統架構</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-book-bible text-theology-gold"></i> 敘事神學</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-white border-b border-slate-200 py-12 px-4 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-theology-paper border border-theology-gold/30 text-theology-ink text-xs font-bold mb-4">
+                <i class="fa-solid fa-triangle-exclamation"></i> INTERCALATION / SANDWICH STRUCTURE
+            </div>
+            <h2 class="text-4xl md:text-5xl font-serif font-black text-slate-800 mb-6">
+                當 <span class="text-eng-blue">A 敘事</span> 被 <span class="text-rose-500">B 敘事</span> 打斷
+            </h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                作為工程師，我們稱之為「嵌套循環 (Nested Loop)」或「中斷處理 (Interrupt Handler)」；<br>
+                作為傳道人，我們稱之為「相互詮釋」。<br>
+                中間的故事(B) 是解開外層故事(A) 的 <span class="font-bold underline decoration-eng-accent decoration-2">神學鑰匙</span>。
+            </p>
+        </div>
+    </header>
+
+    <div class="sticky top-20 z-40 bg-slate-50/90 backdrop-blur-sm border-y border-slate-200 py-4">
+        <div class="max-w-7xl mx-auto px-4 flex justify-center gap-4">
+            <button onclick="filterContent('all')" class="filter-btn active px-6 py-2 rounded-full font-bold text-sm transition-all bg-eng-dark text-white shadow-lg">
+                全部展示 (All)
+            </button>
+            <button onclick="filterContent('ot')" class="filter-btn px-6 py-2 rounded-full font-bold text-sm transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
+                舊約原型 (OT)
+            </button>
+            <button onclick="filterContent('nt')" class="filter-btn px-6 py-2 rounded-full font-bold text-sm transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-100">
+                新約馬可 (Markan)
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="content-grid">
+
+            <article class="filter-item ot bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-stone-600 to-stone-800 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-scroll mr-2"></i>創世記 37-39</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">對比結構 (Contrast)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-slate-50 border-l-4 border-slate-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-slate-700 block">A1: 約瑟被賣 (37章)</span>
+                            約瑟被兄弟出賣，帶下埃及。這是關於「純全人受苦」的開始。
+                        </div>
+                    </div>
+                    
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold text-amber-800 block"><i class="fa-solid fa-key mr-1"></i> B: 猶大與他瑪 (38章)</span>
+                            突然插入猶大的故事。猶大離開弟兄，落入情慾的網羅，顯示出雅各家的道德敗壞與虛偽。
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-slate-50 border-l-4 border-slate-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-slate-700 block">A2: 約瑟在波提乏家 (39章)</span>
+                            鏡頭回到約瑟。他在外邦面對誘惑卻持守聖潔：「我怎能作這大惡得罪神呢？」
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-xs font-bold text-eng-blue uppercase mb-1"><i class="fa-solid fa-microchip"></i> 工程結構分析</h4>
+                                <p class="text-xs text-slate-500 leading-snug">
+                                    這是一個「對照實驗 (A/B Test)」。將猶大的失敗(B)直接置於約瑟的成功(A2)之前，以突顯約瑟的道德完整性(Integrity)。系統顯示：彌賽亞的家系(猶大)並非靠行為稱義，而是靠恩典。
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-theology-gold uppercase mb-1"><i class="fa-solid fa-church"></i> 傳道人筆記</h4>
+                                <p class="text-xs text-slate-500 leading-snug">
+                                    神沒有隱藏選民的醜陋。猶大的黑暗襯托了約瑟的光明，但最終神卻揀選了猶大的後裔成為耶穌的先祖。這讓我們看見：神的揀選不是因為我們配得，而是在人的軟弱中顯出祂的救贖計畫。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="filter-item ot bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-stone-600 to-stone-800 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-scroll mr-2"></i>撒母耳記下 10-12</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">框架結構 (Frame)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-slate-50 border-l-4 border-slate-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-slate-700 block">A1: 亞捫人的戰爭 (10章-11:1)</span>
+                            大衛派約押去攻打亞捫人，圍攻拉巴。大衛卻留在耶路撒冷。
+                        </div>
+                    </div>
+                    
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold text-rose-800 block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> B: 大衛與拔示巴 (11:2-12:25)</span>
+                            大衛犯罪、設計殺烏利亞、拿單先知責備、孩子死亡。這是一場內在的靈性戰爭。
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-slate-50 border-l-4 border-slate-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-slate-700 block">A2: 攻取拉巴 (12:26-31)</span>
+                            約押攻取京城，大衛來到戰場，奪取亞捫人的王冠。戰爭結束。
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-xs font-bold text-eng-blue uppercase mb-1"><i class="fa-solid fa-microchip"></i> 工程結構分析</h4>
+                                <p class="text-xs text-slate-500 leading-snug">
+                                    外層的軍事勝利(A) 包裹了內層的道德徹底失敗(B)。這種結構產生了極大的諷刺力(Irony)。雖然大衛在外部戰場(System Output) 贏了，但核心處理器(Kernel) 已經崩潰。
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-theology-gold uppercase mb-1"><i class="fa-solid fa-church"></i> 傳道人筆記</h4>
+                                <p class="text-xs text-slate-500 leading-snug">
+                                    我們常像大衛一樣，外在事奉得勝（攻取拉巴），內在生命卻已腐爛。這段經文警告我們：不要用事工的成就來掩蓋私下的罪惡。神看重的是內裡的誠實，而非外戴的王冠。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="filter-item nt bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-book-bible mr-2"></i>馬可福音 5:21-43</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">時間延遲 (Delay)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A1: 睚魯求醫</span>
+                            有權勢的管會堂者，為12歲快死的女兒求耶穌。
+                        </div>
+                    </div>
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold text-yellow-800 block"><i class="fa-solid fa-clock mr-1"></i> B: 患血漏婦人</span>
+                            無名、不潔淨的婦人，病了12年，觸摸耶穌得醫治。
+                        </div>
+                    </div>
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A2: 女兒復活</span>
+                            女兒死了，耶穌卻說：「不要怕，只要信」，叫她復活。
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <p class="text-sm text-slate-600"><span class="font-bold text-eng-blue">核心分析：</span> 婦人的信心是給睚魯的示範課。 <span class="bg-yellow-100 px-1">12年的病(絕望) vs 12歲的生命(希望)</span>。中斷是為了建立更深層的信心系統。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="filter-item nt bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-book-bible mr-2"></i>馬可福音 11:12-25</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">象徵詮釋 (Symbolism)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A1: 咒詛無花果樹</span>
+                            耶穌找不著果子，咒詛樹（象徵以色列/聖殿）。
+                        </div>
+                    </div>
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold text-red-800 block"><i class="fa-solid fa-gavel mr-1"></i> B: 潔淨聖殿</span>
+                            責備聖殿失去功能（禱告），變為賊窩。
+                        </div>
+                    </div>
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A2: 樹根枯乾</span>
+                            樹連根枯乾，預示聖殿系統的徹底毀壞。
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <p class="text-sm text-slate-600"><span class="font-bold text-eng-blue">核心分析：</span> 無花果樹 = 聖殿。 <span class="bg-red-100 px-1">沒有果子(功能失效) = 受到審判(系統報廢)</span>。這是一個嚴厲的警告。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="filter-item nt bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-book-bible mr-2"></i>馬可福音 6:7-30</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">代價評估 (Cost)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A1: 差遣十二門徒</span>
+                            門徒受差遣去傳道、趕鬼，充滿能力。
+                        </div>
+                    </div>
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-slate-800 text-white border-l-4 border-slate-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold block mb-1"><i class="fa-solid fa-skull mr-1"></i> B: 施洗約翰殉道</span>
+                            詳細描述義人約翰被殺的恐怖場景。
+                        </div>
+                    </div>
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A2: 門徒回歸</span>
+                            門徒回來匯報工作（但陰影籠罩）。
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <p class="text-sm text-slate-600"><span class="font-bold text-eng-blue">核心分析：</span> 成功的宣教 (A) 包裹著 殉道的代價 (B)。這是在進行「風險評估」：跟隨耶穌意味著要準備好面對約翰那樣的結局。</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="filter-item nt bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-book-bible mr-2"></i>馬可福音 3:20-35</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">重新定義 (Redefinition)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A1: 親屬的誤解</span>
+                            耶穌家人說祂「癲狂了」，要拉祂回家。
+                        </div>
+                    </div>
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold text-purple-800 block"><i class="fa-solid fa-bolt mr-1"></i> B: 文士的褻瀆</span>
+                            宗教領袖指控祂被「別西卜」附著。
+                        </div>
+                    </div>
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A2: 真正的親屬</span>
+                            耶穌定義：「凡遵行神旨意的人就是我的弟兄姊妹和母親了。」
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <p class="text-sm text-slate-600"><span class="font-bold text-eng-blue">核心分析：</span> 局外人(文士) 與 局內人(親屬) 都誤解了耶穌。結構打破了血緣與宗教地位的界線，建立了基於「順服」的新系統架構。</p>
+                    </div>
+                </div>
+            </article>
+
+             <article class="filter-item nt bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden card-hover group">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-3 flex justify-between items-center text-white">
+                    <span class="font-mono font-bold"><i class="fa-solid fa-book-bible mr-2"></i>馬可福音 14:53-72</span>
+                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded">忠誠測試 (Loyalty)</span>
+                </div>
+                <div class="p-6 relative">
+                    <div class="sandwich-connector left-8"></div>
+                    <div class="relative z-10 mb-4 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A1: 彼得遠遠跟隨</span>
+                            彼得進入大祭司院子，在火光裡取暖。
+                        </div>
+                    </div>
+                    <div class="relative z-10 mb-4 pl-4">
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded shadow-sm text-sm transform scale-[1.02]">
+                            <span class="font-bold text-green-800 block"><i class="fa-solid fa-crown mr-1"></i> B: 耶穌勇敢認信</span>
+                            耶穌在大祭司面前宣告：「我是」。
+                        </div>
+                    </div>
+                    <div class="relative z-10 pl-8">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm">
+                            <span class="font-bold text-blue-800 block">A2: 彼得否認主</span>
+                            彼得發誓說「我不認得這個人」，雞叫，痛哭。
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <p class="text-sm text-slate-600"><span class="font-bold text-eng-blue">核心分析：</span> 將 <span class="text-green-600">忠信的見證者(耶穌)</span> 夾在 <span class="text-red-500">失敗的見證者(彼得)</span> 之間。突顯人性的徹底軟弱與基督的獨自承擔。</p>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <footer class="bg-eng-dark text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-4xl mx-auto text-center px-6">
+            <h3 class="text-white font-mono text-lg mb-4">ENGINEERING THE GOSPEL</h3>
+            <p class="text-sm mb-6 max-w-2xl mx-auto">
+                結構不是為了結構本身，而是為了承載真理的重量。<br>
+                就像鋼筋混凝土中的鋼筋是為了抗拉，經文中的插入結構是為了抗衡我們單向的思考，帶出立體的啟示。
+            </p>
+            <div class="flex justify-center gap-4 text-xs font-mono">
+                <span class="bg-slate-800 px-3 py-1 rounded border border-slate-700">HTML5</span>
+                <span class="bg-slate-800 px-3 py-1 rounded border border-slate-700">TailwindCSS</span>
+                <span class="bg-slate-800 px-3 py-1 rounded border border-slate-700">No React</span>
+                <span class="bg-theology-gold/20 text-theology-gold px-3 py-1 rounded border border-theology-gold/50">Sola Scriptura</span>
+            </div>
+            <p class="mt-8 text-xs opacity-50">&copy; 2023 Sunday School Structural Analysis Tool.</p>
+        </div>
+    </footer>
+
+    <script>
+        function filterContent(type) {
+            // Button Styling
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-eng-dark', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+            });
+            event.target.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+            event.target.classList.add('bg-eng-dark', 'text-white', 'shadow-lg');
+
+            // Content Filtering
+            const items = document.querySelectorAll('.filter-item');
+            items.forEach(item => {
+                if (type === 'all') {
+                    item.style.display = 'block';
+                    item.classList.add('animate-fade-in');
+                } else if (item.classList.contains(type)) {
+                    item.style.display = 'block';
+                    item.classList.add('animate-fade-in');
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

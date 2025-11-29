@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>啟示錄：阿爾法與奧梅加的進程 | D.Th. Coursework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 引入適合主題的字體 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Cinzel:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Noto Serif TC', serif;
+            background-color: #0c0a09; /* Stone 950 - 更深沉的背景 */
+            color: #e7e5e4; /* Stone 200 */
+        }
+        
+        /* 隱藏橫向滾動條但保持功能 */
+        .h-scroll-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .h-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* 增強文字在圖片上的可讀性 */
+        .fresco-text-shadow {
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
+        }
+
+        /* 金色邊框效果 */
+        .gold-border {
+            border: 3px solid transparent;
+            border-image: linear-gradient(to bottom right, #b45309, #fcd34d, #b45309) 1;
+            box-shadow: 0 0 20px rgba(180, 83, 9, 0.3);
+        }
+
+        /* 模擬古老壁畫的紋理覆蓋層 */
+        .texture-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        
+        /* 圖片容器樣式，確保圖片填滿且有質感 */
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* 稍微降低飽和度和增加對比度，模擬古畫感 (在替換成真實壁畫圖後可移除此濾鏡) */
+            filter: sepia(0.3) contrast(1.1) brightness(0.9); 
+            transition: all 0.7s ease;
+        }
+        /* 滑鼠懸停時恢復一點色彩 */
+        .group:hover .img-container img {
+             filter: sepia(0.1) contrast(1.1) brightness(1.0);
+             transform: scale(1.03);
+        }
+
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cinzel': ['Cinzel', 'serif'],
+                    },
+                    colors: {
+                        // 定義主題色：血紅、金、深石色
+                        'apoc-red': '#7f1d1d',
+                        'apoc-gold': '#d97706',
+                        'apoc-gold-light': '#fcd34d',
+                        'apoc-dark': '#0c0a09',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="overflow-hidden h-screen flex flex-col relative bg-apoc-dark">
+
+    <div class="texture-overlay fixed inset-0 z-50 mix-blend-soft-light"></div>
+
+    <header class="bg-black/80 backdrop-blur-md border-b border-apoc-gold/30 p-4 z-40 absolute top-0 left-0 right-0">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-cinzel text-apoc-gold-light tracking-[0.2em]">APOCALYPSIS</h1>
+                <p class="text-xs text-stone-400">啟示錄的歷史與末世進程</p>
+            </div>
+            <button onclick="toggleIntro()" class="bg-apoc-red/80 hover:bg-apoc-red text-white px-4 py-2 rounded-sm border border-red-900/50 transition text-sm font-cinzel tracking-wider">
+                課程導論
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-x-auto h-scroll-container flex snap-x snap-mandatory items-center pl-[5vw] pr-[5vw] gap-[2vw] md:gap-[4vw] pt-20 pb-12 relative">
+        
+        <div class="fixed top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-apoc-gold/50 to-transparent -z-10"></div>
+
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
+            <div class="absolute inset-0 bg-stone-900 img-container">
+                <img src="1The Vision on Patmos.png" alt="Patmos Island Vision Context">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80"></div>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
+                <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART I: THE VISION</span>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-white">人子的榮耀與七燈臺</h2>
+                <div class="border-l-4 border-apoc-red pl-4 mb-6">
+                    <p class="text-lg md:text-xl text-stone-200 serif italic">"我看見七個金燈臺... 燈臺中間有一位好像人子，身穿長衣，直垂到腳，胸間束著金帶。"</p>
+                    <p class="text-sm text-apoc-gold mt-2 text-right">— 啟示錄 1:12-13</p>
+                </div>
+                <button onclick="openExegesis('ch1')" class="flex items-center gap-2 text-sm uppercase tracking-widest text-apoc-gold-light hover:text-white transition group/btn">
+                    <span>閱讀詮釋</span>
+                    <span class="group-hover/btn:translate-x-1 transition-transform">→</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
+            <div class="absolute inset-0 bg-stone-900 img-container">
+                 <img src="2The Heavenly Throne Room.png" alt="Heavenly Throne Concept">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
+                <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART II: THE AUTHORITY</span>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-white">寶座、羔羊與七印書卷</h2>
+                <div class="border-l-4 border-apoc-red pl-4 mb-6">
+                    <p class="text-lg md:text-xl text-stone-200 serif italic">"看哪，猶大支派的獅子... 已得勝，能以展開那書卷，揭開那七印。"</p>
+                    <p class="text-sm text-apoc-gold mt-2 text-right">— 啟示錄 5:5</p>
+                </div>
+                <button onclick="openExegesis('ch4')" class="flex items-center gap-2 text-sm uppercase tracking-widest text-apoc-gold-light hover:text-white transition group/btn">
+                    <span>閱讀詮釋</span>
+                    <span class="group-hover/btn:translate-x-1 transition-transform">→</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
+            <div class="absolute inset-0 bg-stone-900 img-container">
+                 <img src="3The Four Horsemen and Judgement.png" alt="Four Horsemen Concept">
+                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
+                <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART III: THE JUDGMENT</span>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-white">印、號、碗的審判循環</h2>
+                <div class="border-l-4 border-apoc-red pl-4 mb-6">
+                    <p class="text-lg md:text-xl text-stone-200 serif italic">"我就觀看，見有一匹灰色馬；騎在馬上的，名字叫作死，陰府也隨著他..."</p>
+                    <p class="text-sm text-apoc-gold mt-2 text-right">— 啟示錄 6:8</p>
+                </div>
+                <button onclick="openExegesis('ch6')" class="flex items-center gap-2 text-sm uppercase tracking-widest text-apoc-gold-light hover:text-white transition group/btn">
+                    <span>閱讀詮釋</span>
+                    <span class="group-hover/btn:translate-x-1 transition-transform">→</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
+            <div class="absolute inset-0 bg-stone-900 img-container">
+                <img src="4The Fall of Babylon.png" alt="Fall of Babylon Concept">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
+                <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART IV: THE FALL</span>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-white">巴比倫大城傾倒了</h2>
+                <div class="border-l-4 border-apoc-red pl-4 mb-6">
+                    <p class="text-lg md:text-xl text-stone-200 serif italic">"他大聲喊著說：『巴比倫大城傾倒了！傾倒了！成了鬼魔的住處和各樣污穢之靈的巢穴...』"</p>
+                    <p class="text-sm text-apoc-gold mt-2 text-right">— 啟示錄 18:2</p>
+                </div>
+                <button onclick="openExegesis('ch18')" class="flex items-center gap-2 text-sm uppercase tracking-widest text-apoc-gold-light hover:text-white transition group/btn">
+                    <span>閱讀詮釋</span>
+                    <span class="group-hover/btn:translate-x-1 transition-transform">→</span>
+                </button>
+            </div>
+        </section>
+
+         <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
+            <div class="absolute inset-0 bg-stone-900 img-container">
+                <img src="5The New Jerusalem.png" alt="New Jerusalem Concept">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-blue-950/50 to-transparent opacity-70"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
+                <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART V: THE RESTORATION</span>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-white">新天新地與聖城降臨</h2>
+                <div class="border-l-4 border-apoc-gold pl-4 mb-6">
+                    <p class="text-lg md:text-xl text-stone-200 serif italic">"我又看見一個新天新地；因為先前的天地已經過去了，海也不再有了。我又看見聖城新耶路撒冷由神那裡從天而降..."</p>
+                    <p class="text-sm text-apoc-gold mt-2 text-right">— 啟示錄 21:1-2</p>
+                </div>
+                <button onclick="openExegesis('ch21')" class="flex items-center gap-2 text-sm uppercase tracking-widest text-apoc-gold-light hover:text-white transition group/btn">
+                    <span>閱讀詮釋</span>
+                    <span class="group-hover/btn:translate-x-1 transition-transform">→</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="snap-center shrink-0 w-[90vw] md:w-[45vw] h-[75vh] bg-stone-900/80 backdrop-blur-lg gold-border p-8 flex flex-col relative overflow-y-auto rounded-xl">
+            <div class="sticky top-0 bg-stone-900/90 pb-4 z-10">
+                <h3 class="text-2xl text-apoc-gold-light font-cinzel text-center tracking-widest">符號解碼器</h3>
+                <p class="text-stone-400 mt-2 text-sm text-center font-serif italic">啟示文學的鑰匙：點擊符號以揭示其意涵。</p>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4 mt-4 flex-1">
+                <div class="group border border-stone-700 hover:border-apoc-gold bg-black/50 transition-all duration-300 rounded overflow-hidden">
+                    <button onclick="revealSymbol(this)" class="w-full p-5 text-left flex justify-between items-center outline-none">
+                        <span class="text-lg text-apoc-gold font-bold flex items-center gap-3">
+                            <span class="text-2xl">❼</span> 數字「七」 (Seven)
+                        </span>
+                        <span class="text-stone-500 group-hover:text-apoc-gold transition text-xl symbol-arrow">↓</span>
+                    </button>
+                    <div class="symbol-desc hidden px-5 pb-5 text-stone-300 text-sm leading-relaxed border-t border-stone-800/50 pt-4 font-serif">
+                        <p>在希伯來文化與啟示文學中，「七」代表<strong>神聖的完全性 (Divine Perfection) 和圓滿</strong>。它不是一個數學數字，而是一個聲明。啟示錄中的七印、七號、七碗，表明神對歷史的審判計劃是完整、毫無遺漏的，直至最終的完成。</p>
+                    </div>
+                </div>
+
+                <div class="group border border-stone-700 hover:border-apoc-gold bg-black/50 transition-all duration-300 rounded overflow-hidden">
+                    <button onclick="revealSymbol(this)" class="w-full p-5 text-left flex justify-between items-center outline-none">
+                        <span class="text-lg text-apoc-gold font-bold flex items-center gap-3">
+                             <span class="text-2xl">♛</span> 角 (Horn)
+                        </span>
+                        <span class="text-stone-500 group-hover:text-apoc-gold transition text-xl symbol-arrow">↓</span>
+                    </button>
+                    <div class="symbol-desc hidden px-5 pb-5 text-stone-300 text-sm leading-relaxed border-t border-stone-800/50 pt-4 font-serif">
+                        <p>在古代近東文化中，動物的角象徵<strong>能力、權柄與力量 (Power and Authority)</strong>。羔羊有「七角」，代表祂擁有完全的、神聖的全能；而大紅龍有「十角」，則代表世俗敵對勢力看似強大但最終有限的權力。</p>
+                    </div>
+                </div>
+
+                <div class="group border border-stone-700 hover:border-apoc-gold bg-black/50 transition-all duration-300 rounded overflow-hidden">
+                    <button onclick="revealSymbol(this)" class="w-full p-5 text-left flex justify-between items-center outline-none">
+                        <span class="text-lg text-apoc-gold font-bold flex items-center gap-3">
+                            <span class="text-xl" style="filter: drop-shadow(0 0 2px white);">⚪</span> 白色 (White)
+                        </span>
+                        <span class="text-stone-500 group-hover:text-apoc-gold transition text-xl symbol-arrow">↓</span>
+                    </button>
+                    <div class="symbol-desc hidden px-5 pb-5 text-stone-300 text-sm leading-relaxed border-t border-stone-800/50 pt-4 font-serif">
+                        <p>白色在啟示錄中主要不代表顏色，而代表<strong>純潔、得勝與屬神的公義 (Purity, Victory, and Divine Righteousness)</strong>。聖徒穿白衣，是因為他們被羔羊的血洗淨；基督騎白馬，象徵祂是最終的得勝者與審判者。</p>
+                    </div>
+                </div>
+
+                <div class="group border border-stone-700 hover:border-apoc-gold bg-black/50 transition-all duration-300 rounded overflow-hidden">
+                    <button onclick="revealSymbol(this)" class="w-full p-5 text-left flex justify-between items-center outline-none">
+                        <span class="text-lg text-apoc-gold font-bold flex items-center gap-3">
+                            <span class="text-2xl">🌊</span> 海 (Sea)
+                        </span>
+                        <span class="text-stone-500 group-hover:text-apoc-gold transition text-xl symbol-arrow">↓</span>
+                    </button>
+                    <div class="symbol-desc hidden px-5 pb-5 text-stone-300 text-sm leading-relaxed border-t border-stone-800/50 pt-4 font-serif">
+                        <p>對於古代以色列人（非航海民族），海代表<strong>深不可測的混亂、邪惡的根源與與神敵對的勢力 (Chaos and Evil Source)</strong>。獸從海中上來。因此，新天新地中「海也不再有了」，並非物理海洋的消失，而是宣告一切混亂與邪惡的源頭已被徹底除去。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="fixed bottom-0 w-full bg-black/80 backdrop-blur-md text-stone-500 py-3 px-8 flex justify-between items-center text-xs border-t border-stone-800 z-40 font-cinzel">
+        <div>
+            <span class="hidden md:inline">導航提示：使用 Shift + 滾輪，或觸控滑動以瀏覽歷史長卷。</span>
+        </div>
+        <div class="text-apoc-gold">
+            © 2025 Theological Seminary | Eschatology Dept.
+        </div>
+    </footer>
+
+    <div id="exegesis-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 px-8 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-sm" onclick="closeExegesis()"></div>
+        <div class="bg-stone-900 border-2 border-apoc-gold max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-lg shadow-2xl p-8 relative z-10 transform scale-95 transition-transform duration-300">
+            <button onclick="closeExegesis()" class="absolute top-4 right-4 text-stone-500 hover:text-apoc-red transition text-2xl">×</button>
+            <h3 id="modal-title" class="text-3xl text-apoc-gold-light font-cinzel mb-6 tracking-wider border-b border-stone-800 pb-4"></h3>
+            <div id="modal-content" class="text-stone-300 leading-loose font-serif space-y-6 text-lg"></div>
+        </div>
+    </div>
+
+    <div id="intro-modal" class="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-md transition-all duration-700">
+        <div class="max-w-2xl w-full text-center border-y-2 border-apoc-gold/30 py-12">
+            <h1 class="text-5xl md:text-7xl font-cinzel text-transparent bg-clip-text bg-gradient-to-r from-apoc-gold via-apoc-gold-light to-apoc-gold mb-4 tracking-[0.2em]">ALPHA & OMEGA</h1>
+            <h2 class="text-2xl text-stone-400 font-cinzel mb-8 tracking-widest">啟示錄進程長卷</h2>
+            <div class="w-24 h-1 bg-apoc-red mx-auto mb-8"></div>
+            <p class="text-xl text-stone-300 mb-8 font-serif italic leading-relaxed max-w-lg mx-auto">"歡迎進入約翰的異象。這不是關於末日時間表的猜謎遊戲，而是一幅關於苦難、在帝國中持守忠心，以及羔羊最終勝利的宏大歷史壁畫。"</p>
+            <p class="text-sm text-apoc-gold mb-12 font-cinzel tracking-wider"></p>
+            <button onclick="toggleIntro()" class="group relative px-12 py-4 overflow-hidden rounded-sm bg-apoc-dark border-2 border-apoc-gold text-apoc-gold font-bold uppercase tracking-[0.2em] hover:text-black transition-colors duration-500">
+                <div class="absolute inset-0 w-0 bg-apoc-gold transition-all duration-[500ms] ease-out group-hover:w-full"></div>
+                <span class="relative z-10">開啟書卷</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 內容數據庫 (Theological Data)
+        // ==========================================
+        const exegesisData = {
+            'ch1': {
+                title: "異象的意義 (Theology of Vision)",
+                content: `
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">📖 經文結構分段</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">1:1-3</strong> 啟示的來源與祝福：約翰將從神和基督領受的啟示傳達給七個教會</p>
+                            <p><strong class="text-apoc-gold">1:4-8</strong> 問候與頌讚：三一神的自我啟示（「我是阿拉法，我是俄梅戛」）</p>
+                            <p><strong class="text-apoc-gold">1:9-11</strong> 異象的場景：約翰在拔摩島上，主日被聖靈感動</p>
+                            <p><strong class="text-apoc-gold">1:12-16</strong> 人子的異象：七個金燈臺中間的榮耀人子形象</p>
+                            <p><strong class="text-apoc-gold">1:17-20</strong> 人子的宣告與解釋：祂是首先的、末後的，並解釋七燈臺與七星的意義</p>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">💭 意義和反思</h4>
+                        <div class="space-y-4">
+                            <p><strong class='text-apoc-gold-light'>基督論的核心：</strong> 啟示錄開宗明義表明，這不是關於「未來趨勢」的占卜，而是關於「耶穌基督」的啟示（1:1）。我們首先看到的不是災難，而是復活榮耀的主。這裡描繪的「人子」形象，巧妙地結合了舊約的大祭司（身穿長袍）與君王（胸束金帶）的身分。祂是掌權者。</p>
+                            <p><strong class='text-apoc-gold-light'>受苦中的教會（七燈臺）：</strong> 燈臺象徵教會。值得注意的是，燈臺本身不能發光，必須連結於油的供應（聖靈）。這給予在羅馬帝國逼迫下受苦的教會極大的安慰：基督不僅高高在上，祂更「行走在」七個金燈臺中間，與受苦的群體同在。教會的功能是在黑暗時代為主發光。</p>
+                            <p><strong class='text-apoc-gold-light'>時間的超越性：</strong> 「我是阿拉法，我是俄梅戛」（1:8）宣告了基督對時間的主權。祂不僅是歷史的起點與終點，更是歷史進程的主宰。這意味著我們所經歷的苦難與混亂，都在祂的視野與計劃之中。</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">🙏 如何面對…</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">在苦難中：</strong> 當我們面對逼迫、不公義或個人困境時，要記念基督「行走在」教會中間的應許。我們不是孤軍奮戰，復活的主與我們同在。</p>
+                            <p><strong class="text-apoc-gold">在混亂中：</strong> 當世界看似失控，要仰望那位「首先的、末後的」主。歷史的終局在祂手中，我們可以憑信心前行。</p>
+                            <p><strong class="text-apoc-gold">在服事中：</strong> 作為教會（燈臺），我們要連結於聖靈（油），在黑暗的世代中為主發光，見證基督的榮耀。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'ch4': {
+                title: "歷史的主宰 (Sovereignty over History)",
+                content: `
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">📖 經文結構分段</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">4:1-3</strong> 天上的門開啟：約翰被邀請「上到這裡來」，看見天上的寶座</p>
+                            <p><strong class="text-apoc-gold">4:4-6</strong> 寶座周圍的景象：二十四位長老、四活物、玻璃海</p>
+                            <p><strong class="text-apoc-gold">4:7-11</strong> 敬拜的循環：四活物與長老持續敬拜「坐寶座的」</p>
+                            <p><strong class="text-apoc-gold">5:1-4</strong> 封嚴的書卷：無人配展開那代表神旨意的書卷，約翰哭泣</p>
+                            <p><strong class="text-apoc-gold">5:5-7</strong> 羔羊得勝：猶大支派的獅子、大衛的根，以「曾被殺的羔羊」形象出現</p>
+                            <p><strong class="text-apoc-gold">5:8-14</strong> 全宇宙的敬拜：四活物、二十四位長老、千萬天使，以及「一切被造的」都敬拜羔羊</p>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">💭 意義和反思</h4>
+                        <div class="space-y-4">
+                            <p><strong class='text-apoc-gold-light'>天上的視角 (The Heavenly Perspective)：</strong> 在進入地上的災難敘事之前，約翰先被帶到天上（啟 4:1）。這在詮釋上至關重要：我們必須先看見掌權的神和穩固的寶座，才能有正確的視角去面對看似失控的地上歷史。地上的混亂並未否定天上的秩序。</p>
+                            <p><strong class='text-apoc-gold-light'>書卷與羔羊：</strong> 那書卷代表神對世界歷史的終極旨意、審判與救贖計劃的產權契約。天上地下無人能展開，引發了約翰的哭泣，這象徵著人類無法憑自身解開歷史的死結。唯有「曾被殺的羔羊」配得展開，意味著神的旨意是透過基督的犧牲與救贖行動來實現的。十字架是解讀歷史的鑰匙。</p>
+                            <p><strong class='text-apoc-gold-light'>敬拜的優先性：</strong> 在展開審判之前，天上持續進行著敬拜。這提醒我們，敬拜不是為了「得到什麼」，而是對神本性的回應。即使在苦難中，我們的首要呼召是敬拜那位配得的主。</p>
+                            <p><strong class='text-apoc-gold-light'>獅子與羔羊的張力：</strong> 基督被稱為「猶大支派的獅子」，卻以「曾被殺的羔羊」的形象出現。這揭示了神國度的弔詭：得勝是透過犧牲，權能是透過軟弱，榮耀是透過十字架。</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">🙏 如何面對…</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">歷史的混亂：</strong> 當我們看到戰爭、災難、不公義時，要先「上到這裡來」——透過禱告與默想，看見天上穩固的寶座。歷史的主權在神手中。</p>
+                            <p><strong class="text-apoc-gold">無力感：</strong> 當我們感到無法改變現狀時，要記念：唯有「曾被殺的羔羊」配展開歷史的書卷。我們不是靠自己的力量，而是靠十字架的得勝。</p>
+                            <p><strong class="text-apoc-gold">敬拜的優先：</strong> 在行動之前，先敬拜。在解決問題之前，先讚美。讓敬拜成為我們生活的節奏，而不僅是聚會的活動。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'ch6': {
+                title: "公義與審判 (Justice and Judgment)",
+                content: `
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">📖 經文結構分段</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">6:1-2</strong> 第一印：白馬（假和平的征服者）</p>
+                            <p><strong class="text-apoc-gold">6:3-4</strong> 第二印：紅馬（戰爭與流血）</p>
+                            <p><strong class="text-apoc-gold">6:5-6</strong> 第三印：黑馬（饑荒與經濟剝削）</p>
+                            <p><strong class="text-apoc-gold">6:7-8</strong> 第四印：灰馬（死亡與陰府）</p>
+                            <p><strong class="text-apoc-gold">6:9-11</strong> 第五印：祭壇下的殉道者呼求公義</p>
+                            <p><strong class="text-apoc-gold">6:12-17</strong> 第六印：天地震動，人躲避羔羊的忿怒</p>
+                            <p><strong class="text-apoc-gold">7:1-17</strong> 插段：十四萬四千人受印，以及從大患難中出來的人</p>
+                            <p><strong class="text-apoc-gold">8:1-9:21</strong> 七號：前六號的審判（自然災害、痛苦、死亡）</p>
+                            <p><strong class="text-apoc-gold">15:1-16:21</strong> 七碗：最後的審判傾倒</p>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">💭 意義和反思</h4>
+                        <div class="space-y-4">
+                            <p><strong class='text-apoc-gold-light'>已然與未然的災難：</strong> 四騎士所帶來的征服、戰爭、饑荒與死亡，不應僅被視為遙遠未來的單一事件，它們更是墮落世界歷史中不斷重複的模式。每當人類試圖建立沒有神和平的「假和平」（白馬），隨之而來的就是暴力與死亡。這是對人類文明驕傲的審判。</p>
+                            <p><strong class='text-apoc-gold-light'>祭壇下的呼聲：</strong> 第五印中殉道者呼喊「要等到幾時呢？」，這是歷代受苦信徒對神義論（Theodicy）的終極提問。神的審判（第六印）不是出於殘忍，而是對這冤屈呼聲的公義回應。神若不審判罪惡，祂就不是良善的。審判是神聖潔屬性的必然展現。</p>
+                            <p><strong class='text-apoc-gold-light'>審判的漸進性：</strong> 七印、七號、七碗形成三個循環，顯示審判的逐步加劇。這不是神「報復心重」，而是給人類悔改的機會。即使在審判中，神仍呼喚人回轉（啟 9:20-21）。</p>
+                            <p><strong class='text-apoc-gold-light'>受印的保護：</strong> 在審判展開之前，神的子民先受印（7:1-8）。這表明審判不是針對義人，而是針對那些拒絕神、逼迫聖徒的勢力。神的子民在審判中得保護。</p>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">🔍 七印、七號、七碗詳解</h4>
+                        <div class="space-y-6">
+                            <div>
+                                <h5 class="text-lg text-apoc-gold font-bold mb-3">⛓️ 七印 (The Seven Seals) - 啟示錄 6:1-8:1</h5>
+                                <div class="space-y-2 text-base ml-4 border-l-2 border-apoc-gold/30 pl-4">
+                                    <p><strong class="text-apoc-gold">第一印 (6:1-2)：</strong> 白馬與騎馬者，手拿弓，有冠冕賜給他。象徵<strong>假和平的征服</strong>——人類試圖建立沒有神的和平，但這種「和平」建立在征服與壓迫之上。</p>
+                                    <p><strong class="text-apoc-gold">第二印 (6:3-4)：</strong> 紅馬，騎馬者得權柄可以從地上奪去太平。象徵<strong>戰爭與流血</strong>——假和平必然導致暴力。</p>
+                                    <p><strong class="text-apoc-gold">第三印 (6:5-6)：</strong> 黑馬，騎馬者手拿天平。象徵<strong>饑荒與經濟剝削</strong>——戰爭帶來資源短缺，富人囤積，窮人受苦。</p>
+                                    <p><strong class="text-apoc-gold">第四印 (6:7-8)：</strong> 灰馬，騎馬者名叫「死」，陰府也隨著他。象徵<strong>死亡與毀滅</strong>——戰爭、饑荒、瘟疫、野獸帶來四分之一人口的死亡。</p>
+                                    <p><strong class="text-apoc-gold">第五印 (6:9-11)：</strong> 祭壇下有被殺之人的靈魂呼求。象徵<strong>殉道者的呼聲</strong>——他們為神的道被殺，呼求公義。神給他們白衣，並說要等到「數目滿足」。</p>
+                                    <p><strong class="text-apoc-gold">第六印 (6:12-17)：</strong> 大地震、日頭變黑、月亮變血、星辰墜落。象徵<strong>宇宙性的震動</strong>——天地都要躲避羔羊的忿怒，無人能站立得住。</p>
+                                    <p><strong class="text-apoc-gold">第七印 (8:1)：</strong> 天上寂靜約二刻。這是一個<strong>戲劇性的停頓</strong>，預備更嚴重的審判（七號）的來臨。寂靜本身也是一種審判——神暫時停止祂的恩典。</p>
+                                </div>
+                                <p class="mt-3 text-stone-400 italic text-sm">💡 <strong>要點：</strong> 七印揭示人類歷史中不斷重複的災難模式。這不是「一次性」的未來事件，而是對墮落世界本質的診斷。前四印（四騎士）代表人類文明的自我毀滅，第五印顯示義人的苦難，第六印預告終極的審判。</p>
+                            </div>
+
+                            <div>
+                                <h5 class="text-lg text-apoc-gold font-bold mb-3">📯 七號 (The Seven Trumpets) - 啟示錄 8:2-11:19</h5>
+                                <div class="space-y-2 text-base ml-4 border-l-2 border-apoc-gold/30 pl-4">
+                                    <p><strong class="text-apoc-gold">第一號 (8:7)：</strong> 雹子與火攙著血丟在地上，<strong>地的三分之一</strong>被燒。象徵自然環境的破壞——人類對大地的掠奪帶來神的審判。</p>
+                                    <p><strong class="text-apoc-gold">第二號 (8:8-9)：</strong> 火燒著的大山扔在海中，<strong>海的三分之一</strong>變成血，海中生物死亡三分之一。象徵海洋生態的毀滅。</p>
+                                    <p><strong class="text-apoc-gold">第三號 (8:10-11)：</strong> 大星（名叫「茵陳」）落在江河中，<strong>水的三分之一</strong>變苦，許多人因水而死。象徵淡水資源的污染與短缺。</p>
+                                    <p><strong class="text-apoc-gold">第四號 (8:12)：</strong> <strong>日、月、星辰的三分之一</strong>被擊打，變得黑暗。象徵宇宙秩序的破壞，自然規律的混亂。</p>
+                                    <p><strong class="text-apoc-gold">第五號 (9:1-12)：</strong> 無底坑的煙與蝗蟲，折磨那些<strong>沒有神印記的人</strong>五個月。象徵<strong>屬靈的痛苦</strong>——沒有神保護的人要受極大的折磨，卻求死不得。</p>
+                                    <p><strong class="text-apoc-gold">第六號 (9:13-21)：</strong> 四個使者被釋放，帶來<strong>二萬萬馬軍</strong>，殺死人類的三分之一。但<strong>其餘的人仍不悔改</strong>，繼續拜偶像、行邪術、殺人、行淫、偷竊。這顯示審判的目的不是毀滅，而是呼喚悔改，但人卻硬心拒絕。</p>
+                                    <p><strong class="text-apoc-gold">第七號 (11:15-19)：</strong> 天上大聲宣告：「<strong>世上的國成了我主和主基督的國</strong>。」這是<strong>得勝的宣告</strong>，預告基督的再來與最終的審判。同時，神的殿在天上開了，顯出約櫃，有閃電、聲音、雷轟、地震、大雹。</p>
+                                </div>
+                                <p class="mt-3 text-stone-400 italic text-sm">💡 <strong>要點：</strong> 七號的審判比七印更嚴重（從「四分之一」到「三分之一」），但仍給人悔改的機會。值得注意的是，前四號針對<strong>自然環境</strong>，後三號針對<strong>人類本身</strong>。這提醒我們：環境破壞與人類的罪惡密不可分。神的子民在審判中受保護（有印記），但那些拒絕神的人要受極大的痛苦。</p>
+                            </div>
+
+                            <div>
+                                <h5 class="text-lg text-apoc-gold font-bold mb-3">🍷 七碗 (The Seven Bowls) - 啟示錄 15:1-16:21</h5>
+                                <div class="space-y-2 text-base ml-4 border-l-2 border-apoc-gold/30 pl-4">
+                                    <p><strong class="text-apoc-gold">第一碗 (16:2)：</strong> 惡而且毒的瘡，倒在<strong>有獸印記、拜獸像的人</strong>身上。象徵<strong>身體的痛苦</strong>——那些與敵基督結盟的人要受肉體的折磨。</p>
+                                    <p><strong class="text-apoc-gold">第二碗 (16:3)：</strong> 倒在海裡，<strong>海變成血</strong>，海中一切活物都死了。比第二號更徹底（從「三分之一」到「全部」）。</p>
+                                    <p><strong class="text-apoc-gold">第三碗 (16:4-7)：</strong> 倒在江河與眾水泉源裡，<strong>水變成血</strong>。有聲音從祭壇出來說：「你的判斷是義哉！誠哉！」這表明審判是公義的，是對流義人血的回應。</p>
+                                    <p><strong class="text-apoc-gold">第四碗 (16:8-9)：</strong> 倒在日頭上，叫日頭能用火烤人。人被大熱所烤，就<strong>褻瀆神的名</strong>，並不悔改。這顯示人的心硬到極點。</p>
+                                    <p><strong class="text-apoc-gold">第五碗 (16:10-11)：</strong> 倒在獸的座位上，獸的國就<strong>黑暗了</strong>。人因疼痛就咬自己的舌頭，又因所受的疼痛和瘡就<strong>褻瀆天上的神</strong>，並不悔改。黑暗象徵屬靈的盲目與絕望。</p>
+                                    <p><strong class="text-apoc-gold">第六碗 (16:12-16)：</strong> 倒在<strong>幼發拉底大河</strong>上，河水就乾了，要給<strong>從日出之地所來的眾王</strong>預備道路。這是<strong>哈米吉多頓大戰</strong>的預備——地上眾王聚集要與神爭戰。</p>
+                                    <p><strong class="text-apoc-gold">第七碗 (16:17-21)：</strong> 倒在空中，有<strong>大聲音從殿中的寶座出來</strong>說：「成了！」又有閃電、聲音、雷轟、大地震，<strong>各海島都逃避，眾山也不見了</strong>。又有大雹子從天落在人身上，人就<strong>褻瀆神</strong>。這是最終的、完全的審判。</p>
+                                </div>
+                                <p class="mt-3 text-stone-400 italic text-sm">💡 <strong>要點：</strong> 七碗是<strong>最後的、完全的審判</strong>。與七印、七號不同，七碗的審判是<strong>全然的</strong>（不再是「三分之一」，而是「全部」或「極大」）。這表明神的忍耐已到盡頭，審判已無可挽回。值得注意的是，即使面對如此嚴重的審判，人仍然「不悔改」、「褻瀆神」，這顯示罪的深度與人的剛硬。七碗針對的是那些<strong>有獸印記、拜獸像的人</strong>，即那些完全與敵基督結盟、拒絕神的人。</p>
+                            </div>
+
+                            <div class="bg-stone-800/50 p-4 rounded border border-apoc-gold/20">
+                                <h5 class="text-lg text-apoc-gold-light font-bold mb-3">🔄 三個循環的關係</h5>
+                                <div class="space-y-2 text-base">
+                                    <p><strong class="text-apoc-gold-light">漸進的嚴重性：</strong> 七印影響「四分之一」，七號影響「三分之一」，七碗則是「全部」或「極大」。這顯示審判的<strong>逐步加劇</strong>，給人類多次悔改的機會。</p>
+                                    <p><strong class="text-apoc-gold-light">不同的焦點：</strong> 七印主要揭示<strong>歷史的模式</strong>（人類文明的自我毀滅），七號主要針對<strong>自然環境</strong>（地的破壞），七碗主要針對<strong>敵對神的人</strong>（有獸印記的人）。</p>
+                                    <p><strong class="text-apoc-gold-light">保護的應許：</strong> 在七印與七號之間，有「受印」的插段（7:1-8），表明神的子民在審判中得保護。在七號中，特別提到「沒有神印記的人」要受痛苦（9:4），而七碗則明確針對「有獸印記的人」（16:2）。這表明：<strong>審判是選擇性的</strong>，針對那些拒絕神的人，而神的子民在審判中得保護。</p>
+                                    <p><strong class="text-apoc-gold-light">悔改的呼喚：</strong> 即使在審判中，神仍呼喚人悔改（9:20-21）。但七碗顯示，當人持續拒絕時，審判將無可挽回。這提醒我們：<strong>現在就是悔改的時候</strong>，不要等到審判臨到才後悔。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">🙏 如何面對…</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">世界的不公義：</strong> 當我們看到無辜者受苦、惡人得勢時，不要絕望。神的審判必臨到，公義必得伸張。我們可以像祭壇下的殉道者一樣，向神呼求，相信祂必回應。</p>
+                            <p><strong class="text-apoc-gold">災難與苦難：</strong> 當自然災害、戰爭、疾病臨到時，要明白這不是神的「失控」，而是祂對罪惡世界的審判。同時，我們要為那些仍在罪中的人代禱，求神給他們悔改的機會。</p>
+                            <p><strong class="text-apoc-gold">個人的軟弱：</strong> 我們也要省察自己：是否參與了「假和平」的建立？是否在經濟剝削中獲利？審判從神的家起首，我們要悔改，並在審判中持守信心。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'ch18': {
+                title: "反帝國 (Anti-Imperial)",
+                content: `
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">📖 經文結構分段</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">17:1-6</strong> 大淫婦的異象：坐在眾水上的婦人，與地上的君王行淫</p>
+                            <p><strong class="text-apoc-gold">17:7-18</strong> 獸與十角的解釋：獸的奧秘、十角與大淫婦的關係</p>
+                            <p><strong class="text-apoc-gold">18:1-3</strong> 巴比倫傾倒的宣告：天使大聲宣告大城傾倒</p>
+                            <p><strong class="text-apoc-gold">18:4-8</strong> 呼召神的子民出來：避免與她一同受刑罰</p>
+                            <p><strong class="text-apoc-gold">18:9-19</strong> 地上君王的哀哭：因失去經濟利益而哀哭</p>
+                            <p><strong class="text-apoc-gold">18:20-24</strong> 天上的歡呼與最終的宣告：聖徒、使徒、先知都要因她的傾倒而歡喜</p>
+                            <p><strong class="text-apoc-gold">19:1-10</strong> 天上的讚美：哈利路亞！神已審判大淫婦</p>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">💭 意義和反思</h4>
+                        <div class="space-y-4">
+                            <p><strong class='text-apoc-gold-light'>巴比倫作為權勢象徵：</strong> 在約翰的時代，「巴比倫」是羅馬帝國的代號。在更廣泛的意義上，它指向歷史上一切抵擋神、以經濟剝削、軍事暴力和偶像崇拜為基礎的人類權勢體系。它的奢華是建立在「販賣人口」（啟 18:13）之上的。</p>
+                            <p><strong class='text-apoc-gold-light'>倫理的命令：</strong> 「我的民哪，你們要從那城出來。」（啟 18:4）這不是要求物理上的遷徙，而是倫理上的分離。這是對信徒的強烈呼籲，在經濟、文化與價值觀上，拒絕與這個將要傾倒的罪惡體系同流合污，持守信仰的純潔。</p>
+                            <p><strong class='text-apoc-gold-light'>經濟與靈性的連結：</strong> 巴比倫的傾倒引發「地上君王」的哀哭，因為他們失去了經濟利益（18:11-17）。這揭示了一個深刻的真理：經濟體系與靈性狀態密不可分。當我們參與剝削性的經濟結構時，我們就在參與「巴比倫」的罪。</p>
+                            <p><strong class='text-apoc-gold-light'>「大淫婦」的象徵：</strong> 巴比倫被稱為「大淫婦」，不是指性道德，而是指「屬靈的淫亂」——與世界權勢結盟，背叛對神的忠貞。這提醒我們：教會必須保持與世界的分別，不能與世俗權勢「行淫」。</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">🙏 如何面對…</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">經濟的誘惑：</strong> 當我們在職場、投資、消費中面臨選擇時，要問：這是否建立在剝削他人之上？我們是否參與了「販賣人口」的經濟體系？要從「巴比倫」出來，選擇公義的經濟實踐。</p>
+                            <p><strong class="text-apoc-gold">文化的同化：</strong> 當世界價值觀（成功、權力、享樂）與信仰衝突時，要堅決「從那城出來」。這不是逃避，而是分別為聖，持守對神的忠貞。</p>
+                            <p><strong class="text-apoc-gold">權勢的試探：</strong> 當教會或個人面臨與世俗權勢結盟的誘惑時，要記念：與「大淫婦」結盟的，必與她一同傾倒。我們要選擇與羔羊站在一起，即使這意味著暫時的損失。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'ch21': {
+                title: "終末的更新 (Eschatological Renewal)",
+                content: `
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">📖 經文結構分段</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">20:11-15</strong> 白色大寶座的審判：死人都要復活受審</p>
+                            <p><strong class="text-apoc-gold">21:1-2</strong> 新天新地的出現：海不再有了，新耶路撒冷從天而降</p>
+                            <p><strong class="text-apoc-gold">21:3-4</strong> 神與人同住：以馬內利的終極實現，不再有死亡、悲哀、哭號、疼痛</p>
+                            <p><strong class="text-apoc-gold">21:5-8</strong> 神的宣告：看哪，我將一切都更新了</p>
+                            <p><strong class="text-apoc-gold">21:9-21</strong> 新耶路撒冷的描述：城的尺寸、材料、結構（十二根基、十二門）</p>
+                            <p><strong class="text-apoc-gold">21:22-27</strong> 城中的光與生命：不需要日月光照，因有神的榮耀；列國要在城的光中行走</p>
+                            <p><strong class="text-apoc-gold">22:1-5</strong> 生命河與生命樹：從神和羔羊寶座流出的生命水</p>
+                            <p><strong class="text-apoc-gold">22:6-21</strong> 最後的勸勉與應許：主必快來，聖靈與新婦都說「來！」</p>
+                        </div>
+                    </div>
+                    <div class="mb-8">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">💭 意義和反思</h4>
+                        <div class="space-y-4">
+                            <p><strong class='text-apoc-gold-light'>天堂降臨人間：</strong> 聖經的終局不是我們靈魂「飛去」一個非物質的天堂，而是新耶路撒冷「降臨」在更新的地球上。重點在於終極的「以馬內利」（神與人同住）。神的帳幕在人間，這是伊甸園與聖殿主題的終極實現。</p>
+                            <p><strong class='text-apoc-gold-light'>更新而非毀滅：</strong> 「先前的天地已經過去了」，這更多是指舊秩序的終結，而非物質宇宙的消滅。神是創造者，祂不拋棄祂的作品，而是救贖並更新它。這給予我們現世關懷大地和社會的基礎，因為這一切最終都要被神的榮耀所轉化。</p>
+                            <p><strong class='text-apoc-gold-light'>「海也不再有了」：</strong> 這不是指物理海洋的消失，而是上宣告：一切混亂、邪惡、與神敵對的勢力（「海」的象徵意義）都已被徹底除去。新創造中不再有罪的根源。</p>
+                            <p><strong class='text-apoc-gold-light'>列國在光中行走：</strong> 新耶路撒冷不是排外的，而是「列國要在城的光中行走」（21:24）。這表明神的救贖計劃是普世的，最終要將萬民帶入祂的榮耀中。</p>
+                            <p><strong class='text-apoc-gold-light'>「主必快來」：</strong> 啟示錄以「主必快來」結束，這不是時間預測，而是對盼望的呼喚。我們要活在「快來」的張力中：既知道終局已定，又積極參與現世的更新。</p>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xl text-apoc-gold-light font-cinzel mb-4 border-b border-stone-700 pb-2">🙏 如何面對…</h4>
+                        <div class="space-y-3 text-base">
+                            <p><strong class="text-apoc-gold">現世的苦難：</strong> 當我們面對死亡、疾病、分離時，要記念：在新天新地中，這些都要過去。我們現在的苦難是暫時的，終極的盼望是神與人同住，不再有眼淚。</p>
+                            <p><strong class="text-apoc-gold">環境的關懷：</strong> 既然神要更新天地（而非毀滅），我們現在就應該關懷環境、保護大地。這是對終極更新的預演，是我們作為「新創造」的見證。</p>
+                            <p><strong class="text-apoc-gold">社會的公義：</strong> 既然列國要在神的光中行走，我們現在就要為公義、和平、包容而努力。新耶路撒冷不是「逃離世界」，而是「轉化世界」的終極實現。</p>
+                            <p><strong class="text-apoc-gold">日常的生活：</strong> 「主必快來」提醒我們：每一天都要活在盼望中，既不被現世的困難壓垮，也不逃避現世的責任。我們是「新創造」的初熟果子，要在現世中活出終末的樣式。</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // ==========================================
+        // JavaScript 交互邏輯 (Vanilla JS)
+        // ==========================================
+
+        // 打開詮釋 Modal
+        function openExegesis(key) {
+            const data = exegesisData[key];
+            const modal = document.getElementById('exegesis-modal');
+            const modalContentDiv = modal.querySelector('div.bg-stone-900'); // 獲取內容卡片 div
+
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-content').innerHTML = data.content;
+            
+            // 顯示 Modal 的動畫邏輯
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContentDiv.classList.remove('scale-95'); // 卡片放大
+                modalContentDiv.classList.add('scale-100');
+            }, 10); // 微小延遲以觸發 transition
+        }
+
+        // 關閉詮釋 Modal
+        function closeExegesis() {
+            const modal = document.getElementById('exegesis-modal');
+            const modalContentDiv = modal.querySelector('div.bg-stone-900');
+
+            // 關閉動畫
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContentDiv.classList.remove('scale-100');
+            modalContentDiv.classList.add('scale-95'); // 卡片縮小
+
+            // 等待動畫完成後隱藏元素
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // 與 CSS duration-300 匹配
+        }
+
+        // 切換導論頁面 (Toggle Intro)
+        function toggleIntro() {
+            const modal = document.getElementById('intro-modal');
+            if(!modal.classList.contains('opacity-0')) {
+                // 關閉
+                modal.classList.add('opacity-0', 'pointer-events-none', 'scale-110'); // 增加一點放大淡出的效果
+            } else {
+                // 打開
+                modal.classList.remove('opacity-0', 'pointer-events-none', 'scale-110');
+            }
+        }
+
+        // 互動功能：符號解碼器展開/收起
+        function revealSymbol(button) {
+            const parent = button.parentElement;
+            const desc = parent.querySelector('.symbol-desc');
+            const arrow = parent.querySelector('.symbol-arrow');
+
+            // 簡單的 Toggle 邏輯
+            if (desc.classList.contains('hidden')) {
+                desc.classList.remove('hidden');
+                arrow.innerHTML = '↑'; // 改變箭頭方向
+                parent.classList.add('border-apoc-gold'); // 高亮邊框
+            } else {
+                desc.classList.add('hidden');
+                arrow.innerHTML = '↓';
+                parent.classList.remove('border-apoc-gold');
+            }
+        }
+
+        // 允許通過鍵盤 ESC 關閉 Modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeExegesis();
+                const introModal = document.getElementById('intro-modal');
+                if (!introModal.classList.contains('opacity-0')) {
+                    toggleIntro();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

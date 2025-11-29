@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>約瑟的一生：神學意義教導 | 神學博士課程</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background: linear-gradient(to bottom, #1e3a8a 0%, #3b82f6 50%, #f0f9ff 100%);
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        .serif-text { font-family: 'Noto Serif TC', serif; }
+        
+        /* 橫向滾動容器 */
+        .mural-container {
+            display: flex;
+            width: max-content;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        /* 每個場景 */
+        .scene {
+            min-width: 500px;
+            width: 500px;
+            height: calc(100vh - 4rem);
+            margin: 0 1rem;
+            position: relative;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        
+        .scene:hover {
+            transform: scale(1.02);
+        }
+        
+        .scene-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .scene-number {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .scene-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .scene-reference {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        .scene-image {
+            flex: 1;
+            background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scene-content {
+            padding: 1.5rem;
+            background: white;
+            max-height: 40%;
+            overflow-y: auto;
+        }
+        
+        .verse-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        
+        .theology-box {
+            background: #e0e7ff;
+            border-left: 4px solid #6366f1;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        
+        /* SVG 圖示樣式 */
+        .scene-icon {
+            width: 200px;
+            height: 200px;
+            opacity: 0.8;
+        }
+        
+        /* 互動按鈕 */
+        .interactive-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .interactive-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 導航指示器 */
+        .nav-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background: #3b82f6;
+            width: 32px;
+            border-radius: 6px;
+        }
+        
+        /* 進度條 */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+        
+        /* 平滑滾動 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 自定義滾動條 */
+        ::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* 活動彈窗 */
+        .activity-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .activity-modal.active {
+            display: flex;
+        }
+        
+        .activity-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 進度條 -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- 標題 -->
+    <div class="fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md px-6 py-4 rounded-xl shadow-lg">
+        <h1 class="text-2xl font-bold text-slate-900 mb-1">約瑟的一生</h1>
+        <p class="text-sm text-slate-600">神學意義教導 · 從左到右閱讀</p>
+    </div>
+    
+    <!-- 壁畫容器 -->
+    <div class="mural-container" id="muralContainer">
+        
+        <!-- 場景 1: 雅各的愛子 -->
+        <div class="scene" id="scene-1">
+            <div class="scene-header">
+                <div class="scene-number">場景 01</div>
+                <div class="scene-title">雅各的愛子</div>
+                <div class="scene-reference">創世記 37:3-4</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="80" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+                    <text x="100" y="110" font-size="60" text-anchor="middle" fill="#f59e0b" font-weight="bold">約</text>
+                    <path d="M 60 60 L 140 60 L 140 80 L 60 80 Z" fill="#3b82f6" opacity="0.3"/>
+                    <circle cx="80" cy="50" r="15" fill="#fbbf24"/>
+                    <circle cx="120" cy="50" r="15" fill="#fbbf24"/>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「以色列原來愛約瑟過於愛他的眾子，因為約瑟是他年老生的；他給約瑟做了一件彩衣。約瑟的哥哥們見父親愛約瑟過於愛他們，就恨約瑟，不與他說和睦的話。」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟被父親特別寵愛，預表基督是父神所愛的獨生子。彩衣象徵榮耀與尊貴，但這也引發了兄弟的嫉妒，正如基督來到自己的地方，自己的人倒不接待他（約1:11）。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(1)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 2: 兩個夢 -->
+        <div class="scene" id="scene-2">
+            <div class="scene-header">
+                <div class="scene-number">場景 02</div>
+                <div class="scene-title">兩個異夢</div>
+                <div class="scene-reference">創世記 37:5-11</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="80" fill="#1e1b4b" opacity="0.2"/>
+                    <circle cx="100" cy="60" r="25" fill="#fbbf24"/>
+                    <circle cx="100" cy="60" r="20" fill="#fef3c7"/>
+                    <path d="M 60 100 L 140 100 L 100 140 Z" fill="#10b981" opacity="0.6"/>
+                    <circle cx="70" cy="90" r="8" fill="#fbbf24"/>
+                    <circle cx="130" cy="90" r="8" fill="#fbbf24"/>
+                    <circle cx="80" cy="110" r="8" fill="#fbbf24"/>
+                    <circle cx="120" cy="110" r="8" fill="#fbbf24"/>
+                    <circle cx="90" cy="120" r="8" fill="#fbbf24"/>
+                    <circle cx="110" cy="120" r="8" fill="#fbbf24"/>
+                    <text x="100" y="180" font-size="14" text-anchor="middle" fill="#6366f1" font-weight="bold">禾捆與星辰</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟做了一夢，告訴他哥哥們，他們就越發恨他。約瑟對他們說：『請聽我所做的夢：我們在田裡捆禾稼，我的捆起來站著，你們的捆來圍著我的捆下拜。』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟的夢預示他將來的權柄與地位。這預表基督的國度，萬膝都要跪拜，萬口都要承認（腓2:10-11）。神透過異夢啟示祂的計劃，顯明神的主權與預知。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(2)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 3: 被賣到埃及 -->
+        <div class="scene" id="scene-3">
+            <div class="scene-header">
+                <div class="scene-number">場景 03</div>
+                <div class="scene-title">被賣到埃及</div>
+                <div class="scene-reference">創世記 37:12-36</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="20" y="80" width="160" height="100" fill="#92400e" opacity="0.3"/>
+                    <circle cx="100" cy="100" r="30" fill="#fef3c7"/>
+                    <path d="M 70 100 L 100 70 L 130 100 L 100 130 Z" fill="#dc2626" opacity="0.6"/>
+                    <path d="M 40 60 L 160 60" stroke="#3b82f6" stroke-width="3" stroke-dasharray="5,5"/>
+                    <text x="100" y="50" font-size="12" text-anchor="middle" fill="#6366f1">被賣</text>
+                    <circle cx="50" cy="150" r="15" fill="#f59e0b"/>
+                    <text x="50" y="155" font-size="10" text-anchor="middle" fill="white">銀</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「有些米甸的商人從那裡經過，哥哥們就把約瑟從坑裡拉上來，講定二十舍客勒銀子，把約瑟賣給以實瑪利人。他們就把約瑟帶到埃及去了。」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟被兄弟出賣，預表基督被猶大以三十塊銀子出賣（太26:15）。人的惡意成就了神的計劃，正如使徒行傳所說：「你們就藉著無法之人的手，把他釘在十字架上殺了。神卻將死的痛苦解釋了，叫他復活。」（徒2:23-24）</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(3)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 4: 在波提乏家 -->
+        <div class="scene" id="scene-4">
+            <div class="scene-header">
+                <div class="scene-number">場景 04</div>
+                <div class="scene-title">在波提乏家</div>
+                <div class="scene-reference">創世記 39:1-6</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="40" y="40" width="120" height="120" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                    <rect x="50" y="50" width="100" height="80" fill="#3b82f6" opacity="0.2"/>
+                    <path d="M 60 70 L 140 70 L 140 90 L 60 90 Z" fill="#10b981" opacity="0.4"/>
+                    <circle cx="100" cy="100" r="20" fill="#fef3c7"/>
+                    <path d="M 90 95 L 100 85 L 110 95" stroke="#10b981" stroke-width="2" fill="none"/>
+                    <text x="100" y="145" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">忠心管理</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟住在他主人埃及人的家中，耶和華與他同在，他就百事順利。他主人見耶和華與他同在，又見耶和華使他手裡所辦的盡都順利，就把一切所有的都交在他手裡。」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟在試煉中仍保持忠心，神與他同在，使他凡事順利。這教導我們：無論環境如何，神的同在是我們最大的保障。正如保羅所說：「我靠著那加給我力量的，凡事都能做。」（腓4:13）</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(4)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 5: 被誣告下監 -->
+        <div class="scene" id="scene-5">
+            <div class="scene-header">
+                <div class="scene-number">場景 05</div>
+                <div class="scene-title">被誣告下監</div>
+                <div class="scene-reference">創世記 39:7-20</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="30" width="100" height="140" fill="#4b5563" stroke="#1f2937" stroke-width="3"/>
+                    <rect x="60" y="50" width="80" height="20" fill="#6b7280" opacity="0.5"/>
+                    <rect x="60" y="80" width="80" height="20" fill="#6b7280" opacity="0.5"/>
+                    <circle cx="100" cy="130" r="25" fill="#fef3c7"/>
+                    <path d="M 85 120 L 100 105 L 115 120" stroke="#dc2626" stroke-width="2" fill="none"/>
+                    <text x="100" y="175" font-size="12" text-anchor="middle" fill="#ef4444" font-weight="bold">無辜受難</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟就逃跑了，跑到外邊去。婦人就叫了家裡的人來，對他們說：『你們看！他帶了一個希伯來人進入我們家裡，要戲弄我們。他到我這裡來，要與我同寢，我就大聲喊叫。』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟因持守聖潔而受誣告，預表基督無罪卻被定罪。義人受苦是神計劃的一部分，正如以賽亞書53章所預言的受苦僕人。約瑟選擇順從神而非順從情慾，展現了真正的屬靈品格。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(5)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 6: 在監獄中 -->
+        <div class="scene" id="scene-6">
+            <div class="scene-header">
+                <div class="scene-number">場景 06</div>
+                <div class="scene-title">在監獄中</div>
+                <div class="scene-reference">創世記 39:21-40:23</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="30" y="40" width="140" height="120" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                    <circle cx="100" cy="100" r="30" fill="#fef3c7"/>
+                    <path d="M 70 100 L 100 70 L 130 100" fill="#10b981" opacity="0.6"/>
+                    <circle cx="80" cy="90" r="5" fill="#fbbf24"/>
+                    <circle cx="120" cy="90" r="5" fill="#fbbf24"/>
+                    <text x="100" y="180" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">解夢的恩賜</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「但耶和華與約瑟同在，向他施恩，使他在司獄的眼前蒙恩。司獄就把監裡所有的囚犯都交在約瑟手下；他們在那裡所辦的事都是經他的手。凡在約瑟手下的事，司獄一概不察，因為耶和華與約瑟同在；耶和華使他所做的盡都順利。」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">即使在監獄中，神仍與約瑟同在，並賜給他解夢的恩賜。這表明神的恩典不因環境而改變。約瑟為酒政和膳長解夢，顯明神賜給他的智慧和啟示，預備他將來為法老解夢。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(6)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 7: 為法老解夢 -->
+        <div class="scene" id="scene-7">
+            <div class="scene-header">
+                <div class="scene-number">場景 07</div>
+                <div class="scene-title">為法老解夢</div>
+                <div class="scene-reference">創世記 41:1-45</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="60" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+                    <circle cx="100" cy="70" r="20" fill="#fbbf24"/>
+                    <rect x="60" y="110" width="80" height="30" fill="#10b981" opacity="0.6"/>
+                    <rect x="60" y="150" width="80" height="20" fill="#dc2626" opacity="0.6"/>
+                    <text x="100" y="190" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">七豐年與七荒年</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟對法老說：『法老的夢乃是一個。神已將所要做的事指示法老了。七隻好母牛是七年，七個好穗子也是七年；這夢乃是一個。那隨後上來的七隻又乾瘦又醜陋的母牛是七年，那七個虛空、被東風吹焦的穗子也是七年，將有七個荒年。』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟為法老解夢，顯明神的主權掌管歷史。他將榮耀歸給神：「這不在乎我，神必將平安的話回答法老。」（創41:16）這教導我們：所有的智慧與能力都來自神，我們只是神的器皿。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(7)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 8: 成為埃及宰相 -->
+        <div class="scene" id="scene-8">
+            <div class="scene-header">
+                <div class="scene-number">場景 08</div>
+                <div class="scene-title">成為埃及宰相</div>
+                <div class="scene-reference">創世記 41:46-57</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="30" width="100" height="140" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+                    <path d="M 70 60 L 130 60 L 130 100 L 70 100 Z" fill="#3b82f6" opacity="0.3"/>
+                    <circle cx="100" cy="80" r="15" fill="#fef3c7"/>
+                    <path d="M 90 75 L 100 65 L 110 75" stroke="#10b981" stroke-width="2" fill="none"/>
+                    <rect x="60" y="120" width="80" height="30" fill="#10b981" opacity="0.4"/>
+                    <text x="100" y="175" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">治理全地</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「法老對約瑟說：『我派你治理埃及全地。』法老就摘下手上打印的戒指，戴在約瑟的手上，給他穿上細麻衣，把金鍊戴在他的頸項上，又叫約瑟坐他的副車，喝道的在前面呼叫說：『跪下！』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟從監獄直接升到高位，預表基督從死裡復活，升到父的右邊。神使約瑟「在受苦之後得榮耀」（彼前1:11），這正是神對所有屬祂之人的應許：我們若與基督一同受苦，也必與他一同得榮耀（羅8:17）。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(8)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 9: 與兄弟相見 -->
+        <div class="scene" id="scene-9">
+            <div class="scene-header">
+                <div class="scene-number">場景 09</div>
+                <div class="scene-title">與兄弟相見</div>
+                <div class="scene-reference">創世記 42-45</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="80" cy="100" r="25" fill="#fef3c7"/>
+                    <circle cx="120" cy="100" r="25" fill="#fef3c7"/>
+                    <path d="M 70 90 L 80 80 L 90 90" stroke="#10b981" stroke-width="2" fill="none"/>
+                    <path d="M 110 90 L 120 80 L 130 90" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                    <path d="M 80 100 L 120 100" stroke="#dc2626" stroke-width="2" opacity="0.5"/>
+                    <text x="100" y="150" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">寬恕與和好</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟對他弟兄們說：『我是約瑟。我的父親還在嗎？』他弟兄們都不能回答，因為在他面前都驚惶。約瑟又對他弟兄們說：『請你們近前來。』他們就近前來。他說：『我是你們的兄弟約瑟，就是你們所賣到埃及的。現在，不要因為把我賣到這裡自憂自恨。這是神差我在你們以先來，為要保全生命。』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟選擇寬恕，並看出神在苦難中的美意：「神差我在你們以先來，為要保全生命。」（創45:5）這預表基督的救贖：人的罪惡成就了神的救恩計劃。約瑟的寬恕教導我們：真正的屬靈成熟是能夠從神的角度看苦難。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(9)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 10: 與父親重聚 -->
+        <div class="scene" id="scene-10">
+            <div class="scene-header">
+                <div class="scene-number">場景 10</div>
+                <div class="scene-title">與父親重聚</div>
+                <div class="scene-reference">創世記 46-47</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="80" r="30" fill="#fef3c7"/>
+                    <path d="M 85 70 L 100 55 L 115 70" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                    <circle cx="70" cy="130" r="20" fill="#fef3c7"/>
+                    <circle cx="130" cy="130" r="20" fill="#fef3c7"/>
+                    <path d="M 60 120 L 70 110 L 80 120" stroke="#10b981" stroke-width="2" fill="none"/>
+                    <path d="M 120 120 L 130 110 L 140 120" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                    <text x="100" y="175" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">父子團圓</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟套車往歌珊去，迎接他父親以色列，及至見了面，就伏在父親的頸項上，哭了許久。以色列對約瑟說：『我既得見你的面，知道你還在，就是死我也甘心。』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟與父親的重聚，預表神兒女最終與天父的團聚。這也象徵基督的再來，那時我們要與主面對面。雅各說「就是死我也甘心」，表達了與所愛之人重聚的極大滿足，正如我們將來在天家與主永遠同在的喜樂。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(10)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+        <!-- 場景 11: 祝福後代 -->
+        <div class="scene" id="scene-11">
+            <div class="scene-header">
+                <div class="scene-number">場景 11</div>
+                <div class="scene-title">祝福後代</div>
+                <div class="scene-reference">創世記 48-50</div>
+            </div>
+            <div class="scene-image">
+                <svg class="scene-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="60" r="25" fill="#fef3c7"/>
+                    <path d="M 90 50 L 100 40 L 110 50" stroke="#f59e0b" stroke-width="2" fill="none"/>
+                    <circle cx="70" cy="120" r="18" fill="#fef3c7"/>
+                    <circle cx="130" cy="120" r="18" fill="#fef3c7"/>
+                    <path d="M 60 110 L 70 100 L 80 110" stroke="#10b981" stroke-width="2" fill="none"/>
+                    <path d="M 120 110 L 130 100 L 140 110" stroke="#3b82f6" stroke-width="2" fill="none"/>
+                    <path d="M 100 80 L 100 100" stroke="#fbbf24" stroke-width="3"/>
+                    <text x="100" y="165" font-size="12" text-anchor="middle" fill="#6366f1" font-weight="bold">傳承祝福</text>
+                </svg>
+            </div>
+            <div class="scene-content">
+                <div class="verse-box">
+                    <p class="text-sm font-bold text-amber-800 mb-2">📖 經文</p>
+                    <p class="serif-text text-sm leading-relaxed">「約瑟對他弟兄們說：『我要死了，但神必定看顧你們，領你們從這地上去，到他起誓所應許給亞伯拉罕、以撒、雅各之地。』約瑟叫以色列的子孫起誓說：『神必定看顧你們；你們要把我的骸骨從這裡搬上去。』」</p>
+                </div>
+                <div class="theology-box">
+                    <p class="text-sm font-bold text-indigo-800 mb-2">💭 神學意義</p>
+                    <p class="text-sm leading-relaxed">約瑟臨終前堅信神的應許，要求將他的骸骨帶回應許之地。這表明他對神應許的信心，預表我們對復活的盼望。約瑟的一生見證了「萬事都互相效力，叫愛神的人得益處」（羅8:28），他的信心成為後代的榜樣。</p>
+                </div>
+                <button class="interactive-btn w-full" onclick="openActivity(11)">
+                    <i class="fas fa-lightbulb mr-2"></i>互動思考
+                </button>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- 導航指示器 -->
+    <div class="nav-indicator" id="navIndicator">
+        <div class="nav-dot active" onclick="scrollToScene(0)"></div>
+        <div class="nav-dot" onclick="scrollToScene(1)"></div>
+        <div class="nav-dot" onclick="scrollToScene(2)"></div>
+        <div class="nav-dot" onclick="scrollToScene(3)"></div>
+        <div class="nav-dot" onclick="scrollToScene(4)"></div>
+        <div class="nav-dot" onclick="scrollToScene(5)"></div>
+        <div class="nav-dot" onclick="scrollToScene(6)"></div>
+        <div class="nav-dot" onclick="scrollToScene(7)"></div>
+        <div class="nav-dot" onclick="scrollToScene(8)"></div>
+        <div class="nav-dot" onclick="scrollToScene(9)"></div>
+        <div class="nav-dot" onclick="scrollToScene(10)"></div>
+    </div>
+    
+    <!-- 活動彈窗 -->
+    <div class="activity-modal" id="activityModal">
+        <div class="activity-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-slate-900" id="activityTitle">互動思考</h3>
+                <button onclick="closeActivity()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="activityContent"></div>
+        </div>
+    </div>
+    
+    <script>
+        const scenes = [
+            {
+                title: "雅各的愛子",
+                activity: {
+                    question: "約瑟被父親特別寵愛，這如何預表基督？",
+                    options: [
+                        "A. 基督是父神所愛的獨生子",
+                        "B. 基督也受到人的嫉妒和拒絕",
+                        "C. 兩者都預表神的揀選",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟被父親特別寵愛，預表基督是父神所愛的獨生子（約3:16）。同時，約瑟受到兄弟的嫉妒和拒絕，正如基督來到自己的地方，自己的人倒不接待他（約1:11）。這都顯明了神對選民的揀選和計劃。"
+                }
+            },
+            {
+                title: "兩個異夢",
+                activity: {
+                    question: "約瑟的夢預示了什麼？",
+                    options: [
+                        "A. 他將來的權柄與地位",
+                        "B. 萬物都要向他下拜",
+                        "C. 預表基督的國度",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟的夢預示他將來的權柄與地位，萬物都要向他下拜。這預表基督的國度，正如腓立比書2:10-11所說：「叫一切在天上的、地上的，和地底下的，因耶穌的名無不屈膝，無不口稱『耶穌基督為主』。」"
+                }
+            },
+            {
+                title: "被賣到埃及",
+                activity: {
+                    question: "約瑟被賣如何預表基督？",
+                    options: [
+                        "A. 都被親近的人出賣",
+                        "B. 都為了銀子被出賣",
+                        "C. 人的惡意成就了神的計劃",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟被兄弟以二十舍客勒銀子出賣，預表基督被猶大以三十塊銀子出賣（太26:15）。人的惡意卻成就了神的救恩計劃，正如使徒行傳2:23所說：「他既按著神的定旨先見被交與人，你們就藉著無法之人的手，把他釘在十字架上殺了。」"
+                }
+            },
+            {
+                title: "在波提乏家",
+                activity: {
+                    question: "約瑟在試煉中如何保持忠心？",
+                    options: [
+                        "A. 依靠神與他同在",
+                        "B. 在凡事上盡忠職守",
+                        "C. 將榮耀歸給神",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟在試煉中保持忠心，因為神與他同在，使他凡事順利。這教導我們：無論環境如何，神的同在是我們最大的保障。正如保羅所說：「我靠著那加給我力量的，凡事都能做。」（腓4:13）"
+                }
+            },
+            {
+                title: "被誣告下監",
+                activity: {
+                    question: "約瑟因持守聖潔而受誣告，這如何預表基督？",
+                    options: [
+                        "A. 基督無罪卻被定罪",
+                        "B. 義人受苦是神計劃的一部分",
+                        "C. 預表以賽亞書53章的受苦僕人",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟因持守聖潔而受誣告，預表基督無罪卻被定罪。義人受苦是神計劃的一部分，正如以賽亞書53章所預言的受苦僕人：「他為我們的過犯受害，為我們的罪孽壓傷。」（賽53:5）"
+                }
+            },
+            {
+                title: "在監獄中",
+                activity: {
+                    question: "約瑟在監獄中如何經歷神的恩典？",
+                    options: [
+                        "A. 神與他同在",
+                        "B. 神賜給他解夢的恩賜",
+                        "C. 神預備他將來的事工",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "即使在監獄中，神仍與約瑟同在，並賜給他解夢的恩賜。這表明神的恩典不因環境而改變。約瑟為酒政和膳長解夢，顯明神賜給他的智慧和啟示，預備他將來為法老解夢。"
+                }
+            },
+            {
+                title: "為法老解夢",
+                activity: {
+                    question: "約瑟為法老解夢時如何將榮耀歸給神？",
+                    options: [
+                        "A. 說『這不在乎我，神必將平安的話回答法老』",
+                        "B. 承認所有的智慧都來自神",
+                        "C. 將自己視為神的器皿",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟為法老解夢時，將榮耀歸給神：「這不在乎我，神必將平安的話回答法老。」（創41:16）這教導我們：所有的智慧與能力都來自神，我們只是神的器皿。正如哥林多前書4:7所說：「你有什麼不是領受的呢？若是領受的，為何自誇，彷彿不是領受的呢？」"
+                }
+            },
+            {
+                title: "成為埃及宰相",
+                activity: {
+                    question: "約瑟從監獄升到高位如何預表基督？",
+                    options: [
+                        "A. 預表基督從死裡復活",
+                        "B. 預表基督升到父的右邊",
+                        "C. 預表我們若與基督一同受苦，也必與他一同得榮耀",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟從監獄直接升到高位，預表基督從死裡復活，升到父的右邊。神使約瑟「在受苦之後得榮耀」（彼前1:11），這正是神對所有屬祂之人的應許：我們若與基督一同受苦，也必與他一同得榮耀（羅8:17）。"
+                }
+            },
+            {
+                title: "與兄弟相見",
+                activity: {
+                    question: "約瑟選擇寬恕的關鍵是什麼？",
+                    options: [
+                        "A. 看出神在苦難中的美意",
+                        "B. 相信『神差我在你們以先來，為要保全生命』",
+                        "C. 從神的角度看苦難",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟選擇寬恕，並看出神在苦難中的美意：「神差我在你們以先來，為要保全生命。」（創45:5）這預表基督的救贖：人的罪惡成就了神的救恩計劃。約瑟的寬恕教導我們：真正的屬靈成熟是能夠從神的角度看苦難。"
+                }
+            },
+            {
+                title: "與父親重聚",
+                activity: {
+                    question: "約瑟與父親的重聚預表什麼？",
+                    options: [
+                        "A. 神兒女最終與天父的團聚",
+                        "B. 基督的再來",
+                        "C. 我們將來在天家與主永遠同在的喜樂",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟與父親的重聚，預表神兒女最終與天父的團聚。這也象徵基督的再來，那時我們要與主面對面。雅各說「就是死我也甘心」，表達了與所愛之人重聚的極大滿足，正如我們將來在天家與主永遠同在的喜樂。"
+                }
+            },
+            {
+                title: "祝福後代",
+                activity: {
+                    question: "約瑟臨終前的信心表現在哪裡？",
+                    options: [
+                        "A. 堅信神的應許",
+                        "B. 要求將骸骨帶回應許之地",
+                        "C. 見證『萬事都互相效力，叫愛神的人得益處』",
+                        "D. 以上皆是"
+                    ],
+                    answer: "D",
+                    explanation: "約瑟臨終前堅信神的應許，要求將他的骸骨帶回應許之地。這表明他對神應許的信心，預表我們對復活的盼望。約瑟的一生見證了「萬事都互相效力，叫愛神的人得益處」（羅8:28），他的信心成為後代的榜樣。"
+                }
+            }
+        ];
+        
+        // 滾動處理
+        const muralContainer = document.getElementById('muralContainer');
+        const progressBar = document.getElementById('progressBar');
+        const navDots = document.querySelectorAll('.nav-dot');
+        
+        function updateProgress() {
+            const scrollLeft = muralContainer.scrollLeft;
+            const scrollWidth = muralContainer.scrollWidth - muralContainer.clientWidth;
+            const progress = (scrollLeft / scrollWidth) * 100;
+            progressBar.style.width = progress + '%';
+            
+            // 更新導航點
+            const sceneWidth = 520; // 500px + 20px margin
+            const currentScene = Math.round(scrollLeft / sceneWidth);
+            navDots.forEach((dot, index) => {
+                if (index === currentScene) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        muralContainer.addEventListener('scroll', updateProgress);
+        updateProgress();
+        
+        // 滾動到指定場景
+        function scrollToScene(index) {
+            const sceneWidth = 520;
+            muralContainer.scrollTo({
+                left: index * sceneWidth,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 活動彈窗
+        function openActivity(sceneIndex) {
+            const scene = scenes[sceneIndex - 1];
+            if (!scene) return;
+            
+            const modal = document.getElementById('activityModal');
+            const title = document.getElementById('activityTitle');
+            const content = document.getElementById('activityContent');
+            
+            title.textContent = scene.title + ' - 互動思考';
+            
+            const activity = scene.activity;
+            content.innerHTML = `
+                <div class="mb-4">
+                    <p class="text-lg font-semibold text-slate-800 mb-4">${activity.question}</p>
+                    <div class="space-y-3">
+                        ${activity.options.map((option, index) => `
+                            <button onclick="checkAnswer('${activity.answer}', '${String.fromCharCode(65 + index)}', ${sceneIndex - 1})" 
+                                    class="w-full text-left p-4 border-2 border-slate-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition answer-btn">
+                                ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+                <div id="answerResult" class="hidden mt-4 p-4 rounded-lg"></div>
+            `;
+            
+            modal.classList.add('active');
+        }
+        
+        function closeActivity() {
+            document.getElementById('activityModal').classList.remove('active');
+        }
+        
+        function checkAnswer(correctAnswer, selectedAnswer, sceneIndex) {
+            const resultDiv = document.getElementById('answerResult');
+            const buttons = document.querySelectorAll('.answer-btn');
+            
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-blue-400', 'hover:bg-blue-50');
+            });
+            
+            if (selectedAnswer === correctAnswer) {
+                resultDiv.className = 'mt-4 p-4 rounded-lg bg-green-50 border-2 border-green-400';
+                resultDiv.innerHTML = `
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-check-circle text-green-600 text-xl mr-2"></i>
+                        <span class="font-bold text-green-800">回答正確！</span>
+                    </div>
+                    <p class="text-sm text-green-700">${scenes[sceneIndex].activity.explanation}</p>
+                `;
+            } else {
+                resultDiv.className = 'mt-4 p-4 rounded-lg bg-red-50 border-2 border-red-400';
+                resultDiv.innerHTML = `
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-times-circle text-red-600 text-xl mr-2"></i>
+                        <span class="font-bold text-red-800">回答不正確</span>
+                    </div>
+                    <p class="text-sm text-red-700 mb-2">正確答案是：<strong>${correctAnswer}</strong></p>
+                    <p class="text-sm text-green-700">${scenes[sceneIndex].activity.explanation}</p>
+                `;
+            }
+            
+            resultDiv.classList.remove('hidden');
+        }
+        
+        // 點擊背景關閉彈窗
+        document.getElementById('activityModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeActivity();
+            }
+        });
+    </script>
+</body>
+</html>
+
