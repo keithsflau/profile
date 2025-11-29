@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>啟示錄：阿爾法與奧梅加的進程 | D.Th. Coursework</title>
+    <title>啟示錄：阿爾法與奧梅加的進程 </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* 引入適合主題的字體 */
@@ -43,10 +43,25 @@
         }
         
         /* 圖片容器樣式，確保圖片填滿且有質感 */
-        .img-container img {
+        .img-container {
+            position: relative;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: 0; /* 使用 padding-bottom 技巧時，高度設為 0 */
+            padding-bottom: 56.25%; /* 16:9 默認比例，會被 JavaScript 覆蓋 */
+        }
+        
+        /* 縮放圖片和圖框至90%並置中 */
+        section[data-img] {
+            transform: scale(0.9);
+            transform-origin: center center;
+        }
+        .img-container img {
+            position: absolute;
+            top: 10%;
+            left: 0;
+            width: 100%;
+            height: 80%;
+            object-fit: contain;
             /* 稍微降低飽和度和增加對比度，模擬古畫感 (在替換成真實壁畫圖後可移除此濾鏡) */
             filter: sepia(0.3) contrast(1.1) brightness(0.9); 
             transition: all 0.7s ease;
@@ -55,6 +70,19 @@
         .group:hover .img-container img {
              filter: sepia(0.1) contrast(1.1) brightness(1.0);
              transform: scale(1.03);
+        }
+        
+        /* 調整內容區域位置，確保在圖片可見區域內 */
+        section[data-img] > div.absolute[class*="z-20"] {
+            top: 10% !important;
+            bottom: 10% !important;
+            left: 0 !important;
+            right: 0 !important;
+            max-height: 80% !important;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
     </style>
@@ -97,10 +125,10 @@
         
         <div class="fixed top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-apoc-gold/50 to-transparent -z-10"></div>
 
-        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
-            <div class="absolute inset-0 bg-stone-900 img-container">
-                <img src="1The Vision on Patmos.png" alt="Patmos Island Vision Context">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80"></div>
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] relative group rounded-xl overflow-hidden gold-border mx-auto" data-img="1The Vision on Patmos.png">
+            <div class="bg-stone-900 img-container">
+                <img src="1The Vision on Patmos.png" alt="Patmos Island Vision Context" onload="adjustImageContainer(this)">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 pointer-events-none"></div>
             </div>
             
             <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
@@ -117,10 +145,10 @@
             </div>
         </section>
 
-        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
-            <div class="absolute inset-0 bg-stone-900 img-container">
-                 <img src="2The Heavenly Throne Room.png" alt="Heavenly Throne Concept">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] relative group rounded-xl overflow-hidden gold-border mx-auto" data-img="2The Heavenly Throne Room.png">
+            <div class="bg-stone-900 img-container">
+                 <img src="2The Heavenly Throne Room.png" alt="Heavenly Throne Concept" onload="adjustImageContainer(this)">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 pointer-events-none"></div>
             </div>
             <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
                 <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART II: THE AUTHORITY</span>
@@ -136,10 +164,10 @@
             </div>
         </section>
 
-        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
-            <div class="absolute inset-0 bg-stone-900 img-container">
-                 <img src="3The Four Horsemen and Judgement.png" alt="Four Horsemen Concept">
-                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] relative group rounded-xl overflow-hidden gold-border mx-auto" data-img="3The Four Horsemen and Judgement.png">
+            <div class="bg-stone-900 img-container">
+                 <img src="3The Four Horsemen and Judgement.png" alt="Four Horsemen Concept" onload="adjustImageContainer(this)">
+                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 pointer-events-none"></div>
             </div>
             <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
                 <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART III: THE JUDGMENT</span>
@@ -155,10 +183,10 @@
             </div>
         </section>
 
-        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
-            <div class="absolute inset-0 bg-stone-900 img-container">
-                <img src="4The Fall of Babylon.png" alt="Fall of Babylon Concept">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90"></div>
+        <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] relative group rounded-xl overflow-hidden gold-border mx-auto" data-img="4The Fall of Babylon.png">
+            <div class="bg-stone-900 img-container">
+                <img src="4The Fall of Babylon.png" alt="Fall of Babylon Concept" onload="adjustImageContainer(this)">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 pointer-events-none"></div>
             </div>
             <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
                 <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART IV: THE FALL</span>
@@ -174,10 +202,10 @@
             </div>
         </section>
 
-         <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] h-[75vh] relative group rounded-xl overflow-hidden gold-border">
-            <div class="absolute inset-0 bg-stone-900 img-container">
-                <img src="5The New Jerusalem.png" alt="New Jerusalem Concept">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-blue-950/50 to-transparent opacity-70"></div>
+         <section class="snap-center shrink-0 w-[90vw] md:w-[65vw] relative group rounded-xl overflow-hidden gold-border mx-auto" data-img="5The New Jerusalem.png">
+            <div class="bg-stone-900 img-container">
+                <img src="5The New Jerusalem.png" alt="New Jerusalem Concept" onload="adjustImageContainer(this)">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-blue-950/50 to-transparent opacity-70 pointer-events-none"></div>
             </div>
             <div class="absolute bottom-0 left-0 right-0 p-8 z-20 fresco-text-shadow">
                 <span class="text-apoc-gold-light font-cinzel text-sm md:text-base block mb-2 tracking-widest">PART V: THE RESTORATION</span>
@@ -193,7 +221,7 @@
             </div>
         </section>
 
-        <section class="snap-center shrink-0 w-[90vw] md:w-[45vw] h-[75vh] bg-stone-900/80 backdrop-blur-lg gold-border p-8 flex flex-col relative overflow-y-auto rounded-xl">
+        <section class="snap-center shrink-0 w-[81vw] md:w-[40.5vw] min-h-[75vh] bg-stone-900/80 backdrop-blur-lg gold-border p-8 flex flex-col relative overflow-y-auto rounded-xl mx-auto">
             <div class="sticky top-0 bg-stone-900/90 pb-4 z-10">
                 <h3 class="text-2xl text-apoc-gold-light font-cinzel text-center tracking-widest">符號解碼器</h3>
                 <p class="text-stone-400 mt-2 text-sm text-center font-serif italic">啟示文學的鑰匙：點擊符號以揭示其意涵。</p>
@@ -252,13 +280,10 @@
 
     </main>
 
-    <footer class="fixed bottom-0 w-full bg-black/80 backdrop-blur-md text-stone-500 py-3 px-8 flex justify-between items-center text-xs border-t border-stone-800 z-40 font-cinzel">
-        <div>
-            <span class="hidden md:inline">導航提示：使用 Shift + 滾輪，或觸控滑動以瀏覽歷史長卷。</span>
-        </div>
-        <div class="text-apoc-gold">
-            © 2025 Theological Seminary | Eschatology Dept.
-        </div>
+    <footer style="text-align: center; padding: 1rem; color: #707070; font-size: 0.875rem;">
+        <p style="font-style: italic; margin-bottom: 0.25rem;">But God made the earth by his power; he founded the world by his wisdom and stretched out the heavens by his understanding. Jeremiah 10:12</p>
+        <p style="font-size: 0.75rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">「耶和華用能力創造大地，用智慧建立世界，用聰明鋪張穹蒼。」 耶利米書 10:12</p>
+        <p style="font-size: 0.75rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #d1d5db;">@ 2025 Generated by Gemini Pro 3.0  Prepared by SF Lau</p>
     </footer>
 
     <div id="exegesis-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 px-8 transition-opacity duration-300 opacity-0 pointer-events-none">
@@ -522,6 +547,38 @@
         // JavaScript 交互邏輯 (Vanilla JS)
         // ==========================================
 
+        // 根據圖片實際尺寸調整容器高度
+        function adjustImageContainer(img) {
+            const container = img.parentElement; // .img-container
+            
+            // 獲取圖片自然尺寸
+            const naturalWidth = img.naturalWidth;
+            const naturalHeight = img.naturalHeight;
+            
+            if (naturalWidth > 0 && naturalHeight > 0) {
+                // 計算圖片的寬高比
+                const aspectRatio = naturalHeight / naturalWidth;
+                
+                // 使用 padding-bottom 技巧來維持寬高比
+                // padding-bottom 的百分比是相對於父元素的寬度計算的
+                container.style.paddingBottom = `${aspectRatio * 100}%`;
+            }
+        }
+
+        // 頁面載入完成後，為所有圖片設置調整
+        window.addEventListener('load', function() {
+            const images = document.querySelectorAll('.img-container img');
+            images.forEach(img => {
+                if (img.complete) {
+                    adjustImageContainer(img);
+                } else {
+                    img.addEventListener('load', function() {
+                        adjustImageContainer(this);
+                    });
+                }
+            });
+        });
+
         // 打開詮釋 Modal
         function openExegesis(key) {
             const data = exegesisData[key];
@@ -597,5 +654,7 @@
             }
         });
     </script>
+    
+   
 </body>
 </html>
